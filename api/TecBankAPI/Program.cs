@@ -11,16 +11,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ICuentaService, CuentaService>();
 
+// Register Auth Service
+builder.Services.AddSingleton<IAuthService, AuthService>();
+
+// Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowReactApp",
+        builder => builder
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 // Agregar servicios para manejar JSON
@@ -40,7 +42,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+
+// Use CORS
+app.UseCors("AllowReactApp");
+
+app.UseAuthorization();
 
 var summaries = new[]
 {
