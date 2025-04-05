@@ -4,6 +4,7 @@ import { HomeIcon, UserGroupIcon, CreditCardIcon,
          CurrencyDollarIcon, ClipboardDocumentListIcon, 
          ExclamationTriangleIcon, ChartBarIcon,
          KeyIcon, CreditCardIcon as CardIcon } from '@heroicons/react/24/outline';
+import Roles from './components/Roles';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -175,19 +176,6 @@ function Tarjetas() {
       <div className="mt-4">
         <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
           Agregar Tarjeta
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function Roles() {
-  return (
-    <div className="p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold text-gray-900">Gestión de Roles</h2>
-      <div className="mt-4">
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-          Agregar Rol
         </button>
       </div>
     </div>
