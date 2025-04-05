@@ -14,12 +14,15 @@ builder.Services.AddScoped<ICuentaService, CuentaService>();
 // Register Auth Service
 builder.Services.AddSingleton<IAuthService, AuthService>();
 
+// Register Admin Service
+builder.Services.AddSingleton<IAdminService, AdminService>();
+
 // Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
         builder => builder
-            .WithOrigins("http://localhost:3000")
+            .WithOrigins("http://localhost:3000", "http://localhost:3001")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());
