@@ -2,14 +2,17 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { HomeIcon, UserGroupIcon, CreditCardIcon, 
          CurrencyDollarIcon, ClipboardDocumentListIcon, 
-         ExclamationTriangleIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+         ExclamationTriangleIcon, ChartBarIcon,
+         KeyIcon, CreditCardIcon as CardIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
   { name: 'Clientes', href: '/clientes', icon: UserGroupIcon },
   { name: 'Cuentas', href: '/cuentas', icon: CreditCardIcon },
+  { name: 'Tarjetas', href: '/tarjetas', icon: CardIcon },
   { name: 'Préstamos', href: '/prestamos', icon: CurrencyDollarIcon },
   { name: 'Asesores', href: '/asesores', icon: ClipboardDocumentListIcon },
+  { name: 'Roles', href: '/roles', icon: KeyIcon },
   { name: 'Morosidad', href: '/morosidad', icon: ExclamationTriangleIcon },
   { name: 'Reportes', href: '/reportes', icon: ChartBarIcon },
 ];
@@ -52,8 +55,10 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/clientes" element={<Clientes />} />
                 <Route path="/cuentas" element={<Cuentas />} />
+                <Route path="/tarjetas" element={<Tarjetas />} />
                 <Route path="/prestamos" element={<Prestamos />} />
                 <Route path="/asesores" element={<Asesores />} />
+                <Route path="/roles" element={<Roles />} />
                 <Route path="/morosidad" element={<Morosidad />} />
                 <Route path="/reportes" element={<Reportes />} />
               </Routes>
@@ -157,6 +162,32 @@ function Reportes() {
       <div className="mt-4">
         <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
           Generar Reporte
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Tarjetas() {
+  return (
+    <div className="p-6 bg-white rounded-lg shadow">
+      <h2 className="text-2xl font-bold text-gray-900">Gestión de Tarjetas</h2>
+      <div className="mt-4">
+        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+          Agregar Tarjeta
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Roles() {
+  return (
+    <div className="p-6 bg-white rounded-lg shadow">
+      <h2 className="text-2xl font-bold text-gray-900">Gestión de Roles</h2>
+      <div className="mt-4">
+        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+          Agregar Rol
         </button>
       </div>
     </div>
