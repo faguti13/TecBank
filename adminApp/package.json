@@ -18,6 +18,8 @@
     "autoprefixer": "^10.4.17",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "postcss": "^8.4.35",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

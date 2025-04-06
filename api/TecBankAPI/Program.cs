@@ -11,6 +11,8 @@ builder.Services.AddSwaggerGen();
 // Register Services
 builder.Services.AddScoped<RolService>();
 builder.Services.AddScoped<PrestamoService>();
+builder.Services.AddScoped<ClienteService>();
+builder.Services.AddHostedService<ReporteBackgroundService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>

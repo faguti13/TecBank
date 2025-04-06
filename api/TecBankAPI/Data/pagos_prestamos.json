@@ -5,5 +5,19 @@
     "Monto": 1,
     "FechaPago": "2025-04-06T17:14:12.894Z",
     "EsPagoExtraordinario": false
+  },
+  {
+    "Id": 2,
+    "PrestamoId": 2,
+    "Monto": 50000,
+    "FechaPago": "2025-04-06T17:17:56.633Z",
+    "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 3,
+    "PrestamoId": 2,
+    "Monto": -50000,
+    "FechaPago": "2025-04-06T17:19:34.603Z",
+    "EsPagoExtraordinario": true
   }
 ]

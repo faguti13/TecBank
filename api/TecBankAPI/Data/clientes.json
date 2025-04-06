@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "Id": 1,
+    "Cedula": "119230145",
+    "Nombre": "Fabian",
+    "Apellido1": "Gutierrez",
+    "Apellido2": "Jimenez",
+    "Direccion": "Residencial Estancia Antigua",
+    "Telefono": "64012272",
+    "Usuario": "FabianGJ",
+    "Password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+    "Email": "fabian@test.com",
+    "IngresoMensual": 0,
+    "TipoCliente": "Físico"
+  },
+  {
+    "Id": 2,
+    "Cedula": "123456789",
+    "Nombre": "Cliente",
+    "Apellido1": "Prueba",
+    "Apellido2": "Test",
+    "Direccion": "Dirección de prueba",
+    "Telefono": "88888888",
+    "Usuario": "cliente_test",
+    "Password": "test123",
+    "Email": "cliente@test.com",
+    "IngresoMensual": 1500000,
+    "TipoCliente": "Físico"
+  }
+]

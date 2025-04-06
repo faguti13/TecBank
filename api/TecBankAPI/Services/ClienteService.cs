@@ -7,10 +7,15 @@ public class ClienteService : IClienteService
 {
     private readonly string _dataPath = "Data/clientes.json";
     private List<Cliente> _clientes = new();
+    private readonly string _clientesFilePath;
+    private static readonly object _lock = new object();
 
     public ClienteService()
     {
         LoadData();
+        var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+        Directory.CreateDirectory(basePath);
+        _clientesFilePath = Path.Combine(basePath, "clientes.json");
     }
 
     private void LoadData()
@@ -75,5 +80,27 @@ public class ClienteService : IClienteService
         _clientes.Remove(cliente);
         SaveData();
         await Task.CompletedTask;
+    }
+
+    public Cliente GetById(int id)
+    {
+        lock (_lock)
+        {
+            if (!File.Exists(_clientesFilePath))
+            {
+                throw new Exception("No se encontró el archivo de clientes");
+            }
+
+            var json = File.ReadAllText(_clientesFilePath);
+            var clientes = JsonSerializer.Deserialize<List<Cliente>>(json) ?? new List<Cliente>();
+            var cliente = clientes.FirstOrDefault(c => c.Id == id);
+
+            if (cliente == null)
+            {
+                throw new Exception($"No se encontró el cliente con ID {id}");
+            }
+
+            return cliente;
+        }
     }
 } 

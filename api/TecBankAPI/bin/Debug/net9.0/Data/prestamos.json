@@ -1,1 +1,514 @@
-[]
+[
+  {
+    "Id": 1,
+    "MontoOriginal": 1,
+    "Saldo": 0,
+    "ClienteId": 1,
+    "TasaInteres": 1,
+    "PlazoMeses": 1,
+    "Moneda": "Colones",
+    "FechaCreacion": "2025-04-06T10:56:36.1620906-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 1,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-06T10:56:36.1620906-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.00,
+        "MontoCuota": 1.00,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "MontoOriginal": 1000000,
+    "Saldo": 1000000,
+    "ClienteId": 2,
+    "TasaInteres": 10,
+    "PlazoMeses": 18,
+    "Moneda": "Colones",
+    "FechaCreacion": "2024-01-06T10:57:00.7648665-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2024-02-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 51723.75,
+        "MontoInteres": 8333.33,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 948276.25,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 2,
+        "FechaProgramada": "2024-03-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 52154.78,
+        "MontoInteres": 7902.30,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 896121.48,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 3,
+        "FechaProgramada": "2024-04-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 52589.40,
+        "MontoInteres": 7467.68,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 843532.07,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 4,
+        "FechaProgramada": "2025-08-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 53027.65,
+        "MontoInteres": 7029.43,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 790504.43,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 5,
+        "FechaProgramada": "2025-09-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 53469.54,
+        "MontoInteres": 6587.54,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 737034.89,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 6,
+        "FechaProgramada": "2025-10-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 53915.12,
+        "MontoInteres": 6141.96,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 683119.76,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 7,
+        "FechaProgramada": "2025-11-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 54364.42,
+        "MontoInteres": 5692.66,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 628755.35,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 8,
+        "FechaProgramada": "2025-12-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 54817.45,
+        "MontoInteres": 5239.63,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 573937.90,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 9,
+        "FechaProgramada": "2026-01-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 55274.26,
+        "MontoInteres": 4782.82,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 518663.63,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 10,
+        "FechaProgramada": "2026-02-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 55734.88,
+        "MontoInteres": 4322.20,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 462928.75,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 11,
+        "FechaProgramada": "2026-03-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 56199.34,
+        "MontoInteres": 3857.74,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 406729.41,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 12,
+        "FechaProgramada": "2026-04-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 56667.67,
+        "MontoInteres": 3389.41,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 350061.74,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 13,
+        "FechaProgramada": "2026-05-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 57139.90,
+        "MontoInteres": 2917.18,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 292921.84,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 14,
+        "FechaProgramada": "2026-06-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 57616.06,
+        "MontoInteres": 2441.02,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 235305.78,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 15,
+        "FechaProgramada": "2026-07-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 58096.20,
+        "MontoInteres": 1960.88,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 177209.58,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 16,
+        "FechaProgramada": "2026-08-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 58580.33,
+        "MontoInteres": 1476.75,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 118629.24,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 17,
+        "FechaProgramada": "2026-09-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 59068.50,
+        "MontoInteres": 988.58,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 59560.74,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 2,
+        "NumeroCuota": 18,
+        "FechaProgramada": "2026-10-06T10:57:00.7648665-06:00",
+        "MontoAmortizacion": 59560.74,
+        "MontoInteres": 496.34,
+        "MontoCuota": 60057.08,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "MontoOriginal": 2000,
+    "Saldo": 2000,
+    "ClienteId": 3,
+    "TasaInteres": 15,
+    "PlazoMeses": 24,
+    "Moneda": "Dolares",
+    "FechaCreacion": "2025-04-06T10:57:27.0472726-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 71.97,
+        "MontoInteres": 25.00,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1928.03,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 2,
+        "FechaProgramada": "2025-06-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 72.87,
+        "MontoInteres": 24.10,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1855.15,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 3,
+        "FechaProgramada": "2025-07-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 73.78,
+        "MontoInteres": 23.19,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1781.37,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 4,
+        "FechaProgramada": "2025-08-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 74.71,
+        "MontoInteres": 22.27,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1706.66,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 5,
+        "FechaProgramada": "2025-09-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 75.64,
+        "MontoInteres": 21.33,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1631.02,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 6,
+        "FechaProgramada": "2025-10-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 76.59,
+        "MontoInteres": 20.39,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1554.44,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 7,
+        "FechaProgramada": "2025-11-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 77.54,
+        "MontoInteres": 19.43,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1476.90,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 8,
+        "FechaProgramada": "2025-12-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 78.51,
+        "MontoInteres": 18.46,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1398.38,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 9,
+        "FechaProgramada": "2026-01-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 79.49,
+        "MontoInteres": 17.48,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1318.89,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 10,
+        "FechaProgramada": "2026-02-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 80.49,
+        "MontoInteres": 16.49,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1238.40,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 11,
+        "FechaProgramada": "2026-03-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 81.49,
+        "MontoInteres": 15.48,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1156.91,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 12,
+        "FechaProgramada": "2026-04-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 82.51,
+        "MontoInteres": 14.46,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 1074.40,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 13,
+        "FechaProgramada": "2026-05-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 83.54,
+        "MontoInteres": 13.43,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 990.85,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 14,
+        "FechaProgramada": "2026-06-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 84.59,
+        "MontoInteres": 12.39,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 906.27,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 15,
+        "FechaProgramada": "2026-07-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 85.64,
+        "MontoInteres": 11.33,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 820.62,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 16,
+        "FechaProgramada": "2026-08-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 86.72,
+        "MontoInteres": 10.26,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 733.91,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 17,
+        "FechaProgramada": "2026-09-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 87.80,
+        "MontoInteres": 9.17,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 646.11,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 18,
+        "FechaProgramada": "2026-10-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 88.90,
+        "MontoInteres": 8.08,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 557.21,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 19,
+        "FechaProgramada": "2026-11-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 90.01,
+        "MontoInteres": 6.97,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 467.20,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 20,
+        "FechaProgramada": "2026-12-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 91.13,
+        "MontoInteres": 5.84,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 376.07,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 21,
+        "FechaProgramada": "2027-01-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 92.27,
+        "MontoInteres": 4.70,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 283.80,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 22,
+        "FechaProgramada": "2027-02-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 93.43,
+        "MontoInteres": 3.55,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 190.37,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 23,
+        "FechaProgramada": "2027-03-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 94.59,
+        "MontoInteres": 2.38,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 95.78,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 3,
+        "NumeroCuota": 24,
+        "FechaProgramada": "2027-04-06T10:57:27.0472726-06:00",
+        "MontoAmortizacion": 95.78,
+        "MontoInteres": 1.20,
+        "MontoCuota": 96.97,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  }
+]

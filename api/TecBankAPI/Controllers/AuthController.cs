@@ -4,13 +4,13 @@ using TecBankAPI.Services;
 
 namespace TecBankAPI.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly AuthService _authService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(AuthService authService)
         {
             _authService = authService;
         }
@@ -20,12 +20,7 @@ namespace TecBankAPI.Controllers
         {
             try
             {
-                var cliente = await _authService.Login(request.Usuario, request.Password);
-                if (cliente == null)
-                {
-                    return Unauthorized("Usuario o contraseña incorrectos");
-                }
-
+                var cliente = await _authService.Login(request);
                 return Ok(cliente);
             }
             catch (Exception ex)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { prestamoService, Prestamo, PagoPrestamo, CalendarioPago } from '../services/prestamoService';
+import { prestamoService, Prestamo, PagoPrestamo, CalendarioPago, TipoMoneda } from '../services/prestamoService';
 import { format } from 'date-fns';
 
 const Prestamos: React.FC = () => {
@@ -7,13 +7,15 @@ const Prestamos: React.FC = () => {
     const [selectedPrestamo, setSelectedPrestamo] = useState<Prestamo | null>(null);
     const [showForm, setShowForm] = useState(false);
     const [showPagoForm, setShowPagoForm] = useState(false);
+    const [showCalendario, setShowCalendario] = useState(false);
     const [error, setError] = useState('');
 
     const [formData, setFormData] = useState({
         montoOriginal: '',
         clienteId: '',
         tasaInteres: '',
-        plazoMeses: ''
+        plazoMeses: '',
+        moneda: TipoMoneda.Colones
     });
 
     const [pagoData, setPagoData] = useState({
@@ -42,17 +44,26 @@ const Prestamos: React.FC = () => {
                 clienteId: parseInt(formData.clienteId),
                 tasaInteres: parseFloat(formData.tasaInteres),
                 plazoMeses: parseInt(formData.plazoMeses),
-                saldo: parseFloat(formData.montoOriginal),
-                pagos: [],
-                calendarioPagos: []
+                moneda: formData.moneda,
+                saldo: parseFloat(formData.montoOriginal)
             };
 
-            await prestamoService.create(prestamo);
+            console.log('Enviando préstamo:', prestamo);
+            const createdPrestamo = await prestamoService.create(prestamo);
+            console.log('Préstamo creado:', createdPrestamo);
+            
             setShowForm(false);
-            setFormData({ montoOriginal: '', clienteId: '', tasaInteres: '', plazoMeses: '' });
+            setFormData({ 
+                montoOriginal: '', 
+                clienteId: '', 
+                tasaInteres: '', 
+                plazoMeses: '',
+                moneda: TipoMoneda.Colones 
+            });
             loadPrestamos();
-        } catch (err) {
-            setError('Error al crear el préstamo');
+        } catch (err: any) {
+            console.error('Error completo:', err);
+            setError(err.message || 'Error al crear el préstamo');
         }
     };
 
@@ -76,10 +87,12 @@ const Prestamos: React.FC = () => {
         }
     };
 
-    const formatMoney = (amount: number) => {
+    const formatMoney = (amount: number, moneda: TipoMoneda) => {
+        const currency = moneda === TipoMoneda.Colones ? 'CRC' : 
+                        moneda === TipoMoneda.Dolares ? 'USD' : 'EUR';
         return new Intl.NumberFormat('es-CR', {
             style: 'currency',
-            currency: 'CRC'
+            currency: currency
         }).format(amount);
     };
 
@@ -155,6 +168,23 @@ const Prestamos: React.FC = () => {
                                     required
                                 />
                             </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Moneda
+                                </label>
+                                <select
+                                    value={formData.moneda}
+                                    onChange={(e) => setFormData({ ...formData, moneda: e.target.value as TipoMoneda })}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    required
+                                >
+                                    {Object.values(TipoMoneda).map((moneda) => (
+                                        <option key={moneda} value={moneda}>
+                                            {moneda}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                             <div className="flex justify-end space-x-2">
                                 <button
                                     type="button"
@@ -176,7 +206,7 @@ const Prestamos: React.FC = () => {
             )}
 
             {showPagoForm && selectedPrestamo && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                         <h3 className="text-lg font-medium mb-4">Registrar Pago</h3>
                         <form onSubmit={handlePagoSubmit} className="space-y-4">
@@ -224,6 +254,78 @@ const Prestamos: React.FC = () => {
                 </div>
             )}
 
+            {showCalendario && selectedPrestamo && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-4xl max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-medium">
+                                Calendario de Pagos - Préstamo #{selectedPrestamo.id}
+                            </h3>
+                            <button
+                                onClick={() => setShowCalendario(false)}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                <span className="text-2xl">&times;</span>
+                            </button>
+                        </div>
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Cuota
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Fecha
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Amortización
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Interés
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Cuota Total
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Saldo
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Estado
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {selectedPrestamo?.calendarioPagos?.map((cuota) => (
+                                    <tr key={cuota.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {cuota.numeroCuota}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {format(new Date(cuota.fechaProgramada), 'dd/MM/yyyy')}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {formatMoney(cuota.montoAmortizacion, selectedPrestamo.moneda)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {formatMoney(cuota.montoInteres, selectedPrestamo.moneda)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {formatMoney(cuota.montoCuota, selectedPrestamo.moneda)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {cuota.saldoProyectado ? formatMoney(cuota.saldoProyectado, selectedPrestamo.moneda) : '-'}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {cuota.pagado ? 'Pagado' : 'Pendiente'}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
+
             <div className="mt-8">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
@@ -244,6 +346,9 @@ const Prestamos: React.FC = () => {
                                 Plazo
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Moneda
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Acciones
                             </th>
                         </tr>
@@ -255,10 +360,10 @@ const Prestamos: React.FC = () => {
                                     {prestamo.clienteId}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {formatMoney(prestamo.montoOriginal)}
+                                    {formatMoney(prestamo.montoOriginal, prestamo.moneda)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {formatMoney(prestamo.saldo)}
+                                    {formatMoney(prestamo.saldo, prestamo.moneda)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {prestamo.tasaInteres}%
@@ -266,7 +371,19 @@ const Prestamos: React.FC = () => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {prestamo.plazoMeses} meses
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {prestamo.moneda}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                    <button
+                                        onClick={() => {
+                                            setSelectedPrestamo(prestamo);
+                                            setShowCalendario(true);
+                                        }}
+                                        className="text-blue-600 hover:text-blue-900"
+                                    >
+                                        Ver Calendario
+                                    </button>
                                     <button
                                         onClick={() => {
                                             setSelectedPrestamo(prestamo);
@@ -282,66 +399,6 @@ const Prestamos: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-
-            {selectedPrestamo && (
-                <div className="mt-8">
-                    <h3 className="text-lg font-medium mb-4">Calendario de Pagos</h3>
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Cuota
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Fecha
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Amortización
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Interés
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Cuota Total
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Saldo
-                                </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Estado
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {selectedPrestamo.calendarioPagos.map((cuota) => (
-                                <tr key={cuota.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {cuota.numeroCuota}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {format(new Date(cuota.fechaProgramada), 'dd/MM/yyyy')}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {formatMoney(cuota.montoAmortizacion)}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {formatMoney(cuota.montoInteres)}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {formatMoney(cuota.montoCuota)}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {cuota.saldoProyectado ? formatMoney(cuota.saldoProyectado) : '-'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {cuota.pagado ? 'Pagado' : 'Pendiente'}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
         </div>
     );
 };

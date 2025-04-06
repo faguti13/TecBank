@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { HomeIcon, UsersIcon, CreditCardIcon, CurrencyDollarIcon, UserGroupIcon, KeyIcon, DocumentTextIcon, UserIcon } from '@heroicons/react/24/outline';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,6 +12,18 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
+  const navigationItems = [
+    { name: 'Dashboard', href: '/', icon: HomeIcon },
+    { name: 'Clientes', href: '/clientes', icon: UsersIcon },
+    { name: 'Cuentas', href: '/cuentas', icon: CreditCardIcon },
+    { name: 'Tarjetas', href: '/tarjetas', icon: CreditCardIcon },
+    { name: 'Préstamos', href: '/prestamos', icon: CurrencyDollarIcon },
+    { name: 'Asesores', href: '/asesores', icon: UserGroupIcon },
+    { name: 'Roles', href: '/roles', icon: KeyIcon },
+    { name: 'Reportes', href: '/reportes', icon: DocumentTextIcon },
+    { name: 'Usuarios', href: '/usuarios', icon: UserIcon },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
@@ -19,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
             <h1 className="text-xl font-bold text-white">TecBank Admin</h1>
           </div>
           <nav className="flex-1 px-2 py-4 space-y-1">
-            {navigation.map((item) => (
+            {navigationItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}

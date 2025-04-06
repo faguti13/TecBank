@@ -8,6 +8,7 @@ import Roles from './components/Roles';
 import Cuentas from './components/Cuentas';
 import Prestamos from './components/Prestamos';
 import Layout from './components/Layout';
+import Reportes from './components/Reportes';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -110,19 +111,6 @@ function Morosidad() {
       <div className="mt-4">
         <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
           Ver Reporte de Morosidad
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function Reportes() {
-  return (
-    <div className="p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold text-gray-900">Reportes</h2>
-      <div className="mt-4">
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-          Generar Reporte
         </button>
       </div>
     </div>

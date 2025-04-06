@@ -5,87 +5,86 @@ namespace TecBankAPI.Services
 {
     public interface IAuthService
     {
-        Task<Cliente?> Login(string usuario, string password);
+        Task<Cliente> Login(LoginRequest request);
         Task<Cliente> Register(RegisterRequest request);
-        Task SaveClientes();
     }
 
     public class AuthService : IAuthService
     {
-        private List<Cliente> _clientes;
-        private readonly string _dataPath = "Data/clientes.json";
-        private readonly JsonSerializerOptions _jsonOptions;
+        private readonly string _clientesFilePath;
+        private static readonly object _lock = new object();
 
         public AuthService()
         {
-            _jsonOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                PropertyNamingPolicy = null
-            };
-            _clientes = LoadClientes();
+            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            Directory.CreateDirectory(basePath);
+            _clientesFilePath = Path.Combine(basePath, "clientes.json");
         }
 
-        private List<Cliente> LoadClientes()
+        public async Task<Cliente> Login(LoginRequest request)
         {
-            if (!File.Exists(_dataPath))
+            lock (_lock)
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(_dataPath)!);
-                return new List<Cliente>();
+                if (!File.Exists(_clientesFilePath))
+                {
+                    throw new Exception("No se encontró el archivo de clientes");
+                }
+
+                var json = File.ReadAllText(_clientesFilePath);
+                var clientes = JsonSerializer.Deserialize<List<Cliente>>(json) ?? new List<Cliente>();
+                var cliente = clientes.FirstOrDefault(c => c.Usuario == request.Usuario);
+
+                if (cliente == null || cliente.Password != request.Password)
+                {
+                    throw new Exception("Usuario o contraseña incorrectos");
+                }
+
+                return cliente;
             }
-
-            var json = File.ReadAllText(_dataPath);
-            return JsonSerializer.Deserialize<List<Cliente>>(json, _jsonOptions) ?? new List<Cliente>();
-        }
-
-        public async Task SaveClientes()
-        {
-            var json = JsonSerializer.Serialize(_clientes, _jsonOptions);
-            await File.WriteAllTextAsync(_dataPath, json);
-        }
-
-        public async Task<Cliente?> Login(string usuario, string password)
-        {
-            var cliente = _clientes.FirstOrDefault(c => 
-                c.Usuario.Equals(usuario, StringComparison.OrdinalIgnoreCase));
-
-            if (cliente == null || !cliente.VerifyPassword(password))
-            {
-                return null;
-            }
-
-            return cliente;
         }
 
         public async Task<Cliente> Register(RegisterRequest request)
         {
-            if (_clientes.Any(c => c.Usuario.Equals(request.Usuario, StringComparison.OrdinalIgnoreCase)))
+            lock (_lock)
             {
-                throw new Exception("El usuario ya existe");
+                if (!File.Exists(_clientesFilePath))
+                {
+                    File.WriteAllText(_clientesFilePath, "[]");
+                }
+
+                var json = File.ReadAllText(_clientesFilePath);
+                var clientes = JsonSerializer.Deserialize<List<Cliente>>(json) ?? new List<Cliente>();
+
+                if (clientes.Any(c => c.Usuario == request.Usuario))
+                {
+                    throw new Exception("Ya existe un usuario con ese nombre de usuario");
+                }
+
+                if (clientes.Any(c => c.Cedula == request.Cedula))
+                {
+                    throw new Exception("Ya existe un usuario con esa cédula");
+                }
+
+                var nuevoCliente = new Cliente
+                {
+                    Id = clientes.Count > 0 ? clientes.Max(c => c.Id) + 1 : 1,
+                    Cedula = request.Cedula,
+                    Nombre = request.Nombre,
+                    Apellido1 = request.Apellido1,
+                    Apellido2 = request.Apellido2,
+                    Direccion = request.Direccion,
+                    Telefono = request.Telefono,
+                    Usuario = request.Usuario,
+                    Password = request.Password,
+                    Email = request.Email,
+                    TipoCliente = request.TipoCliente
+                };
+
+                clientes.Add(nuevoCliente);
+                File.WriteAllText(_clientesFilePath, JsonSerializer.Serialize(clientes));
+
+                return nuevoCliente;
             }
-
-            if (_clientes.Any(c => c.Cedula == request.Cedula))
-            {
-                throw new Exception("La cédula ya está registrada");
-            }
-
-            var cliente = new Cliente
-            {
-                Cedula = request.Cedula,
-                Nombre = request.Nombre,
-                Apellido1 = request.Apellido1,
-                Apellido2 = request.Apellido2,
-                Direccion = request.Direccion,
-                Telefono = request.Telefono,
-                Usuario = request.Usuario,
-                Password = request.Password,
-                TipoCliente = request.TipoCliente
-            };
-
-            _clientes.Add(cliente);
-            await SaveClientes();
-
-            return cliente;
         }
     }
 } 
