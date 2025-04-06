@@ -10,7 +10,7 @@ builder.Services.AddSwaggerGen();
 
 // Register Services
 builder.Services.AddScoped<RolService>();
-builder.Services.AddSingleton<CuentaService>();
+builder.Services.AddScoped<PrestamoService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>
