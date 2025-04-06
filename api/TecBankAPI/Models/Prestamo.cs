@@ -21,6 +21,9 @@ public class Prestamo
     [Required]
     public int PlazoMeses { get; set; }
 
+    [Required]
+    public TipoMoneda Moneda { get; set; }
+
     public DateTime FechaCreacion { get; set; }
 
     public List<PagoPrestamo> Pagos { get; set; } = new List<PagoPrestamo>();

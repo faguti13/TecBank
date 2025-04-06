@@ -75,20 +75,31 @@ namespace TecBankAPI.Services
 
         public Prestamo Create(Prestamo prestamo)
         {
-            var prestamos = ReadData<Prestamo>(_prestamosPath);
-            prestamo.Id = prestamos.Count > 0 ? prestamos.Max(p => p.Id) + 1 : 1;
-            prestamo.FechaCreacion = DateTime.Now;
-            prestamo.Saldo = prestamo.MontoOriginal;
+            try
+            {
+                var prestamos = ReadData<Prestamo>(_prestamosPath);
+                prestamo.Id = prestamos.Count > 0 ? prestamos.Max(p => p.Id) + 1 : 1;
+                prestamo.FechaCreacion = DateTime.Now;
+                prestamo.Saldo = prestamo.MontoOriginal;
 
-            // Generar calendario de pagos
-            var calendarioPagos = GenerarCalendarioPagos(prestamo);
-            prestamo.CalendarioPagos = calendarioPagos;
+                // Generar calendario de pagos
+                var calendarioPagos = GenerarCalendarioPagos(prestamo);
+                prestamo.CalendarioPagos = calendarioPagos;
 
-            prestamos.Add(prestamo);
-            SaveData(prestamos, _prestamosPath);
-            SaveData(calendarioPagos, _calendarioPath);
+                // Obtener calendarios existentes y agregar el nuevo
+                var calendarioExistente = ReadData<CalendarioPago>(_calendarioPath);
+                calendarioExistente.AddRange(calendarioPagos);
 
-            return prestamo;
+                prestamos.Add(prestamo);
+                SaveData(prestamos, _prestamosPath);
+                SaveData(calendarioExistente, _calendarioPath);
+
+                return prestamo;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al crear el préstamo: {ex.Message}", ex);
+            }
         }
 
         public bool RegistrarPago(int prestamoId, PagoPrestamo pago)
@@ -108,8 +119,7 @@ namespace TecBankAPI.Services
             // Si es pago extraordinario, recalcular calendario
             if (pago.EsPagoExtraordinario)
             {
-                var calendarioPagos = RecalcularCalendarioPagos(prestamoToUpdate);
-                SaveData(calendarioPagos, _calendarioPath);
+                RecalcularCalendarioPagos(prestamoToUpdate);
             }
 
             pagos.Add(pago);
@@ -155,8 +165,11 @@ namespace TecBankAPI.Services
 
         private List<CalendarioPago> RecalcularCalendarioPagos(Prestamo prestamo)
         {
-            // Eliminar calendario existente
-            var calendarioPagos = ReadData<CalendarioPago>(_calendarioPath)
+            // Obtener todos los calendarios
+            var todosLosCalendarios = ReadData<CalendarioPago>(_calendarioPath);
+            
+            // Eliminar solo el calendario del préstamo actual
+            var calendariosFiltrados = todosLosCalendarios
                 .Where(c => c.PrestamoId != prestamo.Id)
                 .ToList();
 
@@ -170,8 +183,13 @@ namespace TecBankAPI.Services
                 FechaCreacion = DateTime.Now
             });
 
-            calendarioPagos.AddRange(nuevoCalendario);
-            return calendarioPagos;
+            // Agregar el nuevo calendario a los existentes
+            calendariosFiltrados.AddRange(nuevoCalendario);
+            
+            // Guardar todos los calendarios
+            SaveData(calendariosFiltrados, _calendarioPath);
+            
+            return nuevoCalendario;
         }
     }
 } 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TecBankAPI.Models;
 using TecBankAPI.Services;
+using System.Text.Json;
 
 namespace TecBankAPI.Controllers
 {
@@ -38,10 +39,24 @@ namespace TecBankAPI.Controllers
 
         // POST: api/Prestamos
         [HttpPost]
-        public ActionResult<Prestamo> CreatePrestamo(Prestamo prestamo)
+        public ActionResult<Prestamo> CreatePrestamo([FromBody] Prestamo prestamo)
         {
-            var createdPrestamo = _prestamoService.Create(prestamo);
-            return CreatedAtAction(nameof(GetPrestamo), new { id = createdPrestamo.Id }, createdPrestamo);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Console.WriteLine($"Recibiendo préstamo: {JsonSerializer.Serialize(prestamo)}");
+                var createdPrestamo = _prestamoService.Create(prestamo);
+                return CreatedAtAction(nameof(GetPrestamo), new { id = createdPrestamo.Id }, createdPrestamo);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error detallado: {ex}");
+                return BadRequest($"Error al crear el préstamo: {ex.Message}. Stack trace: {ex.StackTrace}");
+            }
         }
 
         // POST: api/Prestamos/5/pagos

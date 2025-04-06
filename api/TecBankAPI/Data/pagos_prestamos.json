@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "Id": 1,
+    "PrestamoId": 1,
+    "Monto": 1,
+    "FechaPago": "2025-04-06T17:14:12.894Z",
+    "EsPagoExtraordinario": false
+  }
+]
