@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "numeroCuenta": "U2FsdGVkX1+xJY85y3tSx7xEJ4YV5LZQQf8z9Zk1nFk=",
+      "descripcion": "Cuenta principal de ahorros",
+      "moneda": "CRC",
+      "tipo": "Ahorros"
+    },
+    {
+      "id": 2,
+      "numeroCuenta": "U2FsdGVkX19I3+gvXKQYKtI48Cy5R5/RazhNj4/9WVA=",
+      "descripcion": "Cuenta para gastos personales",
+      "moneda": "USD",
+      "tipo": "Corriente"
+    },
+    {
+      "id": 3,
+      "numeroCuenta": "U2FsdGVkX18OB+JdTKrPwdT1NrZP3o3YnhZKb3lJqp8=",
+      "descripcion": "Cuenta de ahorros en euros",
+      "moneda": "EUR",
+      "tipo": "Ahorros"
+    }
+  ]
+  

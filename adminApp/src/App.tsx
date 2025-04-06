@@ -5,6 +5,7 @@ import { HomeIcon, UserGroupIcon, CreditCardIcon,
          ExclamationTriangleIcon, ChartBarIcon,
          KeyIcon, CreditCardIcon as CardIcon } from '@heroicons/react/24/outline';
 import Roles from './components/Roles';
+import Cuentas from './components/Cuentas';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -104,6 +105,7 @@ function Clientes() {
   );
 }
 
+/*
 function Cuentas() {
   return (
     <div className="p-6 bg-white rounded-lg shadow">
@@ -116,6 +118,7 @@ function Cuentas() {
     </div>
   );
 }
+*/
 
 function Prestamos() {
   return (

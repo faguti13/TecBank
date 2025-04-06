@@ -2,81 +2,61 @@ using Microsoft.AspNetCore.Mvc;
 using TecBankAPI.Models;
 using TecBankAPI.Services;
 
-namespace TecBankAPI.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class CuentaController : ControllerBase
+namespace TecBankAPI.Controllers
 {
-    private readonly ICuentaService _cuentaService;
-
-    public CuentaController(ICuentaService cuentaService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CuentasController : ControllerBase
     {
-        _cuentaService = cuentaService;
-    }
+        private readonly CuentaService _cuentaService;
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Cuenta>>> GetCuentas()
-    {
-        var cuentas = await _cuentaService.GetAllCuentas();
-        return Ok(cuentas);
-    }
-
-    [HttpGet("{numero}")]
-    public async Task<ActionResult<Cuenta>> GetCuenta(string numero)
-    {
-        var cuenta = await _cuentaService.GetCuentaByNumero(numero);
-        if (cuenta == null)
+        public CuentasController(CuentaService cuentaService)
         {
+            _cuentaService = cuentaService;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Cuenta>> GetAll()
+        {
+            return _cuentaService.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Cuenta> GetById(int id)
+        {
+            var cuenta = _cuentaService.GetById(id);
+            if (cuenta == null)
+            {
+                return NotFound();
+            }
+            return cuenta;
+        }
+
+        [HttpPost]
+        public ActionResult<Cuenta> Create(Cuenta cuenta)
+        {
+            var createdCuenta = _cuentaService.Create(cuenta);
+            return CreatedAtAction(nameof(GetById), new { id = createdCuenta.Id }, createdCuenta);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, Cuenta cuenta)
+        {
+            if (_cuentaService.Update(id, cuenta))
+            {
+                return NoContent();
+            }
             return NotFound();
         }
-        return Ok(cuenta);
-    }
 
-    [HttpGet("cliente/{cedula}")]
-    public async Task<ActionResult<IEnumerable<Cuenta>>> GetCuentasByCliente(string cedula)
-    {
-        var cuentas = await _cuentaService.GetCuentasByCliente(cedula);
-        return Ok(cuentas);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<Cuenta>> CreateCuenta(Cuenta cuenta)
-    {
-        await _cuentaService.CreateCuenta(cuenta);
-        return CreatedAtAction(nameof(GetCuenta), new { numero = cuenta.Numero }, cuenta);
-    }
-
-    [HttpPut("{numero}")]
-    public async Task<IActionResult> UpdateCuenta(string numero, Cuenta cuenta)
-    {
-        if (numero != cuenta.Numero)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            return BadRequest();
+            if (_cuentaService.Delete(id))
+            {
+                return NoContent();
+            }
+            return NotFound();
         }
-
-        await _cuentaService.UpdateCuenta(cuenta);
-        return NoContent();
     }
-
-    [HttpDelete("{numero}")]
-    public async Task<IActionResult> DeleteCuenta(string numero)
-    {
-        await _cuentaService.DeleteCuenta(numero);
-        return NoContent();
-    }
-
-    [HttpPost("{numero}/deposito")]
-    public async Task<ActionResult<Cuenta>> RealizarDeposito(string numero, [FromBody] decimal monto)
-    {
-        var cuenta = await _cuentaService.RealizarDeposito(numero, monto);
-        return Ok(cuenta);
-    }
-
-    [HttpPost("{numero}/retiro")]
-    public async Task<ActionResult<Cuenta>> RealizarRetiro(string numero, [FromBody] decimal monto)
-    {
-        var cuenta = await _cuentaService.RealizarRetiro(numero, monto);
-        return Ok(cuenta);
-    }
-} 
+}
