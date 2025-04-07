@@ -36,7 +36,7 @@ function App() {
   return (
     <Router>
       <Layout navigation={navigation}>
-        <Routes>
+      <Routes>
           <Route path="/" element={<DashboardCliente />} />
           
           {/* Rutas de Cuentas */}
@@ -58,7 +58,7 @@ function App() {
           {/* Otras rutas */}
           <Route path="/perfil" element={<MiPerfil />} />
           <Route path="/ayuda" element={<AyudaCliente />} />
-        </Routes>
+      </Routes>
       </Layout>
     </Router>
   );
