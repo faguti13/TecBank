@@ -1,0 +1,16 @@
+.buttons{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px ;
+    padding-right: 4px;
+    font-size:small; 
+    color: white ;
+    font-weight: bold;
+    background-color: rgb(25, 118, 210)  ;
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
+.buttons:hover{
+    background-color:rgb(21, 101, 192);
+}
