@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface SubmenuItem {
   name: string;
@@ -20,6 +21,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSubmenu = (itemName: string) => {
     if (openSubmenu === itemName) {
@@ -29,14 +31,36 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
     }
   };
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
-        <div className="flex flex-col h-full">
-          <div className="flex items-center justify-center h-16 bg-blue-600">
+    <div className="flex h-screen bg-gray-100">
+      {/* Overlay para móvil */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-20 bg-gray-600 bg-opacity-75 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`
+        fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="flex flex-col h-full bg-white shadow-lg">
+          <div className="flex items-center justify-between h-14 bg-blue-600 px-4">
             <h1 className="text-xl font-bold text-white">TecBank</h1>
+            <button 
+              onClick={toggleSidebar}
+              className="lg:hidden text-white hover:text-gray-200"
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
           </div>
-          <nav className="flex-1 px-2 py-4 space-y-1">
+          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
             {navigation.map((item) => (
               <div key={item.name}>
                 {item.submenu ? (
@@ -72,6 +96,7 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
                             key={subItem.name}
                             to={subItem.href}
                             className="block px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900"
+                            onClick={() => setSidebarOpen(false)}
                           >
                             {subItem.name}
                           </Link>
@@ -83,6 +108,7 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
                   <Link
                     to={item.href}
                     className="flex items-center px-2 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-gray-900 group"
+                    onClick={() => setSidebarOpen(false)}
                   >
                     <item.icon className="w-6 h-6 mr-3 text-gray-400 group-hover:text-gray-500" />
                     {item.name}
@@ -92,12 +118,21 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
             ))}
           </nav>
         </div>
-      </div>
+      </aside>
 
-      <div className="pl-64">
-        <header className="bg-white shadow">
-          <div className="flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <h1 className="text-2xl font-bold text-gray-900">Banca en Línea</h1>
+      {/* Contenido principal */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="bg-white shadow-sm z-10">
+          <div className="flex items-center justify-between h-14 px-4">
+            <div className="flex items-center">
+              <button
+                onClick={toggleSidebar}
+                className="p-2 -ml-3 text-gray-500 lg:hidden hover:text-gray-900"
+              >
+                <Bars3Icon className="w-6 h-6" />
+              </button>
+              <h1 className="text-xl font-bold text-gray-900 ml-2 lg:text-2xl">Banca en Línea</h1>
+            </div>
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-700">
                 <p className="font-medium">Bienvenido(a)</p>
@@ -122,8 +157,8 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
             </div>
           </div>
         </header>
-        <main>
-          <div className="py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <main className="flex-1 overflow-auto">
+          <div className="p-4">
             {children}
           </div>
         </main>
