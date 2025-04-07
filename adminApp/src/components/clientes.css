@@ -1,31 +1,37 @@
 .buttons{
     padding-top: 4px;
     padding-bottom: 4px;
-    padding-left: 4px ;
-    padding-right: 4px;
+    padding-left: 8px ;
+    padding-right: 8px;
     font-size:small; 
     color: white ;
     font-weight: bold;
-    background-color: rgb(25, 118, 210)  ;
+    background-color: rgb(28, 129, 230)  ;
     border-radius: 5px;
     margin-left: 20px;
+    max-width: fit-content;
+    transition: 0.3s;
 }
 
 .buttons:hover{
-    background-color:rgb(21, 101, 192);
+    background-color:rgb(18, 87, 165);
+    padding: 10px;
+    transition: 0.3s;
 }
 
 .addClientBody{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding-top: 5%;
-    padding-left: 15%;
-    padding-right: 15%;
 }
 
 .addClientBlock{
-    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
     min-height: 400px;
+    background-color:rgba(199, 197, 197, 0.084);
+    padding: 50px;
+    border-radius: 10px;
 }
 
 .addClientBlockTitle{
@@ -33,4 +39,12 @@
     display: flex;
     font-size: larger;
     justify-content: center;
+    margin-bottom: 35px;
+}
+
+.addClientBlockBody{
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
