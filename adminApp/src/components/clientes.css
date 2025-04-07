@@ -14,3 +14,23 @@
 .buttons:hover{
     background-color:rgb(21, 101, 192);
 }
+
+.addClientBody{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 5%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.addClientBlock{
+    justify-content: space-between;
+    min-height: 400px;
+}
+
+.addClientBlockTitle{
+    font-weight: bold;
+    display: flex;
+    font-size: larger;
+    justify-content: center;
+}
