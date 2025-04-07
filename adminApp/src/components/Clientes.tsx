@@ -1,20 +1,15 @@
 import './clientes.css';
 import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import { FormControlLabel, FormLabel } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import Divider, { dividerClasses } from '@mui/material/Divider';
+import {Tabs, Tab, Box, CssBaseline, TextField, FormControl, Input, InputLabel, InputAdornment} from '@mui/material';
+import { FormControlLabel, FormLabel, Radio, RadioGroup, IconButton, Divider, Paper, InputBase } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import Accordion from '@mui/material/Accordion';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Typography from '@mui/material/Typography';
 
 const theme = createTheme();
 
@@ -30,7 +25,7 @@ function showTab(tabActive: string, thisTab: string){
 
 
 function Clientes() {
-    const [tabActive, setTabActive] = React.useState('1');
+    const [tabActive, setTabActive] = React.useState('2');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
       setTabActive(newValue);
@@ -99,7 +94,7 @@ function Clientes() {
                                 fontSize: '14px'
                               }}
                             >
-                              {showPassword ? "Ocultar" : "Mostrar"}
+                              {showPassword ?  <Visibility/> : <VisibilityOff/>}
                             </IconButton>
                           </InputAdornment>
                         }
@@ -186,8 +181,79 @@ function Clientes() {
             </div>
           </div>
           {/**************************** Modificar cliente ***********************************/}
-          <div style={{display:showTab(tabActive, "2")}}>
-            Modificar Cliente
+          <div style={{display:showTab(tabActive, "2"), flexFlow: 'column'}}>
+            <div className='editClientSearch'>
+              <Paper
+                component="form"
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder="Buscar Cliente..."
+                  inputProps={{ 'aria-label': 'search client' }}
+                />
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                  <SearchIcon></SearchIcon>
+                </IconButton>
+              </Paper>
+            </div>
+            <div className='editClientBody'>
+              <Accordion className='editClientAccordion'>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon style={{color:'white'}} />}
+                  aria-controls="panel2-content"
+                  id="panel2-header"
+                  sx={{
+                    backgroundColor:'rgb(12, 102, 205)',
+                    borderRadius: '5px',
+                    color: 'white'
+                  }}
+                >
+                  <Typography style={{fontWeight: 'bold'}} component="span">Información de Cuenta</Typography>
+                </AccordionSummary>
+                <AccordionDetails className='editClientAccordionInterior' >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                </AccordionDetails>
+              </Accordion>
+              <Accordion className='editClientAccordion'>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon  style={{color:'white'}} />}
+                  aria-controls="panel2-content"
+                  id="panel2-header"
+                  sx={{
+                    backgroundColor:'rgb(12, 102, 205)',
+                    borderRadius: '5px',
+                    color: 'white'
+                  }}
+                >
+                  <Typography style={{fontWeight: 'bold'}} component="span">Información de Cliente</Typography>
+                </AccordionSummary>
+                <AccordionDetails className='editClientAccordionInterior' >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                </AccordionDetails>
+              </Accordion>
+              <Accordion className='editClientAccordion'>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon  style={{color:'white'}} />}
+                  aria-controls="panel2-content"
+                  id="panel2-header"
+                  sx={{
+                    backgroundColor:'rgb(12, 102, 205)',
+                    borderRadius: '5px',
+                    color: 'white'
+                  }}
+                >
+                  <Typography style={{fontWeight: 'bold'}} component="span">Otros Datos</Typography>
+                </AccordionSummary>
+                <AccordionDetails className='editClientAccordionInterior' >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                </AccordionDetails>
+              </Accordion>
+            </div>
           </div>
           {/**************************** Eliminar cliente ***********************************/}
           <div style={{display:showTab(tabActive, "3")}}>
