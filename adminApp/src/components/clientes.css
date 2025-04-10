@@ -17,7 +17,29 @@
     background-color:rgb(18, 87, 165);
     padding: 10px;
     transition: 0.3s;
+    cursor: pointer;
 }
+
+.buttonSecondary{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px ;
+    padding-right: 8px;
+    font-size:small; 
+    color: white ;
+    font-weight: bold;
+    background-color: rgb(56, 182, 110)  ;
+    border-radius: 5px;
+    max-width: fit-content;
+    transition: 0.3s;
+}
+
+.buttonSecondary:hover{
+    background-color:rgb(15, 132, 68);
+    transition: 0.3s;
+    cursor:pointer;
+}
+
 
 .addClientBody{
     display: flex;
@@ -73,9 +95,21 @@
 
 .editClientAccordion{
     max-width: 70%;
+    min-width: 500px;
     margin-bottom: 5px;
 }
 
 .editClientAccordionInterior{
     background-color:rgba(27, 48, 72, 0.067);
+    display: flex;
+    flex-direction: column;
+}
+
+.editClientTextFieldSpecial{
+    font-weight: bold;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    gap: 20%;
+    margin-bottom: 5%;
 }

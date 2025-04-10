@@ -144,7 +144,7 @@ function Clientes() {
                 </div>
               </div>
               <Divider orientation="vertical" flexItem />
-              {/*Bloque de Identificación*/}
+              {/*Bloque de Otros*/}
               <div className='addClientBlock'>
                 <div className='addClientBlockTitle'>Otros Datos</div>
                 <div className='addClientBlockBody'>
@@ -199,6 +199,7 @@ function Clientes() {
               </Paper>
             </div>
             <div className='editClientBody'>
+              {/*Acordión de Información de Cuenta*/}
               <Accordion className='editClientAccordion'>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon style={{color:'white'}} />}
@@ -213,10 +214,45 @@ function Clientes() {
                   <Typography style={{fontWeight: 'bold'}} component="span">Información de Cuenta</Typography>
                 </AccordionSummary>
                 <AccordionDetails className='editClientAccordionInterior' >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  <div className='editClientTextFieldSpecial'>
+                    Usuario:
+                    <TextField id="standard-basic"  variant="standard" />
+                  </div>
+                  <div className='editClientTextFieldSpecial'>
+                    Contraseña:
+                    <FormControl sx={{width:'200px'}} variant="standard">
+                      
+                      <Input
+                        id="standard-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label={
+                                showPassword ? 'hide the password' : 'display the password'
+                              }
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              onMouseUp={handleMouseUpPassword}
+                              sx={{
+                                fontSize: '14px'
+                              }}
+                            >
+                              {showPassword ?  <Visibility/> : <VisibilityOff/>}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </div>
+                  <div>
+                    <div className='buttonSecondary' style={{float:'right'}}>
+                      Actualizar
+                    </div>
+                  </div>
                 </AccordionDetails>
               </Accordion>
+              {/*Acordión de Información de Cliente */}
               <Accordion className='editClientAccordion'>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon  style={{color:'white'}} />}
@@ -231,10 +267,41 @@ function Clientes() {
                   <Typography style={{fontWeight: 'bold'}} component="span">Información de Cliente</Typography>
                 </AccordionSummary>
                 <AccordionDetails className='editClientAccordionInterior' >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  <div className='editClientTextFieldSpecial'>
+                    Nombre:
+                    <TextField id="standard-basic"  variant="standard" />
+                  </div>
+                  <div className='editClientTextFieldSpecial'>
+                    Apellido:
+                    <TextField id="standard-basic"  variant="standard" />
+                  </div>
+                  <div className='editClientTextFieldSpecial'>
+                    Tipo de usuario: 
+                    <div>
+                      <FormControl>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                        >
+                          <FormControlLabel value="Físico" control={<Radio />} label="Físico" />
+                          <FormControlLabel value="Jurídico" control={<Radio />} label="Jurídico" />
+                        </RadioGroup>
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className='editClientTextFieldSpecial'>
+                    Cédula:
+                    <TextField id="standard-basic"  variant="standard" />
+                  </div>
+                  <div>
+                    <div className='buttonSecondary' style={{float:'right'}}>
+                      Actualizar
+                    </div>
+                  </div>
                 </AccordionDetails>
               </Accordion>
+              {/*Acordión de otros datos*/}
               <Accordion className='editClientAccordion'>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon  style={{color:'white'}} />}
@@ -249,8 +316,28 @@ function Clientes() {
                   <Typography style={{fontWeight: 'bold'}} component="span">Otros Datos</Typography>
                 </AccordionSummary>
                 <AccordionDetails className='editClientAccordionInterior' >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                  malesuada lacus ex, sit amet blandit leo lobortis eget.
+                  <div className='editClientTextFieldSpecial'>
+                    Teléfono:
+                    <TextField id="standard-basic"  variant="standard" />
+                  </div>
+                  <div className='editClientTextFieldSpecial'>
+                    Ingreso mensual:
+                    <TextField id="standard-basic"  variant="standard" />
+                  </div>
+                  <div className='editClientTextFieldSpecial'>
+                    Dirección:
+                    <TextField
+                      id="standard-multiline-static"
+                      multiline
+                      rows={3}
+                      variant="filled"
+                    />
+                  </div>
+                  <div>
+                    <div className='buttonSecondary' style={{float:'right'}}>
+                      Actualizar
+                    </div>
+                  </div>
                 </AccordionDetails>
               </Accordion>
             </div>
