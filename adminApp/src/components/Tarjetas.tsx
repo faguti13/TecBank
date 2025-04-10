@@ -1,23 +1,47 @@
-
-
 import React, { useState } from 'react';
+
+import { tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
 
 const Tarjetas: React.FC = () => {
   // Estado para mostrar el formulario modal
   const [showForm, setShowForm] = useState(false);
 
-
   const [tipoTarjeta, setTipoTarjeta] = useState<string>(''); // Estado para el tipo de tarjeta
   const [saldoDisponible, setSaldoDisponible] = useState<string>(''); // Saldo disponible
   const [montoCredito, setMontoCredito] = useState<string>(''); // Monto de crédito
 
-  
+  const [idCliente, setIdCliente] = useState('');
+  const [numeroCuenta, setNumeroCuenta] = useState('');
+  const [numeroTarjeta, setNumeroTarjeta] = useState('');
+  const [fechaExpiracion, setFechaExpiracion] = useState('');
+  const [codigoSeguridad, setCodigoSeguridad] = useState('');
 
+  // manejador del envio del formulario
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    const nuevaTarjeta = {
+      //idCliente: parseInt(idCliente),
+      numeroCuenta,
+      numeroTarjeta,
+      tipoTarjeta: tipoTarjeta as 'debito' | 'credito',
+      saldoDisponible: tipoTarjeta === 'debito' ? parseFloat(saldoDisponible) : undefined,
+      montoCredito: tipoTarjeta === 'credito' ? parseFloat(montoCredito) : undefined,
+      fechaExpiracion:fechaExpiracion,
+      codigoSeguridad,
+    };
 
+    try {
+      await tarjetaService.create(nuevaTarjeta);
 
-
-
+      alert('Tarjeta creada con éxito');
+      setShowForm(false); // cerrar modal
+      
+    } catch (error) {
+      //console.error('Error al crear la tarjeta', error);
+      alert('Error al crear la tarjeta');
+    }
+  };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow">
@@ -38,19 +62,22 @@ const Tarjetas: React.FC = () => {
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 className="text-lg font-medium mb-4">Nuevo Préstamo</h3>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
 
               {/* campo ID cliente */}
-              <div>
+              {/*<div>
                 <label className="block text-sm font-medium text-gray-700">
                   ID del cliente
                 </label>
                 <input
                   type="number"
+                  value={idCliente}
+                  onChange={(e) => setIdCliente(e.target.value)}
+                  
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
-              </div>
+              </div>*/}
 
               {/* campo Número de cuenta */}
               <div>
@@ -59,6 +86,9 @@ const Tarjetas: React.FC = () => {
                 </label>
                 <input
                     type="text"
+                    value={numeroCuenta}
+                    onChange={(e) => setNumeroCuenta(e.target.value)}
+                    
                     maxLength={16} // Para un formato (XXXX XXXX XXXX XXXX)
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
@@ -72,6 +102,9 @@ const Tarjetas: React.FC = () => {
                 </label>
                 <input
                     type="text"
+                    value={numeroTarjeta}
+                    onChange={(e) => setNumeroTarjeta(e.target.value)}
+                    
                     maxLength={16} // Para un formato (XXXX XXXX XXXX XXXX)
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
@@ -84,6 +117,7 @@ const Tarjetas: React.FC = () => {
                 <select
                   value={tipoTarjeta}
                   onChange={(e) => setTipoTarjeta(e.target.value)}
+                  
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 >
@@ -93,7 +127,7 @@ const Tarjetas: React.FC = () => {
                 </select>
               </div>
 
-              {/* Campo adicional para saldo o monto según tipo de tarjeta */}
+              {/* Campo para saldo o monto según tipo de tarjeta */}
               {tipoTarjeta === 'debito' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Saldo disponible</label>
@@ -127,6 +161,8 @@ const Tarjetas: React.FC = () => {
                 </label>
                 <input
                     type="month"
+                    value={fechaExpiracion}
+                    onChange={(e) => setFechaExpiracion(e.target.value)}
                     min={`${new Date().getFullYear()}-01`} 
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required
@@ -140,6 +176,8 @@ const Tarjetas: React.FC = () => {
                 </label>
                 <input
                     type="text"
+                    value={codigoSeguridad}
+                    onChange={(e) => setCodigoSeguridad(e.target.value)}
                     maxLength={3} // Para un formato (CVV)
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     required

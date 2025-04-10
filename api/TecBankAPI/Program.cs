@@ -13,6 +13,7 @@ builder.Services.AddScoped<RolService>();
 builder.Services.AddScoped<PrestamoService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddHostedService<ReporteBackgroundService>();
+builder.Services.AddScoped<TarjetaService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>

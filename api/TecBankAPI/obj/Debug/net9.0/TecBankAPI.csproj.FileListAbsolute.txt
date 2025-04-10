@@ -515,3 +515,4 @@ C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.pdb
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.genruntimeconfig.cache
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref\TecBankAPI.dll
+C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\tarjetas.json

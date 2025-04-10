@@ -3,17 +3,25 @@ using System.ComponentModel.DataAnnotations;
 namespace TecBankAPI.Models;
 
 public class Tarjeta
-{
-    [Key]
-    public string Numero { get; set; } = string.Empty;
-    
-    public bool TipoTarjeta { get; set; } // true para Crédito, false para Débito
-    public DateTime FechaExpiracion { get; set; }
-    public string CodigoSeguridad { get; set; } = string.Empty;
-    public decimal SaldoDisponible { get; set; }
-    public decimal SaldoPendiente { get; set; } // Solo para tarjetas de crédito
+    {
+        [Required] 
+        public int Id { get; set; }  
 
-    // Relaciones
-    public string NumeroCuenta { get; set; } = string.Empty;
-    public virtual Cuenta? CuentaAsociada { get; set; }
-} 
+        [Required]  
+        public string NumeroCuenta { get; set; }
+
+        [Required]
+        public string NumeroTarjeta { get; set; }
+
+        [Required]
+        public string TipoTarjeta { get; set; }  // 'debito' | 'credito'
+
+        public decimal? SaldoDisponible { get; set; }  // Este es opcional si es débito
+        public decimal? MontoCredito { get; set; }    // Este es opcional si es crédito
+
+        [Required]
+        public string fechaExpiracion { get; set; }  // Fecha de expiración
+
+        [Required]
+        public string CodigoSeguridad { get; set; }  // Código de seguridad (CVV)
+    }
