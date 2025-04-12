@@ -9,6 +9,7 @@ export interface Prestamo {
     montoOriginal: number;
     saldo: number;
     clienteId: number;
+    asesorId: number;
     tasaInteres: number;
     plazoMeses: number;
     moneda: TipoMoneda;

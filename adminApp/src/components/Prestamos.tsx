@@ -13,6 +13,7 @@ const Prestamos: React.FC = () => {
     const [formData, setFormData] = useState({
         montoOriginal: '',
         clienteId: '',
+        asesorId: '',
         tasaInteres: '',
         plazoMeses: '',
         moneda: TipoMoneda.Colones
@@ -42,6 +43,7 @@ const Prestamos: React.FC = () => {
             const prestamo = {
                 montoOriginal: parseFloat(formData.montoOriginal),
                 clienteId: parseInt(formData.clienteId),
+                asesorId: parseInt(formData.asesorId),
                 tasaInteres: parseFloat(formData.tasaInteres),
                 plazoMeses: parseInt(formData.plazoMeses),
                 moneda: formData.moneda,
@@ -56,6 +58,7 @@ const Prestamos: React.FC = () => {
             setFormData({ 
                 montoOriginal: '', 
                 clienteId: '', 
+                asesorId: '', 
                 tasaInteres: '', 
                 plazoMeses: '',
                 moneda: TipoMoneda.Colones 
@@ -140,6 +143,18 @@ const Prestamos: React.FC = () => {
                                     type="number"
                                     value={formData.clienteId}
                                     onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })}
+                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                    ID del Asesor
+                                </label>
+                                <input
+                                    type="number"
+                                    value={formData.asesorId}
+                                    onChange={(e) => setFormData({ ...formData, asesorId: e.target.value })}
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                     required
                                 />
@@ -349,6 +364,9 @@ const Prestamos: React.FC = () => {
                                 Moneda
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Asesor
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Acciones
                             </th>
                         </tr>
@@ -373,6 +391,9 @@ const Prestamos: React.FC = () => {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {prestamo.moneda}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {prestamo.asesorId}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                     <button
