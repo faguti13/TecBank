@@ -516,4 +516,7 @@ C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\Tec
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.genruntimeconfig.cache
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref\TecBankAPI.dll
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\tarjetas.json
+<<<<<<< HEAD
 C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\tarjetas.json
+=======
+>>>>>>> FuncionalidadTajetas

@@ -1,42 +1,32 @@
 [
   {
     "Id": 1,
-    "NumeroCuenta": "prueba",
+    "NumeroCuenta": "Prueba",
     "NumeroTarjeta": "prueba",
-    "TipoTarjeta": "debito",
-    "SaldoDisponible": 20000,
+    "TipoTarjeta": "Debito",
+    "SaldoDisponible": 10000,
     "MontoCredito": null,
-    "FechaVencimiento": "0001-01-01T00:00:00",
-    "CodigoSeguridad": "234"
+    "fechaExpiracion": "2036-08",
+    "CodigoSeguridad": "888"
   },
   {
     "Id": 2,
-    "NumeroCuenta": "prueba",
-    "NumeroTarjeta": "prueba",
-    "TipoTarjeta": "debito",
-    "SaldoDisponible": 20000,
-    "MontoCredito": null,
-    "FechaVencimiento": "0001-01-01T00:00:00",
-    "CodigoSeguridad": "234"
+    "NumeroCuenta": "U2FsdGVkX1\u002BxJY8",
+    "NumeroTarjeta": "1234567821234556",
+    "TipoTarjeta": "Credito",
+    "SaldoDisponible": null,
+    "MontoCredito": 54000,
+    "fechaExpiracion": "2025-05",
+    "CodigoSeguridad": "123"
   },
   {
     "Id": 3,
-    "NumeroCuenta": "23",
-    "NumeroTarjeta": "34",
-    "TipoTarjeta": "debito",
-    "SaldoDisponible": 3,
+    "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
+    "NumeroTarjeta": "prueba3",
+    "TipoTarjeta": "Debito",
+    "SaldoDisponible": 12000,
     "MontoCredito": null,
-    "FechaVencimiento": "0001-01-01T00:00:00",
-    "CodigoSeguridad": "234"
-  },
-  {
-    "Id": 4,
-    "NumeroCuenta": "44",
-    "NumeroTarjeta": "44",
-    "TipoTarjeta": "credito",
-    "SaldoDisponible": null,
-    "MontoCredito": 45,
-    "FechaVencimiento": "0001-01-01T00:00:00",
+    "fechaExpiracion": "2033-10",
     "CodigoSeguridad": "234"
   }
 ]

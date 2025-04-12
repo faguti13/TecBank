@@ -32,6 +32,21 @@ namespace TecBankAPI.Controllers
             return cuenta;
         }
 
+    
+
+        [HttpGet("buscar/{numeroCuenta}")] //busca una cuenta por el num de cuenta
+        public ActionResult<Cuenta> GetByNumeroCuenta(string numeroCuenta)
+        {
+            var cuenta = _cuentaService.GetByNumeroCuenta(numeroCuenta); 
+            if (cuenta == null)
+            {
+                return BadRequest(new { message = $"La cuenta con el número {numeroCuenta} no existe o es inválida." });
+            }
+
+            return cuenta;  
+        }
+
+
         [HttpPost]
         public ActionResult<Cuenta> Create(Cuenta cuenta)
         {
