@@ -4,7 +4,7 @@ export interface Tarjeta {
     //idCliente: number;
     numeroCuenta: string;
     numeroTarjeta: string;
-    tipoTarjeta: 'debito' | 'credito';
+    tipoTarjeta: 'Debito' | 'Credito';
     saldoDisponible?: number;
     montoCredito?: number;
     fechaExpiracion: string;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
+import { Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
 
 const Tarjetas: React.FC = () => {
   // Estado para mostrar el formulario modal
@@ -18,6 +18,7 @@ const Tarjetas: React.FC = () => {
 
   const [isCuentaConfirmada, setIsCuentaConfirmada] = useState(false);
   const [isCuentaExistente, setIsCuentaExistente] = useState(false);
+  const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
 
   const resetForm = () => { // Resetear la confirmación de cuenta, todo en blanco
     setNumeroCuenta('');
@@ -38,9 +39,9 @@ const Tarjetas: React.FC = () => {
       //idCliente: parseInt(idCliente),
       numeroCuenta,
       numeroTarjeta,
-      tipoTarjeta: tipoTarjeta as 'debito' | 'credito',
-      saldoDisponible: tipoTarjeta === 'debito' ? parseFloat(saldoDisponible) : undefined,
-      montoCredito: tipoTarjeta === 'credito' ? parseFloat(montoCredito) : undefined,
+      tipoTarjeta: tipoTarjeta as 'Debito' | 'Credito',
+      saldoDisponible: tipoTarjeta === 'Debito' ? parseFloat(saldoDisponible) : undefined,
+      montoCredito: tipoTarjeta === 'Credito' ? parseFloat(montoCredito) : undefined,
       fechaExpiracion:fechaExpiracion,
       codigoSeguridad,
     };
@@ -49,6 +50,7 @@ const Tarjetas: React.FC = () => {
       await tarjetaService.create(nuevaTarjeta);
 
       alert('Tarjeta creada con éxito');
+      fetchTarjetas();
       resetForm(); //limpiar el formulario con la tarjeta ya creada
       setShowForm(false); // cerrar modal
       
@@ -114,6 +116,22 @@ const Tarjetas: React.FC = () => {
     }
   };
 
+  // Llamada al API para obtener todas las tarjetas
+  useEffect(() => {
+    fetchTarjetas()
+  }, []);
+
+  const fetchTarjetas = async () => {
+    try {
+      const tarjetas = await tarjetaService.getAll();
+      setTarjetas(tarjetas); // Guarda las tarjetas en el estado
+    } catch (error) {
+      console.error('Error al obtener las tarjetas:', error);
+      alert('Hubo un problema al obtener las tarjetas');
+    }
+  };
+
+
   return (
     <div className="p-6 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Gestión de Tarjetas</h2>
@@ -129,6 +147,7 @@ const Tarjetas: React.FC = () => {
       </div>
 
       {/* Pestaña que aparece cuando showForm es true (cuando se presiona agregar tarjeta) */}
+      
       {showForm && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -209,13 +228,13 @@ const Tarjetas: React.FC = () => {
                   required
                 >
                   <option value="">Selecciona el tipo de tarjeta</option>
-                  <option value="debito">Débito</option>
-                  <option value="credito">Crédito</option>
+                  <option value="Debito">Débito</option>
+                  <option value="Credito">Crédito</option>
                 </select>
               </div>
 
               {/* Campo para saldo o monto según tipo de tarjeta */}
-              {tipoTarjeta === 'debito' && (
+              {tipoTarjeta === 'Debito' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Saldo disponible</label>
                   <input
@@ -228,7 +247,7 @@ const Tarjetas: React.FC = () => {
                 </div>
               )}
 
-              {tipoTarjeta === 'credito' && (
+              {tipoTarjeta === 'Credito' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Monto de crédito</label>
                   <input
@@ -292,10 +311,54 @@ const Tarjetas: React.FC = () => {
                   Crear
                 </button>
               </div>
+            
             </form>
           </div>
         </div>
       )}
+
+
+      {/* Mostrar la tabla de tarjetas abajo del formulario */}
+      <div className="mt-8">
+              <h3 className="text-lg font-medium mb-4">Listado de Tarjetas</h3>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Número de Cuenta</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Número de Tarjeta</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tipo de Tarjeta</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Saldo Disponible</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Monto Crédito</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Fecha Expiración</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tarjetas.map((tarjeta) => (
+                    <tr key={tarjeta.numeroTarjeta}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {tarjeta.numeroCuenta}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {tarjeta.numeroTarjeta}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {tarjeta.tipoTarjeta}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {tarjeta.saldoDisponible ?? 'N/A'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {tarjeta.montoCredito ?? 'N/A'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {tarjeta.fechaExpiracion}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
     </div>
   );
 };

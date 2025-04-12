@@ -1,9 +1,9 @@
 [
   {
     "Id": 1,
-    "NumeroCuenta": "prueba",
+    "NumeroCuenta": "Prueba",
     "NumeroTarjeta": "prueba",
-    "TipoTarjeta": "debito",
+    "TipoTarjeta": "Debito",
     "SaldoDisponible": 10000,
     "MontoCredito": null,
     "fechaExpiracion": "2036-08",
@@ -11,9 +11,9 @@
   },
   {
     "Id": 2,
-    "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
+    "NumeroCuenta": "U2FsdGVkX1\u002BxJY8",
     "NumeroTarjeta": "1234567821234556",
-    "TipoTarjeta": "credito",
+    "TipoTarjeta": "Credito",
     "SaldoDisponible": null,
     "MontoCredito": 54000,
     "fechaExpiracion": "2025-05",
@@ -21,12 +21,12 @@
   },
   {
     "Id": 3,
-    "NumeroCuenta": "U2FsdGVkX18OB\u002BJ=",
-    "NumeroTarjeta": "Prueba3",
-    "TipoTarjeta": "debito",
-    "SaldoDisponible": 15000,
+    "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
+    "NumeroTarjeta": "prueba3",
+    "TipoTarjeta": "Debito",
+    "SaldoDisponible": 12000,
     "MontoCredito": null,
-    "fechaExpiracion": "2032-07",
-    "CodigoSeguridad": "123"
+    "fechaExpiracion": "2033-10",
+    "CodigoSeguridad": "234"
   }
 ]
