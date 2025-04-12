@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj": {}
+    "C:\\Users\\jrami\\Desktop\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj": {
+    "C:\\Users\\jrami\\Desktop\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj",
+        "projectUniqueName": "C:\\Users\\jrami\\Desktop\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj",
         "projectName": "TecBankAPI",
-        "projectPath": "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj",
-        "packagesPath": "C:\\Users\\FabianGJ\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\obj\\",
+        "projectPath": "C:\\Users\\jrami\\Desktop\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj",
+        "packagesPath": "C:\\Users\\jrami\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jrami\\Desktop\\TecBank\\api\\TecBankAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\FabianGJ\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\jrami\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

@@ -6,7 +6,7 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Asesor{
     id?:number;
-    cedula:number;
+    cedula:string;
     nombre_1:string;
     nombre_2:string;                                                         
     apellido_1:string;
@@ -20,7 +20,7 @@ const Asesores: React.FC = () => {
     const [asesores, setAsesores] = useState<Asesor[]>([]);
     const [newAsesor, setNewAsesor] = useState<Asesor>({
       id: undefined,
-      cedula:0,
+      cedula:'',
       nombre_1: '',
       nombre_2: '',
       apellido_1: '',
@@ -45,12 +45,16 @@ const Asesores: React.FC = () => {
     
       const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log("Datos a enviar:", newAsesor);
+        const formattedDate = new Date(newAsesor.fecha_nacimiento).toISOString().split('T')[0];
+        //Muestra el asesor con la fecha formateada(solo fecha, se excluye la hora)
+        const asesorToSubmit = { ...newAsesor, fecha_nacimiento: formattedDate };
         try {
           // Crear un nuevo asesor y actualizar la lista
           const createdAsesor = await createAsesor(newAsesor);
           setAsesores([...asesores, createdAsesor]);  
           setNewAsesor({
-            cedula:0,
+            cedula:'',
             nombre_1: '',
             nombre_2: '',
             apellido_1: '',
@@ -74,7 +78,7 @@ const Asesores: React.FC = () => {
                 type="number"
                 id="cedula"
                 value={newAsesor.cedula}
-                onChange={(e) => setNewAsesor({ ...newAsesor, cedula: Number(e.target.value) })}
+                onChange={(e) => setNewAsesor({ ...newAsesor, cedula: e.target.value })}
                 placeholder="Cédula"
                 required
                 className="block w-1/4 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -86,7 +90,7 @@ const Asesores: React.FC = () => {
             <div className="flex space-x-4">
                 <input
                 type="text"
-                id="nombres"
+                id="nombre1"
                 value={newAsesor.nombre_1}
                 onChange={(e) => setNewAsesor({ ...newAsesor, nombre_1: e.target.value })}
                 placeholder="Primer nombre"
@@ -95,7 +99,7 @@ const Asesores: React.FC = () => {
                 />
                 <input
                 type="text"
-                id= "nombres"
+                id= "nombre2"
                 value={newAsesor.nombre_2}
                 onChange={(e) => setNewAsesor({ ...newAsesor, nombre_2: e.target.value })}
                 placeholder="Segundo nombre"
@@ -110,7 +114,7 @@ const Asesores: React.FC = () => {
             <div className="flex space-x-4">  
               <input
                 type="text"
-                id= "apellidos"
+                id= "apellido1"
                 value={newAsesor.apellido_1}
                 onChange={(e) => setNewAsesor({ ...newAsesor, apellido_1: e.target.value })}
                 placeholder="Primer apellido"
@@ -119,7 +123,7 @@ const Asesores: React.FC = () => {
                 />
               <input
                 type="text"
-                id= "apellidos"
+                id= "apellido2"
                 value={newAsesor.apellido_2}
                 onChange={(e) => setNewAsesor({ ...newAsesor, apellido_2: e.target.value })}
                 placeholder="Segundo apellido"

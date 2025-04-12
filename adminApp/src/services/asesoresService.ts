@@ -2,7 +2,7 @@
 
 interface Asesor {
     id?: number;
-    cedula:number;
+    cedula:string;
     nombre_1: string;
     nombre_2: string;
     apellido_1: string;
@@ -12,7 +12,7 @@ interface Asesor {
     meta_dolares: number;
   }
   
-  const API_URL = 'http://localhost:5240/api';
+  const API_URL = 'http://localhost:5240/api/asesor';
   
   // Función para obtener todos los asesores
   export const getAllAsesores = async (): Promise<Asesor[]> => {
