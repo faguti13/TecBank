@@ -40,6 +40,23 @@
     cursor:pointer;
 }
 
+.buttonThird{
+    padding: 10px;
+    font-size: medium; 
+    color: white ;
+    font-weight: bold;
+    background-color: rgb(231, 64, 64)  ;
+    border-radius: 5px;
+    max-width: fit-content;
+    transition: 0.3s;
+}
+
+.buttonThird:hover{
+    background-color:rgb(140, 17, 17);
+    transition: 0.3s;
+    cursor:pointer;
+}
+
 
 .addClientBody{
     display: flex;

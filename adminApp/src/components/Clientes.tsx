@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button} from '@mui/material';
 
 const theme = createTheme();
 
@@ -43,6 +44,17 @@ function Clientes() {
       event.preventDefault();
     };
 
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+
+    const handleClickOpenDeleteDialog = () => {
+      setOpenDeleteDialog(true);
+    };
+
+    const handleCloseDeleteDialog = () => {
+      setOpenDeleteDialog(false);
+    };
+
+
 
     return (
       <div className="p-6 bg-white rounded-lg shadow">
@@ -63,7 +75,6 @@ function Clientes() {
                 label="Añadir Cliente"
               />
               <Tab value="2" label="Modificar Datos" />
-              <Tab value="3" label="Eliminar Cliente" />
             </Tabs>
           </Box>
           
@@ -340,11 +351,33 @@ function Clientes() {
                   </div>
                 </AccordionDetails>
               </Accordion>
+              <div className='editClientAccordion' style={{marginTop:'10px'}}>
+                <div className='buttonThird' onClick={handleClickOpenDeleteDialog}>
+                    Eliminar Cliente
+                </div>
+              </div>
+              <Dialog
+                open={openDeleteDialog}
+                onClose={handleCloseDeleteDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Eliminar cliente"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    ¿Está seguro que desea eliminar este usuario? El usuario no podrá acceder a su cuenta ni realizar transacciones bancarias.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseDeleteDialog}>Cancelar</Button>
+                  <Button onClick={handleCloseDeleteDialog} autoFocus>
+                    Eliminar
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </div>
-          </div>
-          {/**************************** Eliminar cliente ***********************************/}
-          <div style={{display:showTab(tabActive, "3")}}>
-            Eliminar Cliente
           </div>
           </ThemeProvider>
         </div>
