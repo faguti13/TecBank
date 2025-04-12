@@ -9,16 +9,5 @@
     "fecha_nacimiento": "2004-05-18",
     "meta_colones": 5000000,
     "meta_dolares": 10000
-  },
-  {
-    "Id": 2,
-    "cedula": "108960234",
-    "nombre_1": "Bruno",
-    "nombre_2": "",
-    "apellido_1": "Coto",
-    "apellido_2": "Alfaro",
-    "fecha_nacimiento": "1994-02-09",
-    "meta_colones": 200000,
-    "meta_dolares": 5000
   }
 ]
