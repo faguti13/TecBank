@@ -1,0 +1,13 @@
+[
+  {
+    "Id": 1,
+    "cedula": "309990765",
+    "nombre_1": "Joaquin",
+    "nombre_2": "Ignacio",
+    "apellido_1": "Ramirez",
+    "apellido_2": "Sequeira",
+    "fecha_nacimiento": "2004-05-18",
+    "meta_colones": 5000000,
+    "meta_dolares": 10000
+  }
+]

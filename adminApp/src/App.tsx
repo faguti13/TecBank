@@ -10,6 +10,7 @@ import Prestamos from './components/Prestamos';
 import Layout from './components/Layout';
 import Reportes from './components/Reportes';
 import Tarjetas from './components/Tarjetas';
+import Asesores from './components/Asesores';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
@@ -92,7 +93,7 @@ function Cuentas() {
 }
 */
 
-function Asesores() {
+/*function Asesores() {
   return (
     <div className="p-6 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-bold text-gray-900">Gestión de Asesores</h2>
@@ -103,7 +104,7 @@ function Asesores() {
       </div>
     </div>
   );
-}
+}*/
 
 function Morosidad() {
   return (
