@@ -10,13 +10,14 @@ const Tarjetas: React.FC = () => {
   const [saldoDisponible, setSaldoDisponible] = useState<string>(''); // Saldo disponible
   const [montoCredito, setMontoCredito] = useState<string>(''); // Monto de crédito
 
-  const [idCliente, setIdCliente] = useState('');
+  //const [idCliente, setIdCliente] = useState('');
   const [numeroCuenta, setNumeroCuenta] = useState('');
   const [numeroTarjeta, setNumeroTarjeta] = useState('');
   const [fechaExpiracion, setFechaExpiracion] = useState('');
   const [codigoSeguridad, setCodigoSeguridad] = useState('');
 
   const [isCuentaConfirmada, setIsCuentaConfirmada] = useState(false);
+  const [isCuentaExistente, setIsCuentaExistente] = useState(false);
 
   const resetForm = () => { // Resetear la confirmación de cuenta, todo en blanco
     setNumeroCuenta('');
@@ -29,7 +30,7 @@ const Tarjetas: React.FC = () => {
     setIsCuentaConfirmada(false); 
   };
 
-  // manejador del envio del formulario
+  /////////////////////// manejador del envio del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -57,24 +58,52 @@ const Tarjetas: React.FC = () => {
     }
   };
 
+
+/////////////////////// manejador de verificacion de que el num cuenta no esta asociado a otra cuenta
+  const handleConfirmarUnicidadCuenta = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const tarjeta = await tarjetaService.verificarUnicidadCuenta(numeroCuenta);
+      alert('El número de cuenta digitado ya está asociado a una tarjeta existente'); // Si se recibe una tarjeta, significa que está asociada
+      resetForm();
+
+    } catch (error) {
+      if (error instanceof Error) { // Aquí, si se recibe un error, significa que no se encontró la tarjeta asociada
+        if (error.message === 'El número de cuenta no está asociado a una cuenta') {
+          setIsCuentaConfirmada(true);
+        } else {
+          alert('Hubo un problema al verificar la cuenta, vuelva a intentarlo');
+          resetForm();
+        }
+      } else {
+        console.error('Error inesperado', error);
+        alert('Hubo un error inesperado');
+      }
+    }
+  };
+
+
+ /////////////////////// manejador del la existencia del numero de cuentas en cuentas.json 
   const handleConfirmarCuenta = async (e: React.FormEvent) => {
     e.preventDefault();
   
     try {
       await tarjetaService.verificarCuenta(numeroCuenta);
-  
-      setIsCuentaConfirmada(true);      
+      setIsCuentaExistente(true);  
+
+      if (isCuentaExistente) {
+        await handleConfirmarUnicidadCuenta(e);  // Llama a la función para verificar unicidad
+      }
 
     } catch (error) {
       if (error instanceof Error) {
 
         if (error.message === 'El número de cuenta no existe') {
           alert('El número de cuenta digitado no existe, por favor digite un número de cuenta ya registrado');
-          console.error('Error al verificar cuenta', error);
           resetForm()
 
         } else {
-          //console.error('Error al verificar cuenta', error);
           alert('Hubo un problema al verificar la cuenta, vuelva a intentarlo');
           resetForm()
         }
@@ -139,19 +168,17 @@ const Tarjetas: React.FC = () => {
               </div>
 
               {/* Botón para confirmar cuenta */}
+              <div>
+                <button
+                  type="button"
+                  onClick={handleConfirmarCuenta}
+                  disabled={isCuentaConfirmada}
+                  className={`px-4 py-2 text-sm font-medium ${isCuentaConfirmada ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'} text-white rounded-md`}
+                >
+                  Confirmar cuenta
+                </button>
+              </div>
               
-                <div>
-                  <button
-                    type="button"
-                    onClick={handleConfirmarCuenta}
-                    disabled={isCuentaConfirmada}
-                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
-                  >
-                    Confirmar cuenta
-                  </button>
-                </div>
-              
-
               {/* Si la cuenta está confirmada, mostramos el resto de los campos */}
               {isCuentaConfirmada && (
               <>

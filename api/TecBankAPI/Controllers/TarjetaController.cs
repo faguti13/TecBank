@@ -35,6 +35,19 @@ namespace TecBankAPI.Controllers
             return Ok(tarjeta);
         }
 
+        [HttpGet("buscarPorCuenta/{numeroCuenta}")]
+        public ActionResult<Tarjeta> GetByNumeroCuenta(string numeroCuenta)
+        {
+            var tarjetas = _tarjetaService.GetAll();
+            var tarjeta = tarjetas.FirstOrDefault(t => t.NumeroCuenta == numeroCuenta); //busca una que coincida
+            
+            if (tarjeta == null)
+            {
+                return NotFound($"No se encontró una tarjeta asociada al número de cuenta {numeroCuenta}."); // Si no se encuentra la tarjeta
+            }
+            return Ok(tarjeta);
+        }
+
         [HttpPost]
         public ActionResult<Tarjeta> Create([FromBody] Tarjeta tarjeta)
         {

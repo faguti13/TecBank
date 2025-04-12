@@ -56,8 +56,19 @@ export const tarjetaService = {
                 throw new Error('Error al verificar el número de cuenta');
             }
         }
-        // Si la cuenta es encontrada, simplemente terminamos sin hacer nada más
-        return response.json(); // Aunque no necesitas los datos de la cuenta, simplemente verifica que la respuesta esté bien
+        return response.json(); 
+    },
+
+    async verificarUnicidadCuenta(numeroCuenta: string): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/buscarPorCuenta/${numeroCuenta}`);
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('El número de cuenta no está asociado a una cuenta');
+            } else {
+                throw new Error('Error al verificar el número de cuenta');
+            }
+        }
+        return response.json(); 
     }
     
       

@@ -49,6 +49,14 @@ namespace TecBankAPI.Services
             return ReadData<Tarjeta>(_tarjetasPath).FirstOrDefault(t => t.Id == id);
         }
 
+        // Método para buscar tarjeta por número de cuenta
+        public Tarjeta? GetByNumeroCuenta(string numeroCuenta)
+        {
+            return ReadData<Tarjeta>(_tarjetasPath).FirstOrDefault(t => t.NumeroCuenta == numeroCuenta);
+        }
+
+
+
         public Tarjeta Create(Tarjeta tarjeta)
         {
             try
