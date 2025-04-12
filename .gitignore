@@ -31,3 +31,9 @@ yarn-error.log*
 bin/
 obj/
 dist/
+
+api/TecBankAPI/bin/Debug/
+api/TecBankAPI/obj/Debug/
+
+adminApp/src/bin/
+adminApp/src/obj/
