@@ -56,11 +56,37 @@ const Asesores: React.FC = () => {
         const cedulaRepetida = asesores.some((a) =>
           a.cedula === newAsesor.cedula &&
           (!isEditing || (isEditing && a.id !== currentAsesor?.id))
-        );
-      
-        if (cedulaRepetida) {
-          alert('La cédula ya fue registrada para otro asesor.');
-          return;
+        ); 
+        //Verifica que el asesor sea al menos mayor de edad
+        const esMayorDeEdad = (fechaNacimiento: string): boolean => {
+          const hoy = new Date();
+          const nacimiento = new Date(fechaNacimiento);
+          const edad = hoy.getFullYear() - nacimiento.getFullYear(); //Calcula años
+          const mes = hoy.getMonth() - nacimiento.getMonth();//Calcula meses
+          return edad > 18 || (edad === 18 && mes >= 0 && hoy.getDate() >= nacimiento.getDate()); //Retorna verdadero si es mayor de edad
+        };
+        //Validacion de entrys
+        const validarDatos = (): boolean => {
+          //Verifica que la cedula no sea repetida
+          if (cedulaRepetida) { 
+            alert('La cédula ya fue registrada para otro asesor.');
+            return false; //No deja avanzar 
+          }
+          //Verifica que el sea mayor de 18 años
+          if (!esMayorDeEdad(newAsesor.fecha_nacimiento)) {
+            alert("El asesor debe ser mayor de edad."); 
+            return false;
+          }
+          //Verifica que solo hayan número positivos
+          if (newAsesor.meta_colones <= 0 || newAsesor.meta_dolares <= 0) {
+            alert("Las metas deben ser mayores que 0.");
+            return false;
+          }
+          return true;
+        };
+
+          if (!validarDatos()) {
+            return; // Si la validación falla, no se puede continuar.
         }
        
         try {
@@ -220,7 +246,7 @@ const Asesores: React.FC = () => {
                 type="number"
                 id="metacolones"
                 name="meta_colones"
-                value={isEditing && currentAsesor ? currentAsesor.meta_colones : newAsesor.meta_colones}
+                value={isEditing && currentAsesor ? currentAsesor.meta_colones || '' : newAsesor.meta_colones || ''}
                 onChange={handleInputChange}
                 placeholder="Meta en colones"
                 required
@@ -235,7 +261,7 @@ const Asesores: React.FC = () => {
                 type="number"
                 id="metadolares"
                 name="meta_dolares"
-                value={isEditing && currentAsesor ? currentAsesor.meta_dolares : newAsesor.meta_dolares}
+                value={isEditing && currentAsesor ? currentAsesor.meta_dolares || '' : newAsesor.meta_dolares || ''}
                 onChange={handleInputChange}
                 placeholder="Meta en dólares"
                 required
