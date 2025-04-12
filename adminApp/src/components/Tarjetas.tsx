@@ -16,6 +16,19 @@ const Tarjetas: React.FC = () => {
   const [fechaExpiracion, setFechaExpiracion] = useState('');
   const [codigoSeguridad, setCodigoSeguridad] = useState('');
 
+  const [isCuentaConfirmada, setIsCuentaConfirmada] = useState(false);
+
+  const resetForm = () => { // Resetear la confirmación de cuenta, todo en blanco
+    setNumeroCuenta('');
+    setNumeroTarjeta('');
+    setTipoTarjeta('');
+    setSaldoDisponible('');
+    setMontoCredito('');
+    setFechaExpiracion('');
+    setCodigoSeguridad('');
+    setIsCuentaConfirmada(false); 
+  };
+
   // manejador del envio del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,11 +48,40 @@ const Tarjetas: React.FC = () => {
       await tarjetaService.create(nuevaTarjeta);
 
       alert('Tarjeta creada con éxito');
+      resetForm(); //limpiar el formulario con la tarjeta ya creada
       setShowForm(false); // cerrar modal
       
     } catch (error) {
       //console.error('Error al crear la tarjeta', error);
       alert('Error al crear la tarjeta');
+    }
+  };
+
+  const handleConfirmarCuenta = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    try {
+      await tarjetaService.verificarCuenta(numeroCuenta);
+  
+      setIsCuentaConfirmada(true);      
+
+    } catch (error) {
+      if (error instanceof Error) {
+
+        if (error.message === 'El número de cuenta no existe') {
+          alert('El número de cuenta digitado no existe, por favor digite un número de cuenta ya registrado');
+          console.error('Error al verificar cuenta', error);
+          resetForm()
+
+        } else {
+          //console.error('Error al verificar cuenta', error);
+          alert('Hubo un problema al verificar la cuenta, vuelva a intentarlo');
+          resetForm()
+        }
+      } else {
+        console.error('Error inesperado', error);
+        alert('Hubo un error inesperado');
+      }
     }
   };
 
@@ -61,7 +103,7 @@ const Tarjetas: React.FC = () => {
       {showForm && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 className="text-lg font-medium mb-4">Nuevo Préstamo</h3>
+            <h3 className="text-lg font-medium mb-4">Nuevo Tarjeta</h3>
             <form className="space-y-4" onSubmit={handleSubmit}>
 
               {/* campo ID cliente */}
@@ -82,19 +124,37 @@ const Tarjetas: React.FC = () => {
               {/* campo Número de cuenta */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                    Número de cuenta
+                    Número de cuenta a la que se asociará la tarjeta
                 </label>
                 <input
                     type="text"
                     value={numeroCuenta}
                     onChange={(e) => setNumeroCuenta(e.target.value)}
                     
-                    maxLength={16} // Para un formato (XXXX XXXX XXXX XXXX)
+                    //maxLength={16} // Para un formato (XXXX XXXX XXXX XXXX)
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    disabled={isCuentaConfirmada} //para no modificarla una vez creada
                     required
                 />
               </div>
 
+              {/* Botón para confirmar cuenta */}
+              
+                <div>
+                  <button
+                    type="button"
+                    onClick={handleConfirmarCuenta}
+                    disabled={isCuentaConfirmada}
+                    className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700"
+                  >
+                    Confirmar cuenta
+                  </button>
+                </div>
+              
+
+              {/* Si la cuenta está confirmada, mostramos el resto de los campos */}
+              {isCuentaConfirmada && (
+              <>
               {/* campo Número de tarjeta */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -183,12 +243,17 @@ const Tarjetas: React.FC = () => {
                     required
                 />
               </div>
+              </>
+              )}
 
               {/* Botones para cancelar o confirmar */}
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"
-                  onClick={() => setShowForm(false)} // Cerrar el formulario
+                  onClick={() => {
+                    resetForm(); // limpiar los campos
+                    setShowForm(false); // Cerrar el formulario
+                  }}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                 >
                   Cancelar

@@ -46,4 +46,21 @@ export const tarjetaService = {
         return response.json();
     },
 
+
+    async verificarCuenta(numeroCuenta: string): Promise<void> {
+        const response = await fetch(`${API_URL}/cuentas/buscar/${numeroCuenta}`);
+        if (!response.ok) {
+            if (response.status === 400) {
+                throw new Error('El número de cuenta no existe');
+            } else {
+                throw new Error('Error al verificar el número de cuenta');
+            }
+        }
+        // Si la cuenta es encontrada, simplemente terminamos sin hacer nada más
+        return response.json(); // Aunque no necesitas los datos de la cuenta, simplemente verifica que la respuesta esté bien
+    }
+    
+      
+
+
 }; 

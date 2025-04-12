@@ -1,24 +1,34 @@
 [
-    {
-      "id": 1,
-      "numeroCuenta": "U2FsdGVkX1+xJY85y3tSx7xEJ4YV5LZQQf8z9Zk1nFk=",
-      "descripcion": "Cuenta principal de ahorros",
-      "moneda": "CRC",
-      "tipo": "Ahorros"
-    },
-    {
-      "id": 2,
-      "numeroCuenta": "U2FsdGVkX19I3+gvXKQYKtI48Cy5R5/RazhNj4/9WVA=",
-      "descripcion": "Cuenta para gastos personales",
-      "moneda": "USD",
-      "tipo": "Corriente"
-    },
-    {
-      "id": 3,
-      "numeroCuenta": "U2FsdGVkX18OB+JdTKrPwdT1NrZP3o3YnhZKb3lJqp8=",
-      "descripcion": "Cuenta de ahorros en euros",
-      "moneda": "EUR",
-      "tipo": "Ahorros"
-    }
-  ]
-  
+  {
+    "Id": 1,
+    "NumeroCuenta": "U2FsdGVkX1+xJY8",
+    "Descripcion": "Cuenta principal de ahorros",
+    "Moneda": "CRC",
+    "TipoCuenta": "Ahorros",
+    "CedulaCliente": "12344"
+  },
+  {
+    "Id": 2,
+    "NumeroCuenta": "U2FsdGVkX19I3+gv",
+    "Descripcion": "Cuenta para gastos personales",
+    "Moneda": "USD",
+    "TipoCuenta": "Corriente",
+    "CedulaCliente": "12344"
+  },
+  {
+    "Id": 3,
+    "NumeroCuenta": "U2FsdGVkX18OB+J=",
+    "Descripcion": "Cuenta de ahorros en euros",
+    "Moneda": "EUR",
+    "TipoCuenta": "Ahorros",
+    "CedulaCliente": "12344"
+  },
+  {
+    "Id": 4,
+    "NumeroCuenta": "Prueba",
+    "Descripcion": "Cuenta de ahorros en euros",
+    "Moneda": "EUR",
+    "TipoCuenta": "Ahorros",
+    "CedulaCliente": "12344"
+  }
+]
