@@ -32,7 +32,6 @@ const navigation = [
       { name: 'Pago extraordinario', href: '/prestamos/pago-extra' }
     ]
   },
-  { name: 'Perfil', href: '/perfil', icon: UserIcon },
   { name: 'Ayuda', href: '/ayuda', icon: QuestionMarkCircleIcon }
 ];
 
@@ -60,7 +59,6 @@ function App() {
           <Route path="/prestamos/pago-extra" element={<PagoExtraordinario />} />
           
           {/* Otras rutas */}
-          <Route path="/perfil" element={<MiPerfil />} />
           <Route path="/ayuda" element={<AyudaCliente />} />
       </Routes>
       </Layout>
@@ -289,19 +287,6 @@ function PagoExtraordinario() {
   );
 }
 
-function MiPerfil() {
-  return (
-    <div className="p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold text-gray-900">Mi Perfil</h2>
-      <div className="mt-4">
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-          Editar
-        </button>
-      </div>
-    </div>
-  );
-}
-
 
 function AyudaCliente() {
   const [activeTab, setActiveTab] = useState('faq');
@@ -311,10 +296,6 @@ function AyudaCliente() {
     {
       question: "¿Cómo puedo transferir dinero entre mis cuentas?",
       answer: "Para transferir dinero entre sus cuentas, vaya a la sección 'Mis Cuentas', seleccione 'Transferencias' y siga las instrucciones para realizar la transferencia."
-    },
-    {
-      question: "¿Cómo cambio mi contraseña?",
-      answer: "Para cambiar su contraseña, vaya a la sección 'Perfil', haga clic en 'Editar', y seleccione la opción 'Cambiar contraseña'."
     },
     {
       question: "¿Qué hago si olvidé mi contraseña?",
