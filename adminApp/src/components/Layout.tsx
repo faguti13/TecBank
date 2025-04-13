@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HomeIcon, UsersIcon, CreditCardIcon, CurrencyDollarIcon, UserGroupIcon, KeyIcon, DocumentTextIcon, UserIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, UsersIcon, CreditCardIcon, CurrencyDollarIcon, UserGroupIcon, KeyIcon, DocumentTextIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,13 +15,12 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
   const navigationItems = [
     { name: 'Dashboard', href: '/', icon: HomeIcon },
     { name: 'Clientes', href: '/clientes', icon: UsersIcon },
-    { name: 'Cuentas', href: '/cuentas', icon: CreditCardIcon },
+    { name: 'Cuentas', href: '/cuentas', icon: ChartBarIcon },
     { name: 'Tarjetas', href: '/tarjetas', icon: CreditCardIcon },
     { name: 'Préstamos', href: '/prestamos', icon: CurrencyDollarIcon },
     { name: 'Asesores', href: '/asesores', icon: UserGroupIcon },
     { name: 'Roles', href: '/roles', icon: KeyIcon },
     { name: 'Reportes', href: '/reportes', icon: DocumentTextIcon },
-    { name: 'Usuarios', href: '/usuarios', icon: UserIcon },
   ];
 
   return (

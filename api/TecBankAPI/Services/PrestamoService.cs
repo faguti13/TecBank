@@ -210,5 +210,10 @@ namespace TecBankAPI.Services
             
             return nuevoCalendario;
         }
+//Obtiene los prestamos por asesor basados en su cédula
+        internal IEnumerable<object> GetPrestamosPorAsesor(string cedula)
+        {
+            throw new NotImplementedException();
+        }
     }
 } 
