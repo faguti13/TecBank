@@ -4465,24 +4465,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\FabianGJ\\.nuget\\packages\\": {}
+    "C:\\Users\\alexi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj",
+      "projectUniqueName": "D:\\Alexis\\A_Tec\\Semestre_7\\Bases_Datos\\TecBank\\api\\TecBankApi\\TecBankAPI.csproj",
       "projectName": "TecBankAPI",
-      "projectPath": "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\TecBankAPI.csproj",
-      "packagesPath": "C:\\Users\\FabianGJ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\FabianGJ\\TecBank\\api\\TecBankAPI\\obj\\",
+      "projectPath": "D:\\Alexis\\A_Tec\\Semestre_7\\Bases_Datos\\TecBank\\api\\TecBankApi\\TecBankAPI.csproj",
+      "packagesPath": "C:\\Users\\alexi\\.nuget\\packages\\",
+      "outputPath": "D:\\Alexis\\A_Tec\\Semestre_7\\Bases_Datos\\TecBank\\api\\TecBankApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\FabianGJ\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\alexi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4549,7 +4551,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

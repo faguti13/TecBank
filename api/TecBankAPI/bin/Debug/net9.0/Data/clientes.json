@@ -1,30 +1,41 @@
 [
   {
     "Id": 1,
-    "Cedula": "119230145",
+    "Usuario": "FabianGJ",
+    "Password": "73l8gRjwLftklgfdXT\u002BMdiMEjJwGPVMsyVxe16iYpk8=",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
+    "Cedula": "119230145",
     "Direccion": "Residencial Estancia Antigua",
     "Telefono": "64012272",
-    "Usuario": "FabianGJ",
-    "Password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
     "Email": "fabian@test.com",
-    "IngresoMensual": 0,
-    "TipoCliente": "Físico"
+    "TipoCliente": "F\u00EDsico"
   },
   {
     "Id": 2,
-    "Cedula": "123456789",
+    "Usuario": "cliente_test",
+    "Password": "test123",
     "Nombre": "Cliente",
     "Apellido1": "Prueba",
     "Apellido2": "Test",
-    "Direccion": "Dirección de prueba",
+    "Cedula": "123456789",
+    "Direccion": "Direcci\u00F3n de prueba",
     "Telefono": "88888888",
-    "Usuario": "cliente_test",
-    "Password": "test123",
     "Email": "cliente@test.com",
-    "IngresoMensual": 1500000,
-    "TipoCliente": "Físico"
+    "TipoCliente": "F\u00EDsico"
+  },
+  {
+    "Id": 3,
+    "Usuario": "test2",
+    "Password": "pass",
+    "Nombre": "test2",
+    "Apellido1": "test2",
+    "Apellido2": "test2",
+    "Cedula": "aaaa",
+    "Direccion": "bbbbb",
+    "Telefono": "11111",
+    "Email": "@gmail",
+    "TipoCliente": "F\u00EDsico"
   }
 ]
