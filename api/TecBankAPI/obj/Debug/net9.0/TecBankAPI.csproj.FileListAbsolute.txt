@@ -847,3 +847,7 @@ C:\Users\jrami\Pictures\TecBank\api\TecBankAPI\obj\Debug\net9.0\refint\TecBankAP
 C:\Users\jrami\Pictures\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.pdb
 C:\Users\jrami\Pictures\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.genruntimeconfig.cache
 C:\Users\jrami\Pictures\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref\TecBankAPI.dll
+C:\Users\Emmanuel Calvo\Documents\GitHub\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\calendario_pagos.json
+C:\Users\Emmanuel Calvo\Documents\GitHub\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\pagos_prestamos.json
+C:\Users\Emmanuel Calvo\Documents\GitHub\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\prestamos.json
+>>>>>>> 4e9177f42aa3c0ed1d208ffaa80f0c28857c6d5e

@@ -1,16 +1,14 @@
-// services/cuentaService.ts
-
 interface Cuenta {
     id?: number;
     numeroCuenta: string;
     descripcion: string;
     moneda: 'Colones' | 'Dólares' | 'Euros';
     tipoCuenta: 'Ahorros' | 'Corriente';
-    cedulaCliente: string;
+    nombreCliente: string;  // Cambiado de cedulaCliente a nombreCliente
 }
 
 // URL base de la API
-const API_URL = 'http://localhost:5240/api';
+const API_URL = 'http://localhost:5240/api/Cuentas';
 
 export const cuentaService = {
     // Obtener todas las cuentas

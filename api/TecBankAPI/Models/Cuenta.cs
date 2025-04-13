@@ -7,6 +7,6 @@ namespace TecBankAPI.Models
         public string Descripcion { get; set; } = string.Empty;
         public string Moneda { get; set; } = "Colones";
         public string TipoCuenta { get; set; } = "Ahorros";
-        public string CedulaCliente { get; set; } = string.Empty;
+        public string NombreCliente { get; set; } = string.Empty;
     }
 }
