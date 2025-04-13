@@ -302,6 +302,7 @@ function MiPerfil() {
   );
 }
 
+
 function AyudaCliente() {
   const [activeTab, setActiveTab] = useState('faq');
   
@@ -431,4 +432,4 @@ function AyudaCliente() {
   );
 }
 
-export default AyudaCliente;
+export default App;
