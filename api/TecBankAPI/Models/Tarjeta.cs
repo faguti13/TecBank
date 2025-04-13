@@ -24,6 +24,9 @@ public class Tarjeta
 
         [Required]
         public string CodigoSeguridad { get; set; }  // Código de seguridad (CVV)
+
+        [Required]
+        public decimal MontoSinCancelar { get; set; }
     }
 
 public class Compra

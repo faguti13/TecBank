@@ -48,6 +48,19 @@ namespace TecBankAPI.Controllers
             return Ok(tarjeta);
         }
 
+                // DELETE: api/Roles/5
+        [HttpDelete("{numeroTarjeta}")]
+        public IActionResult DeleteTarjeta(string numeroTarjeta)
+        {
+            var success = _tarjetaService.DeleteTarjeta(numeroTarjeta);
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
         [HttpGet("buscarPorTarjeta/{numeroTarjeta}")]
         public ActionResult<Tarjeta> GetByNumeroTarjeta(string numeroTarjeta)
         {
@@ -85,6 +98,27 @@ namespace TecBankAPI.Controllers
              return NoContent();
         }
 
+        [HttpGet("compras")]
+        public ActionResult<List<Compra>> GetAllCompras()
+        {
+            var compras = _tarjetaService.GetAllCompras();
+            return Ok(compras);
+        }
+
+        [HttpGet("compras/{numeroTarjeta}")]
+        public ActionResult<IEnumerable<Compra>> CompraGetByNumTarjeta(string numeroTarjeta)
+        {
+            var compras = _tarjetaService.CompraGetByNumTarjeta(numeroTarjeta);
+            if (compras == null || !compras.Any())
+            {
+                return NotFound($"No se encontraron compras para la tarjeta {numeroTarjeta}.");
+            }
+
+            return Ok(compras);  // Asegúrate de que esto devuelve un array o lista de compras
+        }
+
+
+
         [HttpPut("actualizarMonto")]
         public IActionResult ActualizarMonto([FromBody] ActualizarMontoRequest request)
         {
@@ -102,11 +136,9 @@ namespace TecBankAPI.Controllers
 
             if (tarjeta.TipoTarjeta == "Debito") // Actualizar saldo o crédito dependiendo del tipo de tarjeta
             {
-                Console.WriteLine($"Saldo disponible antes: {tarjeta.SaldoDisponible}");
                 if ((tarjeta.SaldoDisponible ?? 0) >= request.NuevoMonto)
                 {
                     tarjeta.SaldoDisponible = (tarjeta.SaldoDisponible ?? 0) - request.NuevoMonto;
-                    Console.WriteLine($"Nuevo saldo disponible: {tarjeta.SaldoDisponible}");
                 }
                 else
                 {
@@ -116,6 +148,7 @@ namespace TecBankAPI.Controllers
             else if (tarjeta.TipoTarjeta == "Credito")
             {
                 tarjeta.MontoCredito = (tarjeta.MontoCredito ?? 0) - request.NuevoMonto;
+                tarjeta.MontoSinCancelar = tarjeta.MontoSinCancelar + request.NuevoMonto;
             }
 
             // Actualizar la tarjeta en la lista de tarjetas

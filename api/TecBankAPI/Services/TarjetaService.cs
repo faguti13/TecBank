@@ -66,6 +66,17 @@ namespace TecBankAPI.Services
             return ReadData<Tarjeta>(_tarjetasPath).FirstOrDefault(t => t.NumeroTarjeta == numeroTarjeta);
         }
 
+        public bool DeleteTarjeta(string numeroTarjeta)
+        {
+            var tarjetas = ReadData<Tarjeta>(_tarjetasPath);
+            var tarjeta = tarjetas.FirstOrDefault(t => t.NumeroTarjeta == numeroTarjeta);
+            if (tarjeta == null) return false;
+
+            tarjetas.Remove(tarjeta);
+            SaveData(tarjetas, _tarjetasPath);
+            return true;
+        }
+
         public Tarjeta Create(Tarjeta tarjeta)
         {
             try
@@ -101,5 +112,17 @@ namespace TecBankAPI.Services
                 throw new Exception($"Error al crear la compra: {ex.Message}", ex);
             }
         }
+
+        public List<Compra> GetAllCompras()
+        {
+            return ReadData<Compra>(_comprasPath);
+        }
+
+        public IEnumerable<Compra> CompraGetByNumTarjeta(string numeroTarjeta)
+        {
+            // Asegúrate de que este método esté devolviendo una lista o colección
+            return ReadData<Compra>(_comprasPath).Where(compra => compra.NumeroTarjeta == numeroTarjeta).ToList();
+        }
+
     }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {  DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {DocumentPlusIcon, EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
 
-import { Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
+import { Compra, Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
 
 const Tarjetas: React.FC = () => {
   // Estado para mostrar el formulario modal
@@ -22,7 +22,11 @@ const Tarjetas: React.FC = () => {
   const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
   const [selectedTarjeta, setSelectedTarjeta] = useState<Tarjeta | null>(null);
 
-  const [showCompraForm, setShowCompraForm] = useState(false);
+  const [compras, setCompras] = useState<Compra[]>([]); // Aquí se almacenan las compras
+  const [showCompraForm, setShowCompraForm] = useState(false); // visualización del modal de form compras
+  const [showCompraPorNumForm, setShowCompraPorNumForm] = useState(false); // visualización del modal de las compras por tarjetas
+  const [loading, setLoading] = useState(false); //
+
   const [monto, setMonto] = useState('');
   const [fecha, setFecha] = useState('');
 
@@ -55,6 +59,7 @@ const Tarjetas: React.FC = () => {
       montoCredito: tipoTarjeta === 'Credito' ? parseFloat(montoCredito) : undefined,
       fechaExpiracion:fechaExpiracion,
       codigoSeguridad,
+      montoSinCancelar:0,
     };
 
     try {
@@ -71,6 +76,26 @@ const Tarjetas: React.FC = () => {
     }
   };
 
+
+  /////////////////////// Llamada al API para obtener todas las compras de una tarejta especifica
+  const deleteTarjera = async (tarjeta: Tarjeta) => {
+    setLoading(true);
+
+    if(tarjeta.montoSinCancelar != 0){
+      alert('Esta tarjeta no se puede eliminar: aún tiene un saldo pendiente por cancelar.');
+      return 
+    }
+
+    try {
+      await tarjetaService.deleteTarjeta(tarjeta.numeroTarjeta);
+      alert('Tarjeta elimanda con éxito');
+      fetchTarjetas();
+
+    } catch (error) {
+      console.error('Error al obtener las compras:', error);
+      //alert('Hubo un problema al obtener las compras. Intente nuevamente.');
+    } 
+  };
 
 /////////////////////// manejador de verificacion de que el num cuenta no esta asociado a otra cuenta
   const handleConfirmarUnicidadCuenta = async (e: React.FormEvent) => {
@@ -127,7 +152,7 @@ const Tarjetas: React.FC = () => {
     }
   };
 
-  /////////////////////// Llamada al API para obtener todas las tarjetas
+/////////////////////// Llamada al API para obtener todas las tarjetas
   useEffect(() => {
     fetchTarjetas()
   }, []);
@@ -140,6 +165,35 @@ const Tarjetas: React.FC = () => {
       console.error('Error al obtener las tarjetas:', error);
       alert('Hubo un problema al obtener las tarjetas');
     }
+  };
+
+  /////////////////////// Llamada al API para obtener todas las compras de una tarejta especifica
+  const fetchCompras = async (numeroTarjeta: string) => {
+    setLoading(true);
+    try {
+      const compras = await tarjetaService.compraGetByNumTarjeta(numeroTarjeta);
+
+      setCompras(compras);
+    } catch (error) {
+      console.error('Error al obtener las compras:', error);
+      //alert('Hubo un problema al obtener las compras. Intente nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Función para cerrar el modal
+  const handleCloseModal = () => {
+    setShowCompraPorNumForm(false)
+    setSelectedTarjeta(null);
+    setCompras([]); // Limpia compras al cerrar el modal
+  };
+
+  // Función para ver las compras de la tarjeta seleccionada
+  const handleVerCompras = (tarjeta: Tarjeta) => {
+    setSelectedTarjeta(tarjeta);
+    fetchCompras(tarjeta.numeroTarjeta); 
+    setShowCompraPorNumForm(true); 
   };
 
 /////////////////////// manejador del envio del formulario de nueva compra
@@ -412,7 +466,7 @@ const handleActMontos = async (e: React.FormEvent) => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Fecha Expiración</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Monto Compras</th>
+                      Saldo Pendiente</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Acciones</th>
                   </tr>
@@ -433,11 +487,10 @@ const handleActMontos = async (e: React.FormEvent) => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {tarjeta.fechaExpiracion}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        </td>
+                        {tarjeta.tipoTarjeta === "Credito" ? tarjeta.montoSinCancelar : "N/A"}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
                             onClick={() => {setSelectedTarjeta(tarjeta);
-                              
                               setShowCompraForm(true)
                             }} 
                             title="Agregar nueva compra"
@@ -446,7 +499,16 @@ const handleActMontos = async (e: React.FormEvent) => {
                           </button>
 
                           <button
-                            //onClick={() => rol.id && handleDelete(rol.id)}
+                              onClick={() => { 
+                                setSelectedTarjeta(tarjeta); handleVerCompras(tarjeta);
+                                }} 
+                            title="Ver compras realizadas"
+                            className="text-indigo-600 hover:text-indigo-900 mr-4">
+                          < EyeIcon className="h-5 w-5" />
+                          </button>
+
+                          <button
+                            onClick={() => {deleteTarjera(tarjeta)}}
                             title="Eliminar tarjeta"
                             className="text-red-600 hover:text-red-900">
                           <TrashIcon className="h-5 w-5" />
@@ -505,9 +567,53 @@ const handleActMontos = async (e: React.FormEvent) => {
           </div>
         </div>
       )}
+
+      {/* Modal para mostrar las compras de cada tarjeta*/}
+      {showCompraPorNumForm && (
+              <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-500 bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                  <h2 className="text-xl font-medium mb-4">Compras realizadas para {selectedTarjeta?.numeroTarjeta}</h2>
+
+                  {loading ? (
+                    <p>Cargando...</p>
+                  ) : compras.length > 0 ? (
+                    <ul>
+                      {compras.map((compra, index) => (
+                        <li key={index} className="mb-2">
+                          <p>Monto de compra #{index + 1}: {compra.monto}</p>
+                          <p>Fecha: {compra.fecha}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No se encontraron compras.</p>
+                  )}
+
+                  <button
+                    onClick={handleCloseModal}
+                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg">
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    
     </div>
   );
-};
+}
 
 export default Tarjetas;

@@ -16,5 +16,41 @@
     "NumeroTarjeta": "1234567821234556",
     "Monto": "400",
     "Fecha": "2025-05-23"
+  },
+  {
+    "Id": 4,
+    "NumeroTarjeta": "prueba",
+    "Monto": "1400",
+    "Fecha": "2025-04-17"
+  },
+  {
+    "Id": 5,
+    "NumeroTarjeta": "1234567821234556",
+    "Monto": "3100",
+    "Fecha": "2025-04-17"
+  },
+  {
+    "Id": 6,
+    "NumeroTarjeta": "prueba",
+    "Monto": "600",
+    "Fecha": "2025-04-22"
+  },
+  {
+    "Id": 7,
+    "NumeroTarjeta": "prueba",
+    "Monto": "1000",
+    "Fecha": "2025-04-26"
+  },
+  {
+    "Id": 8,
+    "NumeroTarjeta": "prueba",
+    "Monto": "200",
+    "Fecha": "2025-05-02"
+  },
+  {
+    "Id": 10,
+    "NumeroTarjeta": "prueba3",
+    "Monto": "1250",
+    "Fecha": "2025-04-24"
   }
 ]

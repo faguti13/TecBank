@@ -4,10 +4,11 @@
     "NumeroCuenta": "Prueba",
     "NumeroTarjeta": "prueba",
     "TipoTarjeta": "Debito",
-    "SaldoDisponible": 7000,
+    "SaldoDisponible": 3800,
     "MontoCredito": null,
     "fechaExpiracion": "2036-08",
-    "CodigoSeguridad": "888"
+    "CodigoSeguridad": "888",
+    "MontoSinCancelar": 0
   },
   {
     "Id": 2,
@@ -15,18 +16,20 @@
     "NumeroTarjeta": "1234567821234556",
     "TipoTarjeta": "Credito",
     "SaldoDisponible": null,
-    "MontoCredito": 53500,
+    "MontoCredito": 50000,
     "fechaExpiracion": "2025-05",
-    "CodigoSeguridad": "123"
+    "CodigoSeguridad": "123",
+    "MontoSinCancelar": 3100
   },
   {
     "Id": 3,
     "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
     "NumeroTarjeta": "prueba3",
     "TipoTarjeta": "Debito",
-    "SaldoDisponible": 12000,
+    "SaldoDisponible": 3000,
     "MontoCredito": null,
     "fechaExpiracion": "2033-10",
-    "CodigoSeguridad": "234"
+    "CodigoSeguridad": "234",
+    "MontoSinCancelar": 0
   }
 ]
