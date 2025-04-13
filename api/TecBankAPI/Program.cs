@@ -13,10 +13,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<RolService>();
 builder.Services.AddScoped<PrestamoService>();
 builder.Services.AddScoped<ClienteService>();
-builder.Services.AddHostedService<ReporteBackgroundService>();
 builder.Services.AddScoped<AsesorService>();
 builder.Services.AddScoped<TarjetaService>();
 builder.Services.AddScoped<CuentaService>();
+builder.Services.AddHostedService<ReporteBackgroundService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>

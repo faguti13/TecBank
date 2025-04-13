@@ -8,14 +8,18 @@ namespace TecBankAPI.Services
         private readonly string _prestamosPath;
         private readonly string _pagosPath;
         private readonly string _calendarioPath;
+        private readonly ClienteService _clienteService;
+        private readonly AsesorService _asesorService;
         private static readonly object _lock = new object();
 
-        public PrestamoService(IWebHostEnvironment webHostEnvironment)
+        public PrestamoService(IWebHostEnvironment webHostEnvironment, ClienteService clienteService, AsesorService asesorService)
         {
             var dataPath = Path.Combine(webHostEnvironment.ContentRootPath, "Data");
             _prestamosPath = Path.Combine(dataPath, "prestamos.json");
             _pagosPath = Path.Combine(dataPath, "pagos_prestamos.json");
             _calendarioPath = Path.Combine(dataPath, "calendario_pagos.json");
+            _clienteService = clienteService;
+            _asesorService = asesorService;
 
             // Crear archivos si no existen
             if (!Directory.Exists(dataPath))
@@ -77,6 +81,21 @@ namespace TecBankAPI.Services
         {
             try
             {
+                // Validar que el cliente existe
+                var cliente = _clienteService.GetById(prestamo.ClienteId);
+                if (cliente == null)
+                {
+                    throw new Exception($"El cliente con ID {prestamo.ClienteId} no existe");
+                }
+
+                // Validar que el asesor existe
+                var asesores = _asesorService.GetAsesores();
+                var asesor = asesores.FirstOrDefault(a => a.Id == prestamo.AsesorId);
+                if (asesor == null)
+                {
+                    throw new Exception($"El asesor con ID {prestamo.AsesorId} no existe");
+                }
+
                 var prestamos = ReadData<Prestamo>(_prestamosPath);
                 prestamo.Id = prestamos.Count > 0 ? prestamos.Max(p => p.Id) + 1 : 1;
                 prestamo.FechaCreacion = DateTime.Now;
