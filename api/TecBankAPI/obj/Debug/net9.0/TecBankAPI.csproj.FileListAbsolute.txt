@@ -354,3 +354,6 @@ C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\cuentas.json
 C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\calendario_pagos.json
 C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\pagos_prestamos.json
 C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\prestamos.json
+C:\Users\Emmanuel Calvo\Documents\GitHub\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\calendario_pagos.json
+C:\Users\Emmanuel Calvo\Documents\GitHub\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\pagos_prestamos.json
+C:\Users\Emmanuel Calvo\Documents\GitHub\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\prestamos.json
