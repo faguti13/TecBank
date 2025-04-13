@@ -15,16 +15,31 @@
   },
   {
     "Id": 2,
-    "Cedula": "119230145",
-    "Nombre": "Fabian",
-    "Apellido1": "Gutierrez",
-    "Apellido2": "Jimenez",
+    "Cedula": "119230146",
+    "Nombre": "Juan",
+    "Apellido1": "Perez",
+    "Apellido2": "Gomez",
     "Direccion": "Residencial Estancia Antigua",
-    "Telefono": "64012272",
-    "Usuario": "FabianGJ",
-    "Password": "test123",
-    "Email": "cliente@test.com",
+    "Telefono": "64012273",
+    "Usuario": "JuanPG",
+    "Password": "123456",
+    "Email": "juan@test.com",
     "IngresoMensual": 1500000,
     "TipoCliente": "Físico"
+  },
+  {
+    "Id": 3,
+    "Cedula": "119230147",
+    "Nombre": "Maria",
+    "Apellido1": "Lopez",
+    "Apellido2": "Garcia",
+    "Direccion": "Residencial Estancia Antigua",
+    "Telefono": "64012274",
+    "Usuario": "MariaLG",
+    "Password": "123456",
+    "Email": "maria@test.com",  
+    "IngresoMensual": 2000000,
+    "TipoCliente": "Físico"
   }
+
 ]

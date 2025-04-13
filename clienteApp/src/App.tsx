@@ -1,11 +1,19 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { HomeIcon,  CreditCardIcon, 
          CurrencyDollarIcon, CreditCardIcon as CardIcon, UserIcon, 
-         QuestionMarkCircleIcon, BanknotesIcon} from '@heroicons/react/24/outline';
+         QuestionMarkCircleIcon, BanknotesIcon, PhoneIcon,
+         EnvelopeIcon,
+         ChatBubbleLeftRightIcon,
+         DocumentIcon,
+         ClockIcon} from '@heroicons/react/24/outline';
+
 import { AuthProvider } from './context/AuthContext';
 import Login from './components/Login';
 import ProtectedRoutes from './components/ProtectedRoutes';
+
+
 import Layout from './components/Layout';
 
 const navigation = [
@@ -306,17 +314,135 @@ function MiPerfil() {
   );
 }
 
+
 function AyudaCliente() {
+  const [activeTab, setActiveTab] = useState('faq');
+  
+  // FAQ items
+  const faqItems = [
+    {
+      question: "¿Cómo puedo transferir dinero entre mis cuentas?",
+      answer: "Para transferir dinero entre sus cuentas, vaya a la sección 'Mis Cuentas', seleccione 'Transferencias' y siga las instrucciones para realizar la transferencia."
+    },
+    {
+      question: "¿Cómo cambio mi contraseña?",
+      answer: "Para cambiar su contraseña, vaya a la sección 'Perfil', haga clic en 'Editar', y seleccione la opción 'Cambiar contraseña'."
+    },
+    {
+      question: "¿Qué hago si olvidé mi contraseña?",
+      answer: "Si olvidó su contraseña, en la pantalla de inicio de sesión haga clic en '¿Olvidó su contraseña?' y siga las instrucciones para restablecerla."
+    },
+    {
+      question: "¿Cómo puedo reportar una tarjeta perdida o robada?",
+      answer: "Para reportar una tarjeta perdida o robada, llame inmediatamente a nuestro centro de atención al cliente al 800-TECBANK (800-832-2265) disponible 24/7."
+    },
+    {
+      question: "¿Cómo solicito un nuevo préstamo?",
+      answer: "Para solicitar un nuevo préstamo, visite cualquiera de nuestras sucursales o contacte a su asesor de crédito asignado."
+    }
+  ];
+  
+  // Contact information
+  const contactInfo = {
+    phoneNumbers: [
+      { title: "Atención al Cliente", number: "800-TECBANK (800-832-2265)" },
+      { title: "Soporte Técnico", number: "800-SOPORTE (800-767-6783)" },
+      { title: "Emergencias (Tarjetas)", number: "800-EMERGENCIA (800-364-7436)" }
+    ],
+    email: "ayuda@tecbank.com",
+    hours: "Lunes a Viernes: 8:00 AM - 7:00 PM | Sábados: 9:00 AM - 1:00 PM"
+  };
+
   return (
-    <div className="p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold text-gray-900">Ayuda</h2>
-      <div className="mt-4">
+    <div className="space-y-6">
+      {/* Encabezado */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900">Centro de Ayuda</h2>
         <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-          Contactar
+          Contactar Ahora
         </button>
+      </div>
+      
+      {/* Tabs */}
+      <div className="flex space-x-1 border-b border-gray-200">
+        <button
+          onClick={() => setActiveTab('faq')}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === 'faq' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Preguntas Frecuentes
+        </button>
+        <button
+          onClick={() => setActiveTab('contact')}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === 'contact' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Contacto
+        </button>
+      </div>
+      
+      {/* Tab content */}
+      <div className="p-4 bg-white rounded-lg shadow">
+        {activeTab === 'faq' && (
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <QuestionMarkCircleIcon className="w-6 h-6 text-blue-500" />
+              <h3 className="text-lg font-medium text-gray-900">Preguntas Frecuentes</h3>
+            </div>
+            
+            <div className="space-y-4">
+              {faqItems.map((item, index) => (
+                <details key={index} className="p-4 border border-gray-200 rounded-lg group">
+                  <summary className="flex items-center justify-between cursor-pointer">
+                    <span className="font-medium text-gray-700">{item.question}</span>
+                    <span className="text-blue-500 transition-transform group-open:rotate-180">
+                      &#x25BC;
+                    </span>
+                  </summary>
+                  <p className="mt-3 text-gray-600">{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {activeTab === 'contact' && (
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <PhoneIcon className="w-6 h-6 text-blue-500" />
+              <h3 className="text-lg font-medium text-gray-900">Números de Teléfono</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {contactInfo.phoneNumbers.map((phone, index) => (
+                <div key={index} className="p-4 transition-shadow bg-gray-50 rounded-lg hover:shadow">
+                  <h4 className="text-sm font-medium text-gray-500">{phone.title}</h4>
+                  <p className="mt-1 text-lg font-bold text-blue-600">{phone.number}</p>
+                </div>
+              ))}
+            </div>
+            
+            <div className="p-4 mt-4 border border-gray-200 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <EnvelopeIcon className="w-5 h-5 text-blue-500" />
+                <h4 className="font-medium text-gray-700">Correo Electrónico</h4>
+              </div>
+              <p className="mt-1 text-blue-600">{contactInfo.email}</p>
+              
+              <div className="flex items-center mt-4 space-x-2">
+                <ClockIcon className="w-5 h-5 text-blue-500" />
+                <h4 className="font-medium text-gray-700">Horario de Atención</h4>
+              </div>
+              <p className="mt-1 text-gray-600">{contactInfo.hours}</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
 
 export default App;
