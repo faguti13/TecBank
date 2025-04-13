@@ -5,7 +5,7 @@
     "Descripcion": "Cuenta principal de ahorros",
     "Moneda": "CRC",
     "TipoCuenta": "Ahorros",
-    "CedulaCliente": "12344"
+    "CedulaCliente": "119230145"
   },
   {
     "Id": 2,
@@ -13,7 +13,7 @@
     "Descripcion": "Cuenta para gastos personales",
     "Moneda": "USD",
     "TipoCuenta": "Corriente",
-    "CedulaCliente": "12344"
+    "CedulaCliente": "119230145"
   },
   {
     "Id": 3,
@@ -21,7 +21,7 @@
     "Descripcion": "Cuenta de ahorros en euros",
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
-    "CedulaCliente": "12344"
+    "CedulaCliente": "119230145"
   },
   {
     "Id": 4,
@@ -29,6 +29,6 @@
     "Descripcion": "Cuenta de ahorros en euros",
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
-    "CedulaCliente": "12344"
+    "CedulaCliente": "119230145"
   }
 ]

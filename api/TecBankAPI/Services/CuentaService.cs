@@ -52,6 +52,12 @@ namespace TecBankAPI.Services
             return cuentas.FirstOrDefault(c => c.Id == id);
         }
 
+        public List<Cuenta> GetByClienteId(string cedula)
+        {
+            var cuentas = ReadData();
+            return cuentas.Where(c => c.CedulaCliente == cedula).ToList();
+        }
+
         // Método para buscar cuenta por número de cuenta
         public Cuenta? GetByNumeroCuenta(string numeroCuenta) 
         {
