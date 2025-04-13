@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { HomeIcon,  CreditCardIcon, 
          CurrencyDollarIcon, CreditCardIcon as CardIcon, UserIcon, 
-         QuestionMarkCircleIcon, BanknotesIcon} from '@heroicons/react/24/outline';
-import { AuthProvider } from './context/AuthContext';
+         QuestionMarkCircleIcon, BanknotesIcon, PhoneIcon,
+         EnvelopeIcon,
+         ChatBubbleLeftRightIcon,
+         DocumentIcon,
+         ClockIcon} from '@heroicons/react/24/outline';
+
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
-import ProtectedRoutes from './components/ProtectedRoutes';
+import ProtectedRoute from './components/ProtectedRoute';
+
 import Layout from './components/Layout';
+import Dashboard from './components/Dashboard';
+import MisCuentas from './components/MisCuentas';
+import Transferencias from './components/Transferencias';
+import Tarjetas from './components/Tarjetas';
+import Prestamos from './components/Prestamos';
 
 const navigation = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
@@ -28,8 +39,7 @@ const navigation = [
       { name: 'Pago regular', href: '/dashboard/prestamos/pago' },
       { name: 'Pago extraordinario', href: '/dashboard/prestamos/pago-extra' }
     ]
-  },
-  { name: 'Perfil', href: '/dashboard/perfil', icon: UserIcon },
+  },  
   { name: 'Ayuda', href: '/dashboard/ayuda', icon: QuestionMarkCircleIcon }
 ];
 
@@ -38,32 +48,14 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/dashboard" element={<Layout navigation={navigation} />}>
-              <Route index element={<DashboardCliente />} />
-              
-              {/* Rutas de Cuentas */}
-              <Route path="cuentas" element={<MisCuentas />} />
-              <Route path="cuentas/movimientos" element={<MovimientosCuenta />} />
-              <Route path="cuentas/transferencias" element={<Transferencias />} />
-              <Route path="cuentas/tarjetas" element={<TarjetasDebito />} />
-              
-              {/* Rutas de Tarjetas */}
-              <Route path="tarjetas" element={<MisTarjetas />} />
-              <Route path="tarjetas/pago" element={<PagoTarjetas />} />
-              <Route path="tarjetas/historial" element={<HistorialCompras />} />
-              
-              {/* Rutas de Préstamos */}
-              <Route path="prestamos" element={<MisPrestamos />} />
-              <Route path="prestamos/pago" element={<PagoRegular />} />
-              <Route path="prestamos/pago-extra" element={<PagoExtraordinario />} />
-              
-              {/* Otras rutas */}
-              <Route path="perfil" element={<MiPerfil />} />
-              <Route path="ayuda" element={<AyudaCliente />} />
-            </Route>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Layout navigation={navigation} /></ProtectedRoute>}>
+            <Route index element={<Dashboard />} />
+            <Route path="cuentas" element={<MisCuentas />} />
+            <Route path="transferencias" element={<Transferencias />} />
+            <Route path="tarjetas" element={<Tarjetas />} />
+            <Route path="prestamos" element={<Prestamos />} />
           </Route>
         </Routes>
       </Router>
@@ -75,20 +67,7 @@ function App() {
 function DashboardCliente() {
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-base font-medium text-gray-900">Saldo Total</h3>
-          <p className="mt-2 text-2xl font-bold text-blue-600">$0</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-base font-medium text-gray-900">Próximo Pago</h3>
-          <p className="mt-2 text-2xl font-bold text-green-600">$0</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-base font-medium text-gray-900">Préstamo Activo</h3>
-          <p className="mt-2 text-2xl font-bold text-purple-600">$0</p>
-        </div>
-      </div>
+      
 
       {/* Accesos rápidos */}
       <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
@@ -128,54 +107,6 @@ function DashboardCliente() {
   );
 }
 
-function MisCuentas() {
-  return (
-    <div className="space-y-6">
-      {/* Encabezado con botón */}
-      <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
-        <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">Mis Cuentas</h2>
-        <button className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700">
-          Nueva Cuenta
-        </button>
-      </div>
-
-      {/* Listado de cuentas */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {/* Tarjeta de cuenta 1 */}
-        <div className="p-4 bg-white rounded-lg shadow sm:p-6">
-          <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0">
-            <div>
-              <h3 className="text-base font-medium text-gray-900 sm:text-lg">Cuenta Ahorros</h3>
-              <p className="text-sm text-gray-500">****-7890</p>
-            </div>
-            <span className="inline-flex px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">Activa</span>
-          </div>
-          <p className="mt-3 text-2xl font-bold text-blue-600 sm:text-3xl">$0</p>
-          <button className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-800">
-            Ver movimientos →
-          </button>
-        </div>
-
-        {/* Tarjeta de cuenta 2 */}
-        <div className="p-4 bg-white rounded-lg shadow sm:p-6">
-          <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0">
-            <div>
-              <h3 className="text-base font-medium text-gray-900 sm:text-lg">Cuenta Corriente</h3>
-              <p className="text-sm text-gray-500">****-4567</p>
-            </div>
-            <span className="inline-flex px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">Activa</span>
-          </div>
-          <p className="mt-3 text-2xl font-bold text-blue-600 sm:text-3xl">$0</p>
-          <button className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-800">
-            Ver movimientos →
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
 function MovimientosCuenta() {
   return (
     <div className="p-6 bg-white rounded-lg shadow">
@@ -183,32 +114,6 @@ function MovimientosCuenta() {
       <div className="mt-4">
         <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
           Filtrar
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function Transferencias() {
-  return (
-    <div className="p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold text-gray-900">Transferencias</h2>
-      <div className="mt-4">
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-          Nueva Transferencia
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function TarjetasDebito() {
-  return (
-    <div className="p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold text-gray-900">Tarjetas</h2>
-      <div className="mt-4">
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
-          Ver Todas
         </button>
       </div>
     </div>
@@ -293,6 +198,18 @@ function PagoExtraordinario() {
   );
 }
 
+function MiPerfil() {
+  return (
+    <div className="p-6 bg-white rounded-lg shadow">
+      <h2 className="text-2xl font-bold text-gray-900">Mi Perfil</h2>
+      <div className="mt-4">
+        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+          Editar
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function AyudaCliente() {
   const [activeTab, setActiveTab] = useState('faq');
@@ -418,6 +335,5 @@ function AyudaCliente() {
     </div>
   );
 }
-
 
 export default App;

@@ -2,7 +2,7 @@
   {
     "Id": 1,
     "Usuario": "FabianGJ",
-    "Password": "$2a$11$S5qyMDHgpFsRkwwINYtYSODw9SfhIRW5BbHYtEB48fPrGEW5QbQRm",
+    "Password": "$2a$11$u/dGboTRBXHFihLHMEMMF.cN1IcXkPqXEYoP6EFvAPja5QWmyzDXy",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
@@ -15,7 +15,7 @@
   {
     "Id": 2,
     "Usuario": "cliente_test",
-    "Password": "$2a$11$xBUXpoZ5vtY9cV4Wa3Xvj.Qlf8acKqHiQ1AU3PeNpp9YcD8.tMpBW",
+    "Password": "$2a$11$o8.L1egn/SZqo4S/FuCqruClExi.OLP0eNf53fQj36ftWyC5PmG1W",
     "Nombre": "Cliente",
     "Apellido1": "Prueba",
     "Apellido2": "Test",
@@ -28,7 +28,7 @@
   {
     "Id": 3,
     "Usuario": "test2",
-    "Password": "$2a$11$UaSUI9hIKqH1aIANuB.wMOD74GNM1Kp4ZK/yI557haLVgm90VTCem",
+    "Password": "$2a$11$rHH1a8CHenEp46lbuFBxCOMq5xyG6qssXbanVbpGrnw0Kr9gaMaeK",
     "Nombre": "test2",
     "Apellido1": "test2",
     "Apellido2": "test2",
@@ -41,7 +41,7 @@
   {
     "Id": 0,
     "Usuario": "apepsos",
-    "Password": "$2a$11$xy9.NK.5E1ypAvRQSOit.Ov0azl3sbezlzspNPJ1kQeOafNJpeAoa",
+    "Password": "$2a$11$.HwhdPXGaPTvTEkOexAsA.yYV5J2p3H5wybAcCCG42U4LZ4.jZvty",
     "Nombre": "Luis Alexis",
     "Apellido1": "Alvarado",
     "Apellido2": "Barrantes",
@@ -54,7 +54,7 @@
   {
     "Id": 0,
     "Usuario": "FabianG",
-    "Password": "$2a$11$.p6E2ERJ6ontQM1wsTuugexU/6GJelBqxC7c6IrM5ZgRKQrPvmBmm",
+    "Password": "$2a$11$Ui/.3nO33QcrYE.RLFpcJu41u/9/nfc5SR0Afm4YDfDRVswHvfqj6",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
@@ -67,7 +67,7 @@
   {
     "Id": 0,
     "Usuario": "FabianGJ",
-    "Password": "$2a$11$UYTWi..Q7tTJoU28hHotk.6hxxutrD0EjlFnU.hRpbzXuBABk83NC",
+    "Password": "$2a$11$KEGbliDhGWAZOa8spF1R.Oq8gUbZAboWK0ReTW3o9dJ1cGnK5Rfcy",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
@@ -75,6 +75,19 @@
     "Direccion": "Residencial Estancia Antigua\nG13",
     "Telefono": "64012272",
     "Email": "fagutierrez1318@gmail.com",
+    "TipoCliente": "F\u00EDsico"
+  },
+  {
+    "Id": 0,
+    "Usuario": "juan",
+    "Password": "$2a$11$ubrwj2RfleHPVLJmWZGvFeJQPcVj12NvppaHVGC7SaV/q7HucJFUW",
+    "Nombre": "juan",
+    "Apellido1": "nose",
+    "Apellido2": "nose",
+    "Cedula": "119230150",
+    "Direccion": "Residencial Estancia Antigua\nG13",
+    "Telefono": "64012272",
+    "Email": "juan@correo.com",
     "TipoCliente": "F\u00EDsico"
   }
 ]

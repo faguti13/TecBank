@@ -32,7 +32,12 @@ namespace TecBankAPI.Controllers
             return cuenta;
         }
 
-    
+        [HttpGet("cliente/{cedula}")]
+        public ActionResult<IEnumerable<Cuenta>> GetByClienteId(string cedula)
+        {
+            var cuentas = _cuentaService.GetByClienteId(cedula);
+            return Ok(cuentas);
+        }
 
         [HttpGet("buscar/{numeroCuenta}")] //busca una cuenta por el num de cuenta
         public ActionResult<Cuenta> GetByNumeroCuenta(string numeroCuenta)
@@ -45,7 +50,6 @@ namespace TecBankAPI.Controllers
 
             return cuenta;  
         }
-
 
         [HttpPost]
         public ActionResult<Cuenta> Create(Cuenta cuenta)

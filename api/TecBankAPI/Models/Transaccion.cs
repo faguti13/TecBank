@@ -5,11 +5,15 @@ namespace TecBankAPI.Models;
 public class Transaccion
 {
     [Key]
-    public int ID { get; set; }
-    public string NumeroCuenta { get; set; } = string.Empty;
+    public int Id { get; set; }
+    public int CuentaOrigenId { get; set; }
+    public int? CuentaDestinoId { get; set; }
     public decimal Monto { get; set; }
+    public string Tipo { get; set; } = string.Empty;
     public DateTime Fecha { get; set; }
-    public string TipoTransaccion { get; set; } = string.Empty; // "Depósito", "Retiro", "Transferencia"
+    public string Descripcion { get; set; } = string.Empty;
+    public string Estado { get; set; } = "Completada";
 
-    public virtual Cuenta? Cuenta { get; set; }
+    public virtual Cuenta? CuentaOrigen { get; set; }
+    public virtual Cuenta? CuentaDestino { get; set; }
 } 

@@ -11,11 +11,13 @@ namespace TecBankAPI.Services
         private readonly string _cuentaPath; 
         private static readonly object _lock = new object();
         private readonly string _encryptionKey = "TecBankSecretKey123"; // Clave para encriptación
+        private readonly JsonSerializerOptions _jsonOptions;
 
        public CuentaService(IWebHostEnvironment webHostEnvironment)
         {
             var dataPath = Path.Combine(webHostEnvironment.ContentRootPath, "Data");
             _cuentaPath = Path.Combine(dataPath, "cuentas.json"); 
+            _jsonOptions = new JsonSerializerOptions { WriteIndented = true };
 
             // Crear archivo si no existe
             if (!Directory.Exists(dataPath))
@@ -47,24 +49,7 @@ private void SaveData(List<Cuenta> cuentas)
 {
     lock (_lock)
     {
-        // Crear copias encriptadas para guardar en el JSON
-        var cuentasToSave = cuentas.Select(c => new Cuenta
-        {
-            Id = c.Id,
-            NumeroCuenta = EncryptString(c.NumeroCuenta),
-            Descripcion = c.Descripcion,
-            Moneda = c.Moneda,
-            TipoCuenta = c.TipoCuenta,
-            NombreCliente = c.NombreCliente
-        }).ToList();
-
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-        };
-
-        var jsonString = JsonSerializer.Serialize(cuentasToSave, options);
+        var jsonString = JsonSerializer.Serialize(cuentas, _jsonOptions);
         File.WriteAllText(_cuentaPath, jsonString); 
     }
 }
@@ -161,16 +146,29 @@ private void SaveData(List<Cuenta> cuentas)
             return cuentas.FirstOrDefault(c => c.NumeroCuenta == numeroCuenta);
         }
         
-        public List<Cuenta> GetByNombreCliente(string nombreCliente)
+        public List<Cuenta> GetByClienteId(string cedula)
         {
             var cuentas = ReadData();
-            return cuentas.Where(c => c.NombreCliente.Contains(nombreCliente, StringComparison.OrdinalIgnoreCase)).ToList();
+            return cuentas.Where(c => c.CedulaCliente == cedula).ToList();
         }
 
         public Cuenta Create(Cuenta cuenta)
         {
             var cuentas = ReadData();
             cuenta.Id = cuentas.Count > 0 ? cuentas.Max(c => c.Id) + 1 : 1;
+            
+            // Asegurar que todas las propiedades requeridas estén establecidas
+            if (string.IsNullOrEmpty(cuenta.NumeroCuenta))
+                throw new ArgumentException("El número de cuenta es requerido");
+            if (string.IsNullOrEmpty(cuenta.Descripcion))
+                throw new ArgumentException("La descripción es requerida");
+            if (string.IsNullOrEmpty(cuenta.Moneda))
+                cuenta.Moneda = "Colones";
+            if (string.IsNullOrEmpty(cuenta.TipoCuenta))
+                cuenta.TipoCuenta = "Ahorros";
+            if (string.IsNullOrEmpty(cuenta.CedulaCliente))
+                throw new ArgumentException("La cédula del cliente es requerida");
+
             cuentas.Add(cuenta);
             SaveData(cuentas);
             return cuenta;
@@ -181,6 +179,18 @@ private void SaveData(List<Cuenta> cuentas)
             var cuentas = ReadData();
             var index = cuentas.FindIndex(c => c.Id == id);
             if (index == -1) return false;
+
+            // Asegurar que todas las propiedades requeridas estén establecidas
+            if (string.IsNullOrEmpty(cuenta.NumeroCuenta))
+                throw new ArgumentException("El número de cuenta es requerido");
+            if (string.IsNullOrEmpty(cuenta.Descripcion))
+                throw new ArgumentException("La descripción es requerida");
+            if (string.IsNullOrEmpty(cuenta.Moneda))
+                cuenta.Moneda = "Colones";
+            if (string.IsNullOrEmpty(cuenta.TipoCuenta))
+                cuenta.TipoCuenta = "Ahorros";
+            if (string.IsNullOrEmpty(cuenta.CedulaCliente))
+                throw new ArgumentException("La cédula del cliente es requerida");
 
             cuenta.Id = id;
             cuentas[index] = cuenta;

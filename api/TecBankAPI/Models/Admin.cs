@@ -7,7 +7,7 @@ namespace TecBankAPI.Models
     public class Admin
     {
         [Required]
-        public string Usuario { get; set; }
+        public required string Usuario { get; set; }
         
         [Required]
         private string _password;
@@ -18,10 +18,10 @@ namespace TecBankAPI.Models
         }
 
         [Required]
-        public string Nombre { get; set; }
+        public required string Nombre { get; set; }
         
         [Required]
-        public string Rol { get; set; }
+        public required string Rol { get; set; }
 
         private static string HashPassword(string password)
         {
@@ -39,24 +39,24 @@ namespace TecBankAPI.Models
     public class AdminLoginRequest
     {
         [Required]
-        public string Usuario { get; set; }
+        public required string Usuario { get; set; }
         
         [Required]
-        public string Password { get; set; }
+        public required string Password { get; set; }
     }
 
     public class AdminRegisterRequest
     {
         [Required]
-        public string Usuario { get; set; }
+        public required string Usuario { get; set; }
         
         [Required]
-        public string Password { get; set; }
+        public required string Password { get; set; }
         
         [Required]
-        public string Nombre { get; set; }
+        public required string Nombre { get; set; }
         
         [Required]
-        public string Rol { get; set; }
+        public required string Rol { get; set; }
     }
 } 

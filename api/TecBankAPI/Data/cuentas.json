@@ -1,27 +1,30 @@
 [
   {
     "Id": 1,
-    "NumeroCuenta": "avDdDyeU/IxopDbJitA05g==",
-    "Descripcion": "cuenta familiar",
-    "Moneda": "Euros",
-    "TipoCuenta": "Corriente",
-    "NombreCliente": "Marcos"
+    "NumeroCuenta": "U2FsdGVkX1\u002BxJY8",
+    "Descripcion": "Cuenta principal de ahorros",
+    "Moneda": "CRC",
+    "TipoCuenta": "Ahorros",
+    "CedulaCliente": "119230145",
+    "Saldo": 249900.00
   },
   {
     "Id": 2,
-    "NumeroCuenta": "HCtcWXxxfs7dpVRObIlvhA==",
-    "Descripcion": "nada que decir",
-    "Moneda": "Dólares",
+    "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
+    "Descripcion": "Cuenta para gastos personales",
+    "Moneda": "USD",
     "TipoCuenta": "Corriente",
-    "NombreCliente": "Francisco"
+    "CedulaCliente": "119230145",
+    "Saldo": 600.00
   },
   {
     "Id": 3,
-    "NumeroCuenta": "AsbJsZldLe/gmYN5j9UXiA==",
-    "Descripcion": "Prueba",
-    "Moneda": "Dólares",
+    "NumeroCuenta": "U2FsdGVkX18OB\u002BJ=",
+    "Descripcion": "Cuenta de ahorros en euros",
+    "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
-    "NombreCliente": "Pedro ramirez"
+    "CedulaCliente": "119230146",
+    "Saldo": 1000.00
   },
   {
     "Id": 4,
@@ -29,22 +32,7 @@
     "Descripcion": "prueba2",
     "Moneda": "Euros",
     "TipoCuenta": "Ahorros",
-    "NombreCliente": "Ramón Valdés"
-  },
-  {
-    "Id": 5,
-    "NumeroCuenta": "GBasDr3kjHn819QFU7I0eQ==",
-    "Descripcion": "Prueba 3",
-    "Moneda": "Euros",
-    "TipoCuenta": "Corriente",
-    "NombreCliente": "Pedrito"
-  },
-  {
-    "Id": 6,
-    "NumeroCuenta": "Ci60rtZwfSV0zG7Y5pwuQw==",
-    "Descripcion": "Cuenta Cuentos",
-    "Moneda": "Dólares",
-    "TipoCuenta": "Corriente",
-    "NombreCliente": "Edgar Silva"
+    "CedulaCliente": "119230146",
+    "Saldo": 2500.00
   }
 ]
