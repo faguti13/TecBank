@@ -36,8 +36,7 @@ const navigation = [
       { name: 'Pago regular', href: '/dashboard/prestamos/pago' },
       { name: 'Pago extraordinario', href: '/dashboard/prestamos/pago-extra' }
     ]
-  },
-  { name: 'Perfil', href: '/dashboard/perfil', icon: UserIcon },
+  },  
   { name: 'Ayuda', href: '/dashboard/ayuda', icon: QuestionMarkCircleIcon }
 ];
 
@@ -83,20 +82,7 @@ function App() {
 function DashboardCliente() {
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-base font-medium text-gray-900">Saldo Total</h3>
-          <p className="mt-2 text-2xl font-bold text-blue-600">$0</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-base font-medium text-gray-900">Próximo Pago</h3>
-          <p className="mt-2 text-2xl font-bold text-green-600">$0</p>
-        </div>
-        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-          <h3 className="text-base font-medium text-gray-900">Préstamo Activo</h3>
-          <p className="mt-2 text-2xl font-bold text-purple-600">$0</p>
-        </div>
-      </div>
+      
 
       {/* Accesos rápidos */}
       <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
