@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Register Services
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<RolService>();
 builder.Services.AddScoped<PrestamoService>();
 builder.Services.AddScoped<ClienteService>();
