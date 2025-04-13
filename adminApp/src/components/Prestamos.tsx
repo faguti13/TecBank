@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { prestamoService, Prestamo, PagoPrestamo, CalendarioPago, TipoMoneda } from '../services/prestamoService';
 import { format } from 'date-fns';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+
+interface ErrorMessage {
+    title: string;
+    message: string;
+    type: 'error' | 'warning' | 'info';
+}
 
 const Prestamos: React.FC = () => {
     const [prestamos, setPrestamos] = useState<Prestamo[]>([]);
@@ -8,7 +15,7 @@ const Prestamos: React.FC = () => {
     const [showForm, setShowForm] = useState(false);
     const [showPagoForm, setShowPagoForm] = useState(false);
     const [showCalendario, setShowCalendario] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState<ErrorMessage | null>(null);
 
     const [formData, setFormData] = useState({
         montoOriginal: '',
@@ -33,12 +40,17 @@ const Prestamos: React.FC = () => {
             const data = await prestamoService.getAll();
             setPrestamos(data);
         } catch (err) {
-            setError('Error al cargar los préstamos');
+            setError({
+                title: "Error de carga",
+                message: "No se pudieron cargar los préstamos. Por favor, intente nuevamente.",
+                type: "error"
+            });
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null); // Limpiar error anterior
         try {
             const prestamo = {
                 montoOriginal: parseFloat(formData.montoOriginal),
@@ -50,9 +62,7 @@ const Prestamos: React.FC = () => {
                 saldo: parseFloat(formData.montoOriginal)
             };
 
-            console.log('Enviando préstamo:', prestamo);
             const createdPrestamo = await prestamoService.create(prestamo);
-            console.log('Préstamo creado:', createdPrestamo);
             
             setShowForm(false);
             setFormData({ 
@@ -66,7 +76,28 @@ const Prestamos: React.FC = () => {
             loadPrestamos();
         } catch (err: any) {
             console.error('Error completo:', err);
-            setError(err.message || 'Error al crear el préstamo');
+            let errorMessage: ErrorMessage;
+            
+            if (err.message.includes("No se encontró el cliente")) {
+                errorMessage = {
+                    title: "Cliente no encontrado",
+                    message: "El ID de cliente ingresado no existe en el sistema. Por favor, verifique el ID e intente nuevamente.",
+                    type: "error"
+                };
+            } else if (err.message.includes("El asesor con ID")) {
+                errorMessage = {
+                    title: "Asesor no encontrado",
+                    message: "El ID de asesor ingresado no existe en el sistema. Por favor, verifique el ID e intente nuevamente.",
+                    type: "error"
+                };
+            } else {
+                errorMessage = {
+                    title: "Error al crear el préstamo",
+                    message: err.message || "Ha ocurrido un error inesperado. Por favor, intente nuevamente.",
+                    type: "error"
+                };
+            }
+            setError(errorMessage);
         }
     };
 
@@ -86,7 +117,11 @@ const Prestamos: React.FC = () => {
             setPagoData({ monto: '', esPagoExtraordinario: false });
             loadPrestamos();
         } catch (err) {
-            setError('Error al registrar el pago');
+            setError({
+                title: "Error al registrar pago",
+                message: "No se pudo registrar el pago. Por favor, verifique los datos e intente nuevamente.",
+                type: "error"
+            });
         }
     };
 
@@ -99,14 +134,48 @@ const Prestamos: React.FC = () => {
         }).format(amount);
     };
 
+    const ErrorAlert = ({ error, onClose }: { error: ErrorMessage, onClose: () => void }) => {
+        const bgColor = error.type === 'error' ? 'bg-red-100' : 
+                       error.type === 'warning' ? 'bg-yellow-100' : 
+                       'bg-blue-100';
+        
+        const textColor = error.type === 'error' ? 'text-red-700' : 
+                         error.type === 'warning' ? 'text-yellow-700' : 
+                         'text-blue-700';
+        
+        const borderColor = error.type === 'error' ? 'border-red-400' : 
+                           error.type === 'warning' ? 'border-yellow-400' : 
+                           'border-blue-400';
+
+        return (
+            <div className="fixed top-4 right-4 z-50 max-w-md animate-slide-in">
+                <div className={`${bgColor} border ${borderColor} ${textColor} px-4 py-3 rounded-lg shadow-lg`} role="alert">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <p className="font-bold mb-1">{error.title}</p>
+                            <p className="text-sm">{error.message}</p>
+                        </div>
+                        <button 
+                            onClick={onClose}
+                            className="ml-4 hover:bg-gray-200 rounded-full p-1 transition-colors"
+                        >
+                            <XMarkIcon className="h-5 w-5" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="p-6 bg-white rounded-lg shadow">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Gestión de Préstamos</h2>
             
             {error && (
-                <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                    {error}
-                </div>
+                <ErrorAlert 
+                    error={error} 
+                    onClose={() => setError(null)}
+                />
             )}
 
             <div className="mb-4">
@@ -119,103 +188,106 @@ const Prestamos: React.FC = () => {
             </div>
 
             {showForm && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h3 className="text-lg font-medium mb-4">Nuevo Préstamo</h3>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Monto Original
-                                </label>
-                                <input
-                                    type="number"
-                                    value={formData.montoOriginal}
-                                    onChange={(e) => setFormData({ ...formData, montoOriginal: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    ID del Cliente
-                                </label>
-                                <input
-                                    type="number"
-                                    value={formData.clienteId}
-                                    onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    ID del Asesor
-                                </label>
-                                <input
-                                    type="number"
-                                    value={formData.asesorId}
-                                    onChange={(e) => setFormData({ ...formData, asesorId: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Tasa de Interés (%)
-                                </label>
-                                <input
-                                    type="number"
-                                    value={formData.tasaInteres}
-                                    onChange={(e) => setFormData({ ...formData, tasaInteres: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Plazo (meses)
-                                </label>
-                                <input
-                                    type="number"
-                                    value={formData.plazoMeses}
-                                    onChange={(e) => setFormData({ ...formData, plazoMeses: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Moneda
-                                </label>
-                                <select
-                                    value={formData.moneda}
-                                    onChange={(e) => setFormData({ ...formData, moneda: e.target.value as TipoMoneda })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    required
-                                >
-                                    {Object.values(TipoMoneda).map((moneda) => (
-                                        <option key={moneda} value={moneda}>
-                                            {moneda}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowForm(false)}
-                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                                >
-                                    Crear
-                                </button>
-                            </div>
-                        </form>
+                <div className="fixed inset-0 z-40">
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 backdrop-blur-sm"></div>
+                    <div className="fixed inset-0 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+                            <h3 className="text-lg font-medium mb-4">Nuevo Préstamo</h3>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Monto Original
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={formData.montoOriginal}
+                                        onChange={(e) => setFormData({ ...formData, montoOriginal: e.target.value })}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        ID del Cliente
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={formData.clienteId}
+                                        onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        ID del Asesor
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={formData.asesorId}
+                                        onChange={(e) => setFormData({ ...formData, asesorId: e.target.value })}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Tasa de Interés (%)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={formData.tasaInteres}
+                                        onChange={(e) => setFormData({ ...formData, tasaInteres: e.target.value })}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Plazo (meses)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={formData.plazoMeses}
+                                        onChange={(e) => setFormData({ ...formData, plazoMeses: e.target.value })}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Moneda
+                                    </label>
+                                    <select
+                                        value={formData.moneda}
+                                        onChange={(e) => setFormData({ ...formData, moneda: e.target.value as TipoMoneda })}
+                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        required
+                                    >
+                                        {Object.values(TipoMoneda).map((moneda) => (
+                                            <option key={moneda} value={moneda}>
+                                                {moneda}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex justify-end space-x-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowForm(false)}
+                                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                                    >
+                                        Crear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             )}
@@ -423,5 +495,23 @@ const Prestamos: React.FC = () => {
         </div>
     );
 };
+
+// Agregar estos estilos al archivo CSS global o al tailwind.config.js
+const styles = `
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+`;
 
 export default Prestamos; 

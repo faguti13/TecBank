@@ -9,5 +9,27 @@
     "fecha_nacimiento": "2004-05-18",
     "meta_colones": 5000000,
     "meta_dolares": 10000
+  },
+  {
+    "Id": 2,
+    "cedula": "123456789",
+    "nombre_1": "Juan",
+    "nombre_2": "Carlos",
+    "apellido_1": "Gutierrez",
+    "apellido_2": "Jimenez",
+    "fecha_nacimiento": "2004-12-13",
+    "meta_colones": 10000000,
+    "meta_dolares": 20000
+  },
+  {
+    "Id": 3,
+    "cedula": "987654321",
+    "nombre_1": "Maria",
+    "nombre_2": "Luisa",
+    "apellido_1": "Perez",
+    "apellido_2": "Gomez",
+    "fecha_nacimiento": "2004-07-25",
+    "meta_colones": 7000000,
+    "meta_dolares": 15000
   }
 ]

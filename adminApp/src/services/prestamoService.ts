@@ -65,9 +65,8 @@ export const prestamoService = {
         });
         
         if (!response.ok) {
-            const errorData = await response.text();
-            console.error('Error response:', errorData); // Log para depuración
-            throw new Error(errorData);
+            const errorText = await response.text();
+            throw new Error(errorText);
         }
         
         return response.json();

@@ -16,6 +16,9 @@ public class Prestamo
     public int ClienteId { get; set; }
 
     [Required]
+    public int AsesorId { get; set; }
+
+    [Required]
     public decimal TasaInteres { get; set; }
 
     [Required]
