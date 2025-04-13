@@ -11,6 +11,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button} from '@mui/material';
+import { clientService } from '../services/clientService';
 
 const theme = createTheme();
 
@@ -23,10 +24,24 @@ function showTab(tabActive: string, thisTab: string){
   }
 }
 
+interface Cliente {
+  id?: number;
+  Cedula: string;
+  Nombre: string;
+  Apellido1: string;
+  Apellido2: string;
+  Direccion: string;
+  Telefono: string;
+  Usuario: string;
+  Password: string;
+  Email: string;
+  IngresoMensual: number;
+  TipoCliente: string;
+}
 
 
 function Clientes() {
-    const [tabActive, setTabActive] = React.useState('2');
+    const [tabActive, setTabActive] = React.useState('1');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
       setTabActive(newValue);
@@ -43,6 +58,8 @@ function Clientes() {
     const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
     };
+     
+    /*Dialogo para cuando se va a eliminar un cliente*/
 
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
@@ -54,7 +71,76 @@ function Clientes() {
       setOpenDeleteDialog(false);
     };
 
+    /*Dialogo para cuando se va a crear un cliente*/
 
+    const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
+
+    const createDialogTitles = [
+      "Información faltante",
+      "Error",
+      "Cliente Añadido"
+    ];
+
+    const createDialogTexts = [
+      "Falta información de completar para inscribir al cliente al sistema.",
+      "Error al tratar de crear el perfil. Intente nuevamente o contacte a soporte.",
+      "El cliente ha sido añadido exitosamente."
+    ];
+
+    const [createDialogTitle, setCreateDialogTitle] = React.useState(createDialogTitles[0]);
+
+    const [createDialogText, setCreateDialogText] = React.useState(createDialogTexts[0]);
+
+    const handleClickOpenCreateDialog = (dialogType: number) => {
+      setCreateDialogTitle(createDialogTitles[dialogType]);
+      setCreateDialogText(createDialogTexts[dialogType]);
+      setOpenCreateDialog(true);
+    };
+
+    const handleCloseCreateDialog = () => {
+      setOpenCreateDialog(false);
+    };
+
+
+    const [newClientInfo, setNewClientInfo] = React.useState<Cliente>({
+        Cedula: '',
+        Nombre: '',
+        Apellido1: '',
+        Apellido2: '',
+        Direccion: '',
+        Telefono: '',
+        Usuario: '',
+        Password: '',
+        Email: '',
+        IngresoMensual: 0,
+        TipoCliente: "Físico",
+    });
+
+    const checkIfNewClientIsValid = () =>{
+      var isValid =  Object.values(newClientInfo).every(
+        value => {
+          if ((value === null || value === undefined || value === '')) return false;
+          return true;
+        }
+      );
+      return isValid;
+    }
+
+    const handleCreateClient = async(e: React.FormEvent) =>{
+      e.preventDefault();
+      if(checkIfNewClientIsValid()){
+        try{
+          await clientService.create(newClientInfo);
+          handleClickOpenCreateDialog(2);
+        }catch(err){
+          handleClickOpenCreateDialog(1);
+        }
+      }else{
+        handleClickOpenCreateDialog(0);
+      }
+      
+    };
+    
 
     return (
       <div className="p-6 bg-white rounded-lg shadow">
@@ -85,13 +171,26 @@ function Clientes() {
               <div className='addClientBlock'>
                 <div className='addClientBlockTitle'>Información de Cuenta</div>
                 <div className='addClientBlockBody'>
-                  <TextField required id="standard-basic" label="Usuario" variant="standard" />
+                  <div>
+                    <TextField required id="standard-basic" label="Usuario" variant="standard" 
+                    value={newClientInfo.Usuario} 
+                    onChange={(e) => setNewClientInfo({ ...newClientInfo, Usuario: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <TextField required id="standard-basic" label="Email" variant="standard" 
+                    value={newClientInfo.Email} 
+                    onChange={(e) => setNewClientInfo({ ...newClientInfo, Email: e.target.value })}
+                    />
+                  </div>
                   <div>
                     <FormControl required sx={{width:'200px'}} variant="standard">
                       <InputLabel htmlFor="standard-adornment-password">Contraseña</InputLabel>
                       <Input
                         id="standard-adornment-password"
                         type={showPassword ? 'text' : 'password'}
+                        value={newClientInfo.Password}
+                        onChange={(e) => setNewClientInfo({ ...newClientInfo, Password: e.target.value })}
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
@@ -120,10 +219,23 @@ function Clientes() {
                 <div className='addClientBlockTitle'>Información de Cliente</div>
                 <div className='addClientBlockBody'>
                   <div>
-                    <TextField required id="standard-basic" label="Nombre" variant="standard" />
+                    <TextField 
+                    required id="standard-basic" label="Nombre" variant="standard" 
+                    value={newClientInfo.Nombre} 
+                    onChange={(e) => setNewClientInfo({ ...newClientInfo, Nombre: e.target.value })}
+                    />
                   </div>
                   <div>
-                    <TextField required id="standard-basic" label="Apellido" variant="standard" />
+                    <TextField required id="standard-basic" label="Primer Apellido" variant="standard" 
+                    value={newClientInfo.Apellido1}
+                    onChange={(e) => setNewClientInfo({ ...newClientInfo, Apellido1: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <TextField required id="standard-basic" label="Segundo Apellido" variant="standard" 
+                    value={newClientInfo.Apellido2}
+                    onChange={(e) => setNewClientInfo({ ...newClientInfo, Apellido2: e.target.value })}
+                    />
                   </div>
                   <div>
                     <FormControl>
@@ -132,6 +244,9 @@ function Clientes() {
                         row
                         aria-labelledby="demo-row-radio-buttons-group-label"
                         name="row-radio-buttons-group"
+                        value={newClientInfo.TipoCliente}
+                        onChange={(e) => setNewClientInfo({ ...newClientInfo, TipoCliente: e.target.value })}
+                        defaultValue={"Físico"}
                       >
                         <FormControlLabel value="Físico" control={<Radio />} label="Físico" />
                         <FormControlLabel value="Jurídico" control={<Radio />} label="Jurídico" />
@@ -143,6 +258,8 @@ function Clientes() {
                       required
                       id="standard-number"
                       label="Cédula"
+                      value={newClientInfo.Cedula}
+                      onChange={(e) => setNewClientInfo({ ...newClientInfo, Cedula: e.target.value })}
                       type="number"
                       variant="standard"
                       slotProps={{
@@ -160,13 +277,19 @@ function Clientes() {
                 <div className='addClientBlockTitle'>Otros Datos</div>
                 <div className='addClientBlockBody'>
                   <div>
-                    <TextField id="standard-basic" label="Teléfono" variant="standard" />
+                    <TextField id="standard-basic" label="Teléfono" variant="standard" 
+                    value={newClientInfo.Telefono}
+                    onChange={(e) => setNewClientInfo({ ...newClientInfo, Telefono: e.target.value })}
+                    />
                   </div>
                   <div>
                     <FormControl fullWidth sx={{maxWidth: '200px' }} variant="standard">
                       <InputLabel htmlFor="standard-adornment-amount">Ingreso Mensual</InputLabel>
                       <Input
+                        type='number'
                         id="standard-adornment-amount"
+                        value={newClientInfo.IngresoMensual}
+                        onChange={(e) => setNewClientInfo({ ...newClientInfo, IngresoMensual: parseInt(e.target.value) })}
                         startAdornment={<InputAdornment position="start">₡</InputAdornment>}
                       />
                     </FormControl>
@@ -175,6 +298,8 @@ function Clientes() {
                     <TextField
                       id="standard-multiline-static"
                       label="Dirección/Domicilio"
+                      value={newClientInfo.Direccion}
+                      onChange={(e) => setNewClientInfo({ ...newClientInfo, Direccion: e.target.value })}
                       multiline
                       rows={3}
                       variant="filled"
@@ -186,10 +311,28 @@ function Clientes() {
               
             </div>
             <div style={{marginTop: '20px'}}>
-              <div className='buttons' style={{fontSize: 'large', float:'right'}}>
-                Finalizar
+              <div className='buttons' style={{fontSize: 'large', float:'right'}} onClick={handleCreateClient}>
+                Ingresar Cliente
               </div>
             </div>
+            <Dialog
+                open={openCreateDialog}
+                onClose={handleCloseCreateDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {createDialogTitle}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    {createDialogText}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseCreateDialog}>Ok</Button>
+                </DialogActions>
+              </Dialog>
           </div>
           {/**************************** Modificar cliente ***********************************/}
           <div style={{display:showTab(tabActive, "2"), flexFlow: 'column'}}>
