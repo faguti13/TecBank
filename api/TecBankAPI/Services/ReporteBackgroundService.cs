@@ -39,6 +39,7 @@ namespace TecBankAPI.Services
                     {
                         var prestamoService = scope.ServiceProvider.GetRequiredService<PrestamoService>();
                         var clienteService = scope.ServiceProvider.GetRequiredService<ClienteService>();
+                        var asesorService = scope.ServiceProvider.GetRequiredService<AsesorService>(); 
 
                         var prestamos = prestamoService.GetAll();
                         var reporteMora = new List<ReporteMora>();
@@ -68,6 +69,52 @@ namespace TecBankAPI.Services
                         }
 
                         _logger.LogInformation($"Reporte de morosidad generado con {reporteMora.Count} préstamos en mora");
+              
+              
+                // Generar reporte de asesores
+                        var asesores = asesorService.GetAsesoresConVentasYComisiones();
+
+                        _logger.LogInformation($"Total de asesores recuperados: {asesores.Count()}");
+                        if (!asesores.Any())
+                        {
+                            _logger.LogWarning("No se encontraron asesores.");
+                        }
+
+                        var reporteAsesores = new List<ReporteAsesor>();
+                        //Procesa cada asesor
+                        foreach (var asesor in asesores)
+                        {
+                            try
+                            {
+                                // Omitir asesores sin ventas.
+                                if (asesor.VentasColones == 0 && asesor.VentasDolares == 0)
+                                {
+                                    _logger.LogWarning($"No hay ventas para el asesor {asesor.NombreCompleto}.");
+                                    continue;
+                                }
+                                //Comisión Total
+                                var comisionTotal = asesor.ComisionesColones + asesor.ComisionesDolares;
+
+                                // Agregar datos al reporte.
+                                reporteAsesores.Add(new ReporteAsesor
+                                {
+                                    NombreAsesor = asesor.NombreCompleto,
+                                    Cedula = asesor.Cedula,
+                                    VentasColones = asesor.VentasColones,
+                                    VentasDolares = asesor.VentasDolares,
+                                    ComisionesColones = asesor.ComisionesColones,
+                                    ComisionesDolares = asesor.ComisionesDolares,
+                                    ComisionTotal = comisionTotal
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError($"Error al procesar asesor {asesor.Cedula}: {ex.Message}");
+                                continue;
+                            }
+                        }
+
+                        _logger.LogInformation($"Reporte de asesores generado automáticamente con {reporteAsesores.Count} asesores");
                     }
                 }
                 catch (Exception ex)
@@ -76,7 +123,6 @@ namespace TecBankAPI.Services
                 }
             }
         }
-
         private DateTime CalculateNextRunTime(DateTime now)
         {
             var next = new DateTime(now.Year, now.Month, 5, 0, 0, 0);
@@ -92,5 +138,6 @@ namespace TecBankAPI.Services
 
             return next;
         }
+        
     }
-} 
+}

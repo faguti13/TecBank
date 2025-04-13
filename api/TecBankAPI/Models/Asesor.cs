@@ -28,5 +28,14 @@ namespace TecBankAPI.Models{
 
         [JsonPropertyName("meta_dolares")]
         public decimal MetaDolares { get; set; }
-}
+
+        public string NombreCompleto => $"{Nombre1} {Nombre2} {Apellido1} {Apellido2}";
+
+        public decimal ComisionesColones { get; set; }
+        public decimal ComisionesDolares { get;  set; }
+        public decimal VentasColones { get;  set; }
+        public decimal VentasDolares { get; set; }
+        public decimal ComisionTotal { get; set; }
+    }
+
 }

@@ -9,15 +9,19 @@ namespace TecBankAPI.Controllers
     [ApiController]
     public class ReportesController : ControllerBase
     {
+        private readonly AsesorService _asesorService;
         private readonly PrestamoService _prestamoService;
         private readonly ClienteService _clienteService;
         private readonly ILogger<ReportesController> _logger;
+        
 
         public ReportesController(
+            AsesorService asesorService,
             PrestamoService prestamoService, 
             ClienteService clienteService,
             ILogger<ReportesController> logger)
         {
+            _asesorService = asesorService;
             _prestamoService = prestamoService;
             _clienteService = clienteService;
             _logger = logger;
@@ -81,8 +85,69 @@ namespace TecBankAPI.Controllers
                 return StatusCode(500, $"Error interno al generar el reporte de morosidad: {ex.Message}");
             }
         }
-    }
+        [HttpGet("asesores")]
+        public ActionResult<IEnumerable<ReporteAsesor>> GetReporteAsesores()
+        {
+            try
+            {
+                _logger.LogInformation("Iniciando generación de reporte de asesores");
+                //Obtiene la lista de los asesores con sus ventas y comisiones (Está en AsesorService.cs)
+                var asesores = _asesorService.GetAsesoresConVentasYComisiones();
+                //Datos del reporte final
+                var reporteAsesores = new List<ReporteAsesor>();
 
+                //Se itera sobre cada asesor
+                foreach (var asesor in asesores)
+                {
+                    try
+                    {
+                         // Asignar valores de ventas y comisiones, asegurándose de que no sean null para no tener problemas con 
+                         //formatValue
+                        decimal ventasColones = asesor.VentasColones;
+                        decimal ventasDolares = asesor.VentasDolares;
+                        decimal comisionesColones = asesor.ComisionesColones;
+                        decimal comisionesDolares = asesor.ComisionesDolares;
+
+                        //Comisión Total
+                        decimal comisionTotal = comisionesColones + comisionesDolares;
+
+                        _logger.LogInformation($"Asesor {asesor.NombreCompleto} tiene ventas de {ventasColones} colones y {ventasDolares} dólares.");
+
+                        //Se agrega al reporte solo si hay ventas o comisiones disponibles
+                            reporteAsesores.Add(new ReporteAsesor
+                            {
+                                NombreAsesor = asesor.NombreCompleto,
+                                Cedula = asesor.Cedula,
+                                VentasColones = ventasColones,
+                                VentasDolares = ventasDolares,
+                                ComisionesColones = comisionesColones,
+                                ComisionesDolares = comisionesDolares,
+                                ComisionTotal = comisionTotal
+                            });
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error al procesar asesor {asesor.Cedula}: {ex.Message}");
+                        continue;
+                    }
+                }
+
+                if (!reporteAsesores.Any())
+                {
+                    _logger.LogInformation("No se encontraron asesores con datos disponibles");
+                    return Ok(new List<ReporteAsesor>());
+                }
+
+                _logger.LogInformation($"Reporte de asesores generado exitosamente con {reporteAsesores.Count} asesores.");
+                return Ok(reporteAsesores);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al generar el reporte de asesores: {ex.Message}");
+                return StatusCode(500, $"Error interno al generar el reporte de asesores: {ex.Message}");
+            }
+        }
+}
     public class ReporteMora
     {
         public required string NombreCliente { get; set; }
@@ -92,4 +157,16 @@ namespace TecBankAPI.Controllers
         public decimal MontoAdeudado { get; set; }
         public required string Moneda { get; set; }
     }
-} 
+
+// Definición del reporte de asesor
+    public class ReporteAsesor
+    {
+        public required string NombreAsesor { get; set; }
+        public required string Cedula { get; set; }
+        public decimal VentasColones { get; set; }
+        public decimal VentasDolares { get; set; }
+        public decimal ComisionesColones { get; set; }
+        public decimal ComisionesDolares { get; set; }
+        public decimal ComisionTotal { get; set; }
+    }
+}
