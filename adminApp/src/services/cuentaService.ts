@@ -10,7 +10,7 @@ interface Cuenta {
 }
 
 // URL base de la API
-const API_URL = 'http://localhost:5240/api';
+const API_URL = 'http://localhost:5240/api/Cuentas';
 
 export const cuentaService = {
     // Obtener todas las cuentas
