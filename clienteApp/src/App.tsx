@@ -1,68 +1,76 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { HomeIcon,  CreditCardIcon, 
          CurrencyDollarIcon, CreditCardIcon as CardIcon, UserIcon, 
          QuestionMarkCircleIcon, BanknotesIcon} from '@heroicons/react/24/outline';
-
+import { AuthProvider } from './context/AuthContext';
+import Login from './components/Login';
+import ProtectedRoutes from './components/ProtectedRoutes';
 import Layout from './components/Layout';
 
-
 const navigation = [
-  { name: 'Inicio', href: '/', icon: HomeIcon },
-  { name: 'Mis Cuentas', href: '/cuentas', icon: BanknotesIcon, 
+  { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
+  { name: 'Mis Cuentas', href: '/dashboard/cuentas', icon: BanknotesIcon, 
     submenu: [
-      { name: 'Movimientos', href: '/cuentas/movimientos' },
-      { name: 'Transferencias', href: '/cuentas/transferencias' },
-      { name: 'Tarjetas de débito', href: '/cuentas/tarjetas' }
+      { name: 'Movimientos', href: '/dashboard/cuentas/movimientos' },
+      { name: 'Transferencias', href: '/dashboard/cuentas/transferencias' },
+      { name: 'Tarjetas de débito', href: '/dashboard/cuentas/tarjetas' }
     ]
   },
-  { name: 'Mis Tarjetas', href: '/tarjetas', icon: CreditCardIcon,
+  { name: 'Mis Tarjetas', href: '/dashboard/tarjetas', icon: CreditCardIcon,
     submenu: [
-      { name: 'Pago de tarjetas', href: '/tarjetas/pago' },
-      { name: 'Historial de compras', href: '/tarjetas/historial' }
+      { name: 'Pago de tarjetas', href: '/dashboard/tarjetas/pago' },
+      { name: 'Historial de compras', href: '/dashboard/tarjetas/historial' }
     ]
   },
-  { name: 'Mis Préstamos', href: '/prestamos', icon: CurrencyDollarIcon,
+  { name: 'Mis Préstamos', href: '/dashboard/prestamos', icon: CurrencyDollarIcon,
     submenu: [
-      { name: 'Pago regular', href: '/prestamos/pago' },
-      { name: 'Pago extraordinario', href: '/prestamos/pago-extra' }
+      { name: 'Pago regular', href: '/dashboard/prestamos/pago' },
+      { name: 'Pago extraordinario', href: '/dashboard/prestamos/pago-extra' }
     ]
   },
-  { name: 'Perfil', href: '/perfil', icon: UserIcon },
-  { name: 'Ayuda', href: '/ayuda', icon: QuestionMarkCircleIcon }
+  { name: 'Perfil', href: '/dashboard/perfil', icon: UserIcon },
+  { name: 'Ayuda', href: '/dashboard/ayuda', icon: QuestionMarkCircleIcon }
 ];
 
 function App() {
   return (
-    <Router>
-      <Layout navigation={navigation}>
-      <Routes>
-          <Route path="/" element={<DashboardCliente />} />
-          
-          {/* Rutas de Cuentas */}
-          <Route path="/cuentas" element={<MisCuentas />} />
-          <Route path="/cuentas/movimientos" element={<MovimientosCuenta />} />
-          <Route path="/cuentas/transferencias" element={<Transferencias />} />
-          <Route path="/cuentas/tarjetas" element={<TarjetasDebito />} />
-          
-          {/* Rutas de Tarjetas */}
-          <Route path="/tarjetas" element={<MisTarjetas />} />
-          <Route path="/tarjetas/pago" element={<PagoTarjetas />} />
-          <Route path="/tarjetas/historial" element={<HistorialCompras />} />
-          
-          {/* Rutas de Préstamos */}
-          <Route path="/prestamos" element={<MisPrestamos />} />
-          <Route path="/prestamos/pago" element={<PagoRegular />} />
-          <Route path="/prestamos/pago-extra" element={<PagoExtraordinario />} />
-          
-          {/* Otras rutas */}
-          <Route path="/perfil" element={<MiPerfil />} />
-          <Route path="/ayuda" element={<AyudaCliente />} />
-      </Routes>
-      </Layout>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/dashboard" element={<Layout navigation={navigation} />}>
+              <Route index element={<DashboardCliente />} />
+              
+              {/* Rutas de Cuentas */}
+              <Route path="cuentas" element={<MisCuentas />} />
+              <Route path="cuentas/movimientos" element={<MovimientosCuenta />} />
+              <Route path="cuentas/transferencias" element={<Transferencias />} />
+              <Route path="cuentas/tarjetas" element={<TarjetasDebito />} />
+              
+              {/* Rutas de Tarjetas */}
+              <Route path="tarjetas" element={<MisTarjetas />} />
+              <Route path="tarjetas/pago" element={<PagoTarjetas />} />
+              <Route path="tarjetas/historial" element={<HistorialCompras />} />
+              
+              {/* Rutas de Préstamos */}
+              <Route path="prestamos" element={<MisPrestamos />} />
+              <Route path="prestamos/pago" element={<PagoRegular />} />
+              <Route path="prestamos/pago-extra" element={<PagoExtraordinario />} />
+              
+              {/* Otras rutas */}
+              <Route path="perfil" element={<MiPerfil />} />
+              <Route path="ayuda" element={<AyudaCliente />} />
+            </Route>
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
+
 // Componentes de las páginas
 function DashboardCliente() {
   return (
@@ -310,4 +318,5 @@ function AyudaCliente() {
     </div>
   );
 }
+
 export default App;

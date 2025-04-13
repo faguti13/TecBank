@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '../context/AuthContext';
 
 interface SubmenuItem {
   name: string;
@@ -15,13 +16,19 @@ interface NavigationItem {
 }
 
 interface LayoutProps {
-  children: React.ReactNode;
   navigation: NavigationItem[];
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
+const Layout: React.FC<LayoutProps> = ({ navigation }) => {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const toggleSubmenu = (itemName: string) => {
     if (openSubmenu === itemName) {
@@ -136,9 +143,13 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-700">
                 <p className="font-medium">Bienvenido(a)</p>
-                <p>Cliente</p>
+                <p>{user?.nombre} {user?.apellido1}</p>
               </div>
-              <button className="p-1 rounded-full bg-gray-100 hover:bg-gray-200">
+              <button 
+                onClick={handleLogout}
+                className="p-1 rounded-full bg-gray-100 hover:bg-gray-200"
+                title="Cerrar sesión"
+              >
                 <svg 
                   xmlns="http://www.w3.org/2000/svg" 
                   className="w-6 h-6 text-gray-500" 
@@ -159,7 +170,7 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
         </header>
         <main className="flex-1 overflow-auto">
           <div className="p-4">
-            {children}
+            <Outlet />
           </div>
         </main>
       </div>

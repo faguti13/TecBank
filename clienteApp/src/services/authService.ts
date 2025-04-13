@@ -13,10 +13,24 @@ export const authService = {
         });
 
         if (!response.ok) {
+            if (response.status === 401) {
+                throw new Error('Usuario o contraseña incorrectos');
+            }
             const error = await response.text();
-            throw new Error(error);
+            throw new Error(error || 'Error al iniciar sesión');
         }
 
-        return response.json();
+        const data = await response.json();
+        return data;
+    },
+
+    async getCurrentUser(): Promise<Cliente | null> {
+        const userStr = localStorage.getItem('user');
+        if (!userStr) return null;
+        return JSON.parse(userStr);
+    },
+
+    logout(): void {
+        localStorage.removeItem('user');
     }
 }; 

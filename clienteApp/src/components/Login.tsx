@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { authService } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
+    const { setUser } = useAuth();
     const [formData, setFormData] = useState({
         usuario: '',
         password: ''
     });
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -21,14 +24,16 @@ const Login: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
         
         try {
             const response = await authService.login(formData);
-            // Aquí podrías guardar el token/usuario en localStorage o context
-            localStorage.setItem('user', JSON.stringify(response));
+            setUser(response);
             navigate('/dashboard');
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -58,6 +63,7 @@ const Login: React.FC = () => {
                                 placeholder="Usuario"
                                 value={formData.usuario}
                                 onChange={handleChange}
+                                disabled={isLoading}
                             />
                         </div>
                         <div>
@@ -71,6 +77,7 @@ const Login: React.FC = () => {
                                 placeholder="Contraseña"
                                 value={formData.password}
                                 onChange={handleChange}
+                                disabled={isLoading}
                             />
                         </div>
                     </div>
@@ -78,9 +85,14 @@ const Login: React.FC = () => {
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                                isLoading 
+                                    ? 'bg-indigo-400 cursor-not-allowed' 
+                                    : 'bg-indigo-600 hover:bg-indigo-700'
+                            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                            disabled={isLoading}
                         >
-                            Iniciar Sesión
+                            {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                         </button>
                     </div>
                 </form>
