@@ -5,24 +5,29 @@ namespace TecBankAPI.Services
 {
     public class CuentaService
     {
-        private readonly string _dataPath;
+        
+        private readonly string _cuentaPath; 
         private static readonly object _lock = new object();
 
-        public CuentaService(IWebHostEnvironment webHostEnvironment)
+       public CuentaService(IWebHostEnvironment webHostEnvironment)
         {
-            _dataPath = Path.Combine(webHostEnvironment.ContentRootPath, "Data", "cuentas.json");
-            // Crear el archivo si no existe
-            if (!File.Exists(_dataPath))
-            {
-                File.WriteAllText(_dataPath, "[]");
-            }
+            var dataPath = Path.Combine(webHostEnvironment.ContentRootPath, "Data");
+            _cuentaPath = Path.Combine(dataPath, "cuentas.json"); 
+
+            // Crear archivo si no existe
+            if (!Directory.Exists(dataPath))
+                Directory.CreateDirectory(dataPath);
+
+            if (!File.Exists(_cuentaPath)) 
+                File.WriteAllText(_cuentaPath, "[]");
         }
+     
 
         private List<Cuenta> ReadData()
         {
             lock (_lock)
             {
-                var jsonString = File.ReadAllText(_dataPath);
+                var jsonString = File.ReadAllText(_cuentaPath);
                 return JsonSerializer.Deserialize<List<Cuenta>>(jsonString) ?? new List<Cuenta>();
             }
         }
@@ -32,7 +37,7 @@ namespace TecBankAPI.Services
             lock (_lock)
             {
                 var jsonString = JsonSerializer.Serialize(cuentas, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(_dataPath, jsonString);
+                File.WriteAllText(_cuentaPath, jsonString);
             }
         }
 
@@ -45,6 +50,14 @@ namespace TecBankAPI.Services
         {
             var cuentas = ReadData();
             return cuentas.FirstOrDefault(c => c.Id == id);
+        }
+
+        // Método para buscar cuenta por número de cuenta
+        public Cuenta? GetByNumeroCuenta(string numeroCuenta) 
+        {
+            var cuentas = ReadData();
+            Console.WriteLine($"Buscando cuenta con número: {numeroCuenta}"); 
+            return cuentas.FirstOrDefault(c => c.NumeroCuenta == numeroCuenta); 
         }
 
         public Cuenta Create(Cuenta cuenta)

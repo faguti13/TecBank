@@ -1,4 +1,5 @@
 using TecBankAPI.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddScoped<RolService>();
 builder.Services.AddScoped<PrestamoService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddHostedService<ReporteBackgroundService>();
+builder.Services.AddScoped<AsesorService>();
+builder.Services.AddScoped<TarjetaService>();
+builder.Services.AddScoped<CuentaService>();
 
 // Configure CORS
 builder.Services.AddCors(options =>

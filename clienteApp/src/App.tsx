@@ -36,7 +36,7 @@ function App() {
   return (
     <Router>
       <Layout navigation={navigation}>
-        <Routes>
+      <Routes>
           <Route path="/" element={<DashboardCliente />} />
           
           {/* Rutas de Cuentas */}
@@ -58,7 +58,7 @@ function App() {
           {/* Otras rutas */}
           <Route path="/perfil" element={<MiPerfil />} />
           <Route path="/ayuda" element={<AyudaCliente />} />
-        </Routes>
+      </Routes>
       </Layout>
     </Router>
   );
@@ -66,18 +66,55 @@ function App() {
 // Componentes de las páginas
 function DashboardCliente() {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <div className="p-6 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-medium text-gray-900">Saldo Total</h3>
-        <p className="mt-2 text-3xl font-bold text-blue-600">$0</p>
+    <div className="space-y-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <h3 className="text-base font-medium text-gray-900">Saldo Total</h3>
+          <p className="mt-2 text-2xl font-bold text-blue-600">$0</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <h3 className="text-base font-medium text-gray-900">Próximo Pago</h3>
+          <p className="mt-2 text-2xl font-bold text-green-600">$0</p>
+        </div>
+        <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+          <h3 className="text-base font-medium text-gray-900">Préstamo Activo</h3>
+          <p className="mt-2 text-2xl font-bold text-purple-600">$0</p>
+        </div>
       </div>
-      <div className="p-6 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-medium text-gray-900">Próximo Pago</h3>
-        <p className="mt-2 text-3xl font-bold text-green-600">$0</p>
-      </div>
-      <div className="p-6 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-medium text-gray-900">Préstamo Activo</h3>
-        <p className="mt-2 text-3xl font-bold text-purple-600">$0</p>
+
+      {/* Accesos rápidos */}
+      <div className="p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <h3 className="mb-3 text-base font-medium text-gray-900">Accesos Rápidos</h3>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <Link to="/cuentas/transferencias" 
+                className="flex flex-col items-center p-2 text-center transition-colors rounded-lg hover:bg-gray-50">
+            <div className="p-2 mb-1 bg-blue-50 rounded-full">
+              <BanknotesIcon className="w-6 h-6 text-blue-500" />
+            </div>
+            <span className="text-sm font-medium text-gray-900">Transferir</span>
+          </Link>
+          <Link to="/prestamos/pago" 
+                className="flex flex-col items-center p-2 text-center transition-colors rounded-lg hover:bg-gray-50">
+            <div className="p-2 mb-1 bg-green-50 rounded-full">
+              <CurrencyDollarIcon className="w-6 h-6 text-green-500" />
+            </div>
+            <span className="text-sm font-medium text-gray-900">Pagar Préstamo</span>
+          </Link>
+          <Link to="/tarjetas" 
+                className="flex flex-col items-center p-2 text-center transition-colors rounded-lg hover:bg-gray-50">
+            <div className="p-2 mb-1 bg-purple-50 rounded-full">
+              <CreditCardIcon className="w-6 h-6 text-purple-500" />
+            </div>
+            <span className="text-sm font-medium text-gray-900">Ver Tarjetas</span>
+          </Link>
+          <Link to="/cuentas/movimientos" 
+                className="flex flex-col items-center p-2 text-center transition-colors rounded-lg hover:bg-gray-50">
+            <div className="p-2 mb-1 bg-gray-50 rounded-full">
+              <HomeIcon className="w-6 h-6 text-gray-500" />
+            </div>
+            <span className="text-sm font-medium text-gray-900">Movimientos</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -87,37 +124,41 @@ function MisCuentas() {
   return (
     <div className="space-y-6">
       {/* Encabezado con botón */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-900">Mis Cuentas</h2>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
+        <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">Mis Cuentas</h2>
+        <button className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md sm:w-auto hover:bg-blue-700">
           Nueva Cuenta
         </button>
       </div>
 
-      {/* Listado de cuentas - 3 columnas en desktop */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Listado de cuentas */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {/* Tarjeta de cuenta 1 */}
-        <div className="p-6 bg-white rounded-lg shadow">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium text-gray-900">Cuenta Ahorros</h3>
-            <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">Activa</span>
+        <div className="p-4 bg-white rounded-lg shadow sm:p-6">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0">
+            <div>
+              <h3 className="text-base font-medium text-gray-900 sm:text-lg">Cuenta Ahorros</h3>
+              <p className="text-sm text-gray-500">****-7890</p>
+            </div>
+            <span className="inline-flex px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">Activa</span>
           </div>
-          <p className="mt-2 text-3xl font-bold text-blue-600">$0</p>
-          <p className="text-sm text-gray-500">****-7890</p>
-          <button className="mt-4 text-sm text-blue-600 hover:text-blue-800">
+          <p className="mt-3 text-2xl font-bold text-blue-600 sm:text-3xl">$0</p>
+          <button className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-800">
             Ver movimientos →
           </button>
         </div>
 
         {/* Tarjeta de cuenta 2 */}
-        <div className="p-6 bg-white rounded-lg shadow">
-          <div className="flex justify-between">
-            <h3 className="text-lg font-medium text-gray-900">Cuenta Corriente</h3>
-            <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">Activa</span>
+        <div className="p-4 bg-white rounded-lg shadow sm:p-6">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0">
+            <div>
+              <h3 className="text-base font-medium text-gray-900 sm:text-lg">Cuenta Corriente</h3>
+              <p className="text-sm text-gray-500">****-4567</p>
+            </div>
+            <span className="inline-flex px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-full">Activa</span>
           </div>
-          <p className="mt-2 text-3xl font-bold text-blue-600">$0</p>
-          <p className="text-sm text-gray-500">****-4567</p>
-          <button className="mt-4 text-sm text-blue-600 hover:text-blue-800">
+          <p className="mt-3 text-2xl font-bold text-blue-600 sm:text-3xl">$0</p>
+          <button className="mt-4 text-sm font-medium text-blue-600 hover:text-blue-800">
             Ver movimientos →
           </button>
         </div>
