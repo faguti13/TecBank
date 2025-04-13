@@ -517,3 +517,4 @@ C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\Tec
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref\TecBankAPI.dll
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\tarjetas.json
 C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\compras_tarjetas.json
+C:\Users\Usuario\OneDrive\Escritorio\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\pagos_tarjetas.json

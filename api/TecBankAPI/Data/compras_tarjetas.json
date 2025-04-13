@@ -52,5 +52,11 @@
     "NumeroTarjeta": "prueba3",
     "Monto": "1250",
     "Fecha": "2025-04-24"
+  },
+  {
+    "Id": 11,
+    "NumeroTarjeta": "1234567821234556",
+    "Monto": "100",
+    "Fecha": "2025-04-13"
   }
 ]

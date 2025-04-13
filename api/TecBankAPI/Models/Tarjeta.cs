@@ -50,3 +50,25 @@ public class ActualizarMontoRequest
     public string NumeroTarjeta { get; set; }
     public decimal NuevoMonto { get; set; }  // El monto a restar
 }
+
+public class ActualizarSaldoRequest
+{
+    public string NumeroTarjeta { get; set; }
+    public decimal NuevoMonto { get; set; }  // El monto a restar
+}
+
+
+public class Pago
+    {
+        [Required]
+        public int Id { get; set; }  
+        
+        [Required]
+        public string NumeroTarjeta { get; set; } 
+
+        [Required]
+        public string MontoP { get; set; }  
+
+        [Required]
+        public string FechaP { get; set; }  
+    }

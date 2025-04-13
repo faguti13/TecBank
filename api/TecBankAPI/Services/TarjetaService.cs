@@ -7,6 +7,7 @@ namespace TecBankAPI.Services
     {
         private readonly string _tarjetasPath;
         private readonly string _comprasPath;
+        private readonly string _pagosPath;
         private static readonly object _lock = new object();
 
         public TarjetaService(IWebHostEnvironment webHostEnvironment)
@@ -14,6 +15,7 @@ namespace TecBankAPI.Services
             var dataPath = Path.Combine(webHostEnvironment.ContentRootPath, "Data");
             _tarjetasPath = Path.Combine(dataPath, "tarjetas.json");
             _comprasPath = Path.Combine(dataPath, "compras_tarjetas.json");
+            _pagosPath = Path.Combine(dataPath, "pagos_tarjetas.json");
 
             // Crear archivo si no existe
             if (!Directory.Exists(dataPath))
@@ -24,6 +26,10 @@ namespace TecBankAPI.Services
 
             if (!File.Exists(_comprasPath))
                 File.WriteAllText(_comprasPath, "[]");
+
+            if (!File.Exists(_pagosPath))
+                File.WriteAllText(_pagosPath, "[]");
+            
         }
 
         private List<T> ReadData<T>(string path)
@@ -110,6 +116,24 @@ namespace TecBankAPI.Services
             catch (Exception ex)
             {
                 throw new Exception($"Error al crear la compra: {ex.Message}", ex);
+            }
+        }
+
+        public Pago CreatePago(Pago pago)
+        {
+            try
+            {
+                var pagos = ReadData<Pago>(_pagosPath);
+                pago.Id = pagos.Count > 0 ? pagos.Max(t => t.Id) + 1 : 1;
+
+                pagos.Add(pago);
+                SaveData(pagos, _pagosPath);
+
+                return pago;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al crear el pago: {ex.Message}", ex);
             }
         }
 

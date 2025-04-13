@@ -11,17 +11,6 @@
     "MontoSinCancelar": 0
   },
   {
-    "Id": 2,
-    "NumeroCuenta": "U2FsdGVkX1\u002BxJY8",
-    "NumeroTarjeta": "1234567821234556",
-    "TipoTarjeta": "Credito",
-    "SaldoDisponible": null,
-    "MontoCredito": 50000,
-    "fechaExpiracion": "2025-05",
-    "CodigoSeguridad": "123",
-    "MontoSinCancelar": 3100
-  },
-  {
     "Id": 3,
     "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
     "NumeroTarjeta": "prueba3",

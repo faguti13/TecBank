@@ -165,5 +165,67 @@ namespace TecBankAPI.Controllers
 
             return NoContent(); // Indica que todo se ha realizado correctamente
         }
+
+        [HttpPost("pagos")]
+        public IActionResult CreatePago([FromBody] Pago pago)
+        {
+            if (pago == null)
+            {
+                return BadRequest("El pago no puede ser nula.");
+            }
+            
+            var nuevoPago = _tarjetaService.CreatePago(pago);
+             return NoContent();
+        }
+
+       [HttpPut("actualizarSaldo")]
+        public IActionResult ActualizarSaldo([FromBody] ActualizarSaldoRequest request)
+        {
+            //Console.WriteLine($"Datos recibidos - NumeroTarjeta: {request.NumeroTarjeta}, NuevoMonto: {request.NuevoMonto}");
+            if (string.IsNullOrEmpty(request.NumeroTarjeta) || request.NuevoMonto < 0)
+            {
+                return BadRequest("Datos inválidos.");
+            }
+
+            var tarjeta = _tarjetaService.GetByNumeroTarjeta(request.NumeroTarjeta);
+            if (tarjeta == null)
+            {
+                return NotFound("Tarjeta no encontrada.");
+            }
+
+            if (tarjeta.TipoTarjeta == "Debito") // Actualizar saldo o crédito dependiendo del tipo de tarjeta
+            {
+                    return BadRequest();
+                
+            }
+            else if (tarjeta.TipoTarjeta == "Credito")
+            {
+                tarjeta.MontoSinCancelar = tarjeta.MontoSinCancelar - request.NuevoMonto;
+            }
+
+            // Actualizar la tarjeta en la lista de tarjetas
+            var tarjetas = _tarjetaService.GetAll();
+            var tarjetaIndex = tarjetas.FindIndex(t => t.NumeroTarjeta == tarjeta.NumeroTarjeta);
+            
+            if (tarjetaIndex >= 0)
+            {
+                tarjetas[tarjetaIndex] = tarjeta; 
+            }
+
+            _tarjetaService.SaveData(tarjetas, Path.Combine(Directory.GetCurrentDirectory(), "Data", "tarjetas.json"));
+            Console.WriteLine("Datos guardados correctamente.");
+
+            return NoContent(); // Indica que todo se ha realizado correctamente
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }

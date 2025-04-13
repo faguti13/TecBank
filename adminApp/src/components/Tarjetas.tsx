@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {DocumentPlusIcon, EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {DocumentPlusIcon, EyeIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 import { Compra, Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
 
@@ -24,11 +24,15 @@ const Tarjetas: React.FC = () => {
 
   const [compras, setCompras] = useState<Compra[]>([]); // Aquí se almacenan las compras
   const [showCompraForm, setShowCompraForm] = useState(false); // visualización del modal de form compras
+  const [showPagoForm, setShowPagoForm] = useState(false); // visualización del modal de form pagos
   const [showCompraPorNumForm, setShowCompraPorNumForm] = useState(false); // visualización del modal de las compras por tarjetas
   const [loading, setLoading] = useState(false); //
 
   const [monto, setMonto] = useState('');
   const [fecha, setFecha] = useState('');
+
+  const [montoP, setMontoP] = useState('');
+  const [fechaP, setFechaP] = useState('');
 
   const resetForm = () => { // Resetear la confirmación de cuenta, todo en blanco
     setNumeroCuenta('');
@@ -44,6 +48,11 @@ const Tarjetas: React.FC = () => {
   const resetFormCompras = () => { // Resetear el forms de registrar una nueva compra
     setMonto('');
     setFecha('');
+  };
+
+  const resetFormPagos = () => { // Resetear el forms de registrar una nueva compra
+    setMontoP('');
+    setFechaP('');
   };
 
   /////////////////////// manejador del envio del formulario
@@ -195,6 +204,64 @@ const Tarjetas: React.FC = () => {
     fetchCompras(tarjeta.numeroTarjeta); 
     setShowCompraPorNumForm(true); 
   };
+
+/////////////////////// manejador del envio del formulario de nuevo pagp
+const handleSubmitPago = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!selectedTarjeta) return;
+  const nuevoPago = {
+    numeroTarjeta: selectedTarjeta.numeroTarjeta!,
+    montoP,
+    fechaP,
+  };
+
+  // Validación del monto a abonar
+  const montoNumerico = parseFloat(montoP); 
+  if (selectedTarjeta.tipoTarjeta === 'Debito') {
+    alert('Una tarjeta de débito no tiene montos pendientes.');
+    return;
+  } else if (selectedTarjeta.tipoTarjeta === 'Credito') {
+    if (selectedTarjeta.montoSinCancelar !== undefined && montoNumerico > selectedTarjeta.montoSinCancelar) {
+      alert('El monto del pago excede el saldo pendiente.');
+      return;
+    }
+  }
+
+  try {
+
+    await tarjetaService.registrarPago(nuevoPago);
+  
+    alert('Pago creado con éxito');
+    handleActSaldo(e);
+    //fetchTarjetas();
+    
+  } catch (error) {
+    //console.error('Error al crear la tarjeta', error);
+    alert('Error al crear el pago :(');
+  }
+};
+
+/////////////////////// manejador del envio del formulario para actualizar montos
+const handleActSaldo = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!selectedTarjeta) return;
+  //const montoNumerico = parseFloat(monto); 
+
+  try {
+    const nuevoMonto = parseFloat(montoP);   // El monto a restar
+    await tarjetaService.actualizarSaldo(selectedTarjeta.numeroTarjeta!, nuevoMonto);
+    alert('Saldo actualizado con éxito');
+    fetchTarjetas();
+    resetFormPagos();
+    setShowPagoForm(false);
+    
+  } catch (error) {
+    //console.error('Error al crear la tarjeta', error);
+    alert('Error al actualizar la tarjeta');
+  }
+};
 
 /////////////////////// manejador del envio del formulario de nueva compra
   const handleSubmitCompra = async (e: React.FormEvent) => {
@@ -494,8 +561,8 @@ const handleActMontos = async (e: React.FormEvent) => {
                               setShowCompraForm(true)
                             }} 
                             title="Agregar nueva compra"
-                            className="text-indigo-600 hover:text-indigo-900 mr-4">
-                          < DocumentPlusIcon className="h-5 w-5" />
+                            className="text-indigo-600 hover:text-indigo-900 mr-2">
+                          < DocumentPlusIcon className="h-4 w-4" />
                           </button>
 
                           <button
@@ -503,15 +570,23 @@ const handleActMontos = async (e: React.FormEvent) => {
                                 setSelectedTarjeta(tarjeta); handleVerCompras(tarjeta);
                                 }} 
                             title="Ver compras realizadas"
-                            className="text-indigo-600 hover:text-indigo-900 mr-4">
-                          < EyeIcon className="h-5 w-5" />
+                            className="text-indigo-600 hover:text-indigo-900 mr-2">
+                          < EyeIcon className="h-4 w-4" />
                           </button>
 
                           <button
                             onClick={() => {deleteTarjera(tarjeta)}}
                             title="Eliminar tarjeta"
-                            className="text-red-600 hover:text-red-900">
-                          <TrashIcon className="h-5 w-5" />
+                            className="text-red-600 hover:text-red-900 mr-1">
+                          <TrashIcon className="h-4 w-4" />
+                          </button>
+
+                          <button
+                            onClick={() => {setSelectedTarjeta(tarjeta);
+                              setShowPagoForm(true)}}
+                            title="Agregar Pago al saldo pendiente"
+                            className="text-indigo-600 hover:text-indigo-900 mr-2">
+                          <PlusIcon className="h-4 w-4" />
                           </button>
                       </td>
                  
@@ -521,7 +596,7 @@ const handleActMontos = async (e: React.FormEvent) => {
               </table>
             </div>
 
-      {/* Modal de agregar un pago*/}
+      {/* Modal de agregar una compra*/}
       {showCompraForm && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -552,6 +627,53 @@ const handleActMontos = async (e: React.FormEvent) => {
                   type="button"
                   onClick={() => {setShowCompraForm(false);
                     resetFormCompras()}}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                >
+                  Agregar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de agregar un pago*/}
+      {showPagoForm && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold mb-4">Agregar nuevo pago</h2>
+            <form onSubmit={handleSubmitPago}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+                <input
+                  type="number"
+                  value={montoP}
+                  onChange={(e) => setMontoP(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
+                <input
+                  type="date"
+                  value={fechaP}
+                  onChange={(e) => setFechaP(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={() => {setShowPagoForm(false);
+                    resetFormPagos()}}
                   className="text-gray-500 hover:text-gray-700"
                 >
                   Cancelar

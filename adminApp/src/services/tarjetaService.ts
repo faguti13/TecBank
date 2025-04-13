@@ -18,6 +18,11 @@ export interface Tarjeta {
     fecha: string;
 }
 
+export interface Pago {
+    numeroTarjeta: string;
+    montoP: string;
+    fechaP: string;
+}
 
 const API_URL = 'http://localhost:5240/api';
 
@@ -134,5 +139,34 @@ export const tarjetaService = {
         }
     },
 
+    async registrarPago(pago: Pago): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/pagos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pago),
+        });
+        if (!response.ok) {
+            throw new Error('Error al registrar el pago');
+        }
+    },
+
+    async actualizarSaldo(numeroTarjeta: string, nuevoMonto: number): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/actualizarSaldo`, {
+            method: 'PUT',  // PUT porque actualiza un dato
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                numeroTarjeta,
+                nuevoMonto,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el monto de la tarjeta');
+        }
+    },
 
 }; 
