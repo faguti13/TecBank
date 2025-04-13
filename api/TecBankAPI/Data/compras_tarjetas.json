@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1,
+    "NumeroTarjeta": "prueba",
+    "Monto": "3000",
+    "Fecha": "2025-04-24"
+  },
+  {
+    "Id": 2,
+    "NumeroTarjeta": "1234567821234556",
+    "Monto": "500",
+    "Fecha": "2025-04-24"
+  },
+  {
+    "Id": 3,
+    "NumeroTarjeta": "1234567821234556",
+    "Monto": "400",
+    "Fecha": "2025-05-23"
+  }
+]

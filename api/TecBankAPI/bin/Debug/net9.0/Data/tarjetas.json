@@ -4,7 +4,7 @@
     "NumeroCuenta": "Prueba",
     "NumeroTarjeta": "prueba",
     "TipoTarjeta": "Debito",
-    "SaldoDisponible": 10000,
+    "SaldoDisponible": 7000,
     "MontoCredito": null,
     "fechaExpiracion": "2036-08",
     "CodigoSeguridad": "888"
@@ -15,7 +15,7 @@
     "NumeroTarjeta": "1234567821234556",
     "TipoTarjeta": "Credito",
     "SaldoDisponible": null,
-    "MontoCredito": 54000,
+    "MontoCredito": 53500,
     "fechaExpiracion": "2025-05",
     "CodigoSeguridad": "123"
   },

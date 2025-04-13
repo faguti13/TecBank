@@ -11,6 +11,13 @@ export interface Tarjeta {
     codigoSeguridad: string;
   }
 
+  export interface Compra {
+    numeroTarjeta: string;
+    monto: string;
+    fecha: string;
+}
+
+
 const API_URL = 'http://localhost:5240/api';
 
 export const tarjetaService = {
@@ -69,9 +76,37 @@ export const tarjetaService = {
             }
         }
         return response.json(); 
-    }
+    },
     
-      
+    async registrarCompra(compra: Compra): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/compras`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(compra),
+        });
+        if (!response.ok) {
+            throw new Error('Error al registrar la compra');
+        }
+    },
+
+    async actualizarMonto(numeroTarjeta: string, nuevoMonto: number): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/actualizarMonto`, {
+            method: 'PUT',  // PUT porque actualiza un dato
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                numeroTarjeta,
+                nuevoMonto,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el monto de la tarjeta');
+        }
+    },
 
 
 }; 

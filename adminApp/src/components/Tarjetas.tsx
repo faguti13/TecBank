@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {  DocumentPlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 import { Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
 
@@ -19,6 +20,11 @@ const Tarjetas: React.FC = () => {
   const [isCuentaConfirmada, setIsCuentaConfirmada] = useState(false);
   const [isCuentaExistente, setIsCuentaExistente] = useState(false);
   const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
+  const [selectedTarjeta, setSelectedTarjeta] = useState<Tarjeta | null>(null);
+
+  const [showCompraForm, setShowCompraForm] = useState(false);
+  const [monto, setMonto] = useState('');
+  const [fecha, setFecha] = useState('');
 
   const resetForm = () => { // Resetear la confirmación de cuenta, todo en blanco
     setNumeroCuenta('');
@@ -29,6 +35,11 @@ const Tarjetas: React.FC = () => {
     setFechaExpiracion('');
     setCodigoSeguridad('');
     setIsCuentaConfirmada(false); 
+  };
+
+  const resetFormCompras = () => { // Resetear el forms de registrar una nueva compra
+    setMonto('');
+    setFecha('');
   };
 
   /////////////////////// manejador del envio del formulario
@@ -116,7 +127,7 @@ const Tarjetas: React.FC = () => {
     }
   };
 
-  // Llamada al API para obtener todas las tarjetas
+  /////////////////////// Llamada al API para obtener todas las tarjetas
   useEffect(() => {
     fetchTarjetas()
   }, []);
@@ -131,7 +142,71 @@ const Tarjetas: React.FC = () => {
     }
   };
 
+/////////////////////// manejador del envio del formulario de nueva compra
+  const handleSubmitCompra = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    if (!selectedTarjeta) return;
+    const nuevaCompra = {
+      monto,
+      fecha,
+      numeroTarjeta: selectedTarjeta.numeroTarjeta!,
+    };
+
+    // Validación del monto según el tipo de tarjeta
+    const montoNumerico = parseFloat(monto); 
+    if (selectedTarjeta.tipoTarjeta === 'Debito') {
+      if (selectedTarjeta.saldoDisponible !== undefined && montoNumerico > selectedTarjeta.saldoDisponible) {
+        alert('El monto de la compra excede el saldo disponible de la tarjeta de débito. No se puede realizar la compra.');
+        return;
+      }
+    } else if (selectedTarjeta.tipoTarjeta === 'Credito') {
+      if (selectedTarjeta.montoCredito !== undefined && montoNumerico > selectedTarjeta.montoCredito) {
+        alert('El monto de la compra excede el crédito disponible en la tarjeta. No se puede realizar la compra');
+        return;
+      }
+    }
+
+    try {
+
+      await tarjetaService.registrarCompra(nuevaCompra);
+      //const nuevoMonto = montoNumerico;  // El monto a restar
+      //await tarjetaService.actualizarMonto(selectedTarjeta.numeroTarjeta!, nuevoMonto);
+
+      //setShowCompraForm(false);
+      //resetFormCompras();
+      alert('Compra creada con éxito');
+      handleActMontos(e);
+      //fetchTarjetas();
+      
+    } catch (error) {
+      //console.error('Error al crear la tarjeta', error);
+      alert('Error al crear la compra :(');
+    }
+  };
+
+/////////////////////// manejador del envio del formulario para actualizar montos
+const handleActMontos = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!selectedTarjeta) return;
+  //const montoNumerico = parseFloat(monto); 
+
+  try {
+    const nuevoMonto = parseFloat(monto);   // El monto a restar
+    await tarjetaService.actualizarMonto(selectedTarjeta.numeroTarjeta!, nuevoMonto);
+    alert('Montos actualizados con éxito');
+    fetchTarjetas();
+    resetFormCompras();
+    setShowCompraForm(false);
+    
+  } catch (error) {
+    //console.error('Error al crear la tarjeta', error);
+    alert('Error al actualizar la tarjeta');
+  }
+};
+
+ ///////////////////////  lo que se muestra
   return (
     <div className="p-6 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Gestión de Tarjetas</h2>
@@ -336,6 +411,10 @@ const Tarjetas: React.FC = () => {
                       Monto Crédito</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Fecha Expiración</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Monto Compras</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -353,12 +432,80 @@ const Tarjetas: React.FC = () => {
                         {tarjeta.montoCredito ?? 'N/A'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {tarjeta.fechaExpiracion}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button
+                            onClick={() => {setSelectedTarjeta(tarjeta);
+                              
+                              setShowCompraForm(true)
+                            }} 
+                            title="Agregar nueva compra"
+                            className="text-indigo-600 hover:text-indigo-900 mr-4">
+                          < DocumentPlusIcon className="h-5 w-5" />
+                          </button>
+
+                          <button
+                            //onClick={() => rol.id && handleDelete(rol.id)}
+                            title="Eliminar tarjeta"
+                            className="text-red-600 hover:text-red-900">
+                          <TrashIcon className="h-5 w-5" />
+                          </button>
+                      </td>
+                 
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
+      {/* Modal de agregar un pago*/}
+      {showCompraForm && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold mb-4">Agregar nueva compra</h2>
+            <form onSubmit={handleSubmitCompra}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+                <input
+                  type="number"
+                  value={monto}
+                  onChange={(e) => setMonto(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
+                <input
+                  type="date"
+                  value={fecha}
+                  onChange={(e) => setFecha(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={() => {setShowCompraForm(false);
+                    resetFormCompras()}}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                >
+                  Agregar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+   
     </div>
   );
 };

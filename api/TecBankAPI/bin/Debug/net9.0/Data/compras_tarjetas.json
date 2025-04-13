@@ -1,0 +1,56 @@
+[
+  {
+    "Id": 1,
+    "NumeroTarjeta": "prueba",
+    "Monto": "22",
+    "Fecha": "2025-05-01"
+  },
+  {
+    "Id": 2,
+    "NumeroTarjeta": "prueba",
+    "Monto": "5000",
+    "Fecha": "2025-04-13"
+  },
+  {
+    "Id": 3,
+    "NumeroTarjeta": "prueba",
+    "Monto": "5000",
+    "Fecha": "2025-04-23"
+  },
+  {
+    "Id": 4,
+    "NumeroTarjeta": "prueba3",
+    "Monto": "5000",
+    "Fecha": "2025-04-16"
+  },
+  {
+    "Id": 5,
+    "NumeroTarjeta": "1234567821234556",
+    "Monto": "4500",
+    "Fecha": "2025-04-29"
+  },
+  {
+    "Id": 6,
+    "NumeroTarjeta": "prueba3",
+    "Monto": "2500",
+    "Fecha": "2025-04-11"
+  },
+  {
+    "Id": 7,
+    "NumeroTarjeta": "1234567821234556",
+    "Monto": "500",
+    "Fecha": "2025-04-20"
+  },
+  {
+    "Id": 8,
+    "NumeroTarjeta": "prueba",
+    "Monto": "3000",
+    "Fecha": "2025-04-24"
+  },
+  {
+    "Id": 9,
+    "NumeroTarjeta": "1234567821234556",
+    "Monto": "500",
+    "Fecha": "2025-04-24"
+  }
+]
