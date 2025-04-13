@@ -1,12 +1,10 @@
-// services/cuentaService.ts
-
 interface Cuenta {
     id?: number;
     numeroCuenta: string;
     descripcion: string;
     moneda: 'Colones' | 'Dólares' | 'Euros';
     tipoCuenta: 'Ahorros' | 'Corriente';
-    cedulaCliente: string;
+    nombreCliente: string;  // Cambiado de cedulaCliente a nombreCliente
 }
 
 // URL base de la API

@@ -8,7 +8,7 @@ interface Cuenta {
     descripcion: string;
     moneda: 'Colones' | 'Dólares' | 'Euros';
     tipoCuenta: 'Ahorros' | 'Corriente';
-    cedulaCliente: string;
+    nombreCliente: string;
 }
 
 const Cuentas: React.FC = () => {
@@ -18,7 +18,7 @@ const Cuentas: React.FC = () => {
         descripcion: '',
         moneda: 'Colones',
         tipoCuenta: 'Ahorros',
-        cedulaCliente: ''
+        nombreCliente: ''
     });
     const [isEditing, setIsEditing] = useState(false);
     const [error, setError] = useState('');
@@ -49,7 +49,7 @@ const Cuentas: React.FC = () => {
                 descripcion: '',
                 moneda: 'Colones',
                 tipoCuenta: 'Ahorros',
-                cedulaCliente: ''
+                nombreCliente: ''
             });
             setIsEditing(false);
             loadCuentas();
@@ -145,14 +145,14 @@ const Cuentas: React.FC = () => {
                 </div>
                 
                 <div>
-                    <label htmlFor="cedulaCliente" className="block text-sm font-medium text-gray-700">
-                        Cédula del Cliente
+                    <label htmlFor="nombreCliente" className="block text-sm font-medium text-gray-700">
+                        Nombre del Cliente
                     </label>
                     <input
                         type="text"
-                        id="cedulaCliente"
-                        value={currentCuenta.cedulaCliente}
-                        onChange={(e) => setCurrentCuenta({ ...currentCuenta, cedulaCliente: e.target.value })}
+                        id="nombreCliente"
+                        value={currentCuenta.nombreCliente}
+                        onChange={(e) => setCurrentCuenta({ ...currentCuenta, nombreCliente: e.target.value })}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         required
                     />
@@ -183,7 +183,7 @@ const Cuentas: React.FC = () => {
                                 Tipo de Cuenta
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Cédula Cliente
+                                Nombre Cliente
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Acciones
@@ -206,7 +206,7 @@ const Cuentas: React.FC = () => {
                                     {cuenta.tipoCuenta}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {cuenta.cedulaCliente}
+                                    {cuenta.nombreCliente}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <button
