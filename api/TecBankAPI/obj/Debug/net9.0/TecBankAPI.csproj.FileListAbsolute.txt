@@ -515,3 +515,4 @@ D:\Alexis\A_Tec\Semestre_7\Bases_Datos\TecBank\api\TecBankAPI\obj\Debug\net9.0\r
 D:\Alexis\A_Tec\Semestre_7\Bases_Datos\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.pdb
 D:\Alexis\A_Tec\Semestre_7\Bases_Datos\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.genruntimeconfig.cache
 D:\Alexis\A_Tec\Semestre_7\Bases_Datos\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref\TecBankAPI.dll
+C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\BCrypt.Net-Next.dll

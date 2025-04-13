@@ -34,7 +34,7 @@ namespace TecBankAPI.Services
                 var clientes = JsonSerializer.Deserialize<List<Cliente>>(json) ?? new List<Cliente>();
                 var cliente = clientes.FirstOrDefault(c => c.Usuario == request.Usuario);
 
-                if (cliente == null || cliente.Password != request.Password)
+                if (cliente == null || !cliente.VerifyPassword(request.Password))
                 {
                     throw new Exception("Usuario o contraseña incorrectos");
                 }

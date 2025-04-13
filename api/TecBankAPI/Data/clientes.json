@@ -2,7 +2,7 @@
   {
     "Id": 1,
     "Usuario": "FabianGJ",
-    "Password": "73l8gRjwLftklgfdXT\u002BMdiMEjJwGPVMsyVxe16iYpk8=",
+    "Password": "$2a$11$S5qyMDHgpFsRkwwINYtYSODw9SfhIRW5BbHYtEB48fPrGEW5QbQRm",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
@@ -15,7 +15,7 @@
   {
     "Id": 2,
     "Usuario": "cliente_test",
-    "Password": "test123",
+    "Password": "$2a$11$xBUXpoZ5vtY9cV4Wa3Xvj.Qlf8acKqHiQ1AU3PeNpp9YcD8.tMpBW",
     "Nombre": "Cliente",
     "Apellido1": "Prueba",
     "Apellido2": "Test",
@@ -28,7 +28,7 @@
   {
     "Id": 3,
     "Usuario": "test2",
-    "Password": "pass",
+    "Password": "$2a$11$UaSUI9hIKqH1aIANuB.wMOD74GNM1Kp4ZK/yI557haLVgm90VTCem",
     "Nombre": "test2",
     "Apellido1": "test2",
     "Apellido2": "test2",
@@ -41,7 +41,7 @@
   {
     "Id": 0,
     "Usuario": "apepsos",
-    "Password": "123456",
+    "Password": "$2a$11$xy9.NK.5E1ypAvRQSOit.Ov0azl3sbezlzspNPJ1kQeOafNJpeAoa",
     "Nombre": "Luis Alexis",
     "Apellido1": "Alvarado",
     "Apellido2": "Barrantes",
@@ -49,6 +49,32 @@
     "Direccion": "La Uni\u00F3n, Residencial Paso Real, Calle Viena, Casa M5",
     "Telefono": "85636474",
     "Email": "alexis03126@gmail.com",
+    "TipoCliente": "F\u00EDsico"
+  },
+  {
+    "Id": 0,
+    "Usuario": "FabianG",
+    "Password": "$2a$11$.p6E2ERJ6ontQM1wsTuugexU/6GJelBqxC7c6IrM5ZgRKQrPvmBmm",
+    "Nombre": "Fabian",
+    "Apellido1": "Gutierrez",
+    "Apellido2": "Jimenez",
+    "Cedula": "119230146",
+    "Direccion": "Residencial Estancia Antigua\nG13",
+    "Telefono": "64012272",
+    "Email": "fagutierrez1318@gmail.com",
+    "TipoCliente": "F\u00EDsico"
+  },
+  {
+    "Id": 0,
+    "Usuario": "FabianGJ",
+    "Password": "$2a$11$UYTWi..Q7tTJoU28hHotk.6hxxutrD0EjlFnU.hRpbzXuBABk83NC",
+    "Nombre": "Fabian",
+    "Apellido1": "Gutierrez",
+    "Apellido2": "Jimenez",
+    "Cedula": "119230147",
+    "Direccion": "Residencial Estancia Antigua\nG13",
+    "Telefono": "64012272",
+    "Email": "fagutierrez1318@gmail.com",
     "TipoCliente": "F\u00EDsico"
   }
 ]

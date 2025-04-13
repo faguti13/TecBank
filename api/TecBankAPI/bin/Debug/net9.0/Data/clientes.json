@@ -37,5 +37,31 @@
     "Telefono": "11111",
     "Email": "@gmail",
     "TipoCliente": "F\u00EDsico"
+  },
+  {
+    "Id": 0,
+    "Usuario": "apepsos",
+    "Password": "123456",
+    "Nombre": "Luis Alexis",
+    "Apellido1": "Alvarado",
+    "Apellido2": "Barrantes",
+    "Cedula": "118640248",
+    "Direccion": "La Uni\u00F3n, Residencial Paso Real, Calle Viena, Casa M5",
+    "Telefono": "85636474",
+    "Email": "alexis03126@gmail.com",
+    "TipoCliente": "F\u00EDsico"
+  },
+  {
+    "Id": 0,
+    "Usuario": "FabianG",
+    "Password": "123456",
+    "Nombre": "Fabian",
+    "Apellido1": "Gutierrez",
+    "Apellido2": "Jimenez",
+    "Cedula": "119230146",
+    "Direccion": "Residencial Estancia Antigua\nG13",
+    "Telefono": "64012272",
+    "Email": "fagutierrez1318@gmail.com",
+    "TipoCliente": "F\u00EDsico"
   }
 ]
