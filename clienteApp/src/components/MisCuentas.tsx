@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
+import TransaccionesHistorial from './TransaccionesHistorial';
+import { realizarTransferencia, registrarDeposito, registrarRetiro } from '../services/transaccionesService';
 
 interface Cuenta {
   id: number;
@@ -12,48 +14,212 @@ interface Cuenta {
   saldo: number;
 }
 
+interface TransaccionModalProps {
+  cuenta: Cuenta;
+  tipo: 'transferencia' | 'deposito' | 'retiro';
+  onClose: () => void;
+  onSuccess: () => void;
+  cuentasDisponibles?: Cuenta[];
+}
+
+const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClose, onSuccess, cuentasDisponibles }) => {
+  const [monto, setMonto] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [cuentaDestino, setCuentaDestino] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const montoNumerico = parseFloat(monto);
+      if (isNaN(montoNumerico) || montoNumerico <= 0) {
+        throw new Error('El monto debe ser un número positivo');
+      }
+
+      switch (tipo) {
+        case 'transferencia':
+          if (!cuentaDestino) throw new Error('Seleccione una cuenta destino');
+          await realizarTransferencia({
+            cuentaOrigenId: cuenta.id,
+            cuentaDestinoId: parseInt(cuentaDestino),
+            monto: montoNumerico,
+            descripcion
+          });
+          break;
+        case 'deposito':
+          await registrarDeposito({
+            cuentaId: cuenta.id,
+            monto: montoNumerico,
+            descripcion
+          });
+          break;
+        case 'retiro':
+          await registrarRetiro({
+            cuentaId: cuenta.id,
+            monto: montoNumerico,
+            descripcion
+          });
+          break;
+      }
+
+      onSuccess();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al procesar la operación');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="bg-white p-6 rounded-lg w-full max-w-md">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold capitalize">{tipo}</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {tipo === 'transferencia' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Cuenta Destino</label>
+              <select
+                value={cuentaDestino}
+                onChange={(e) => setCuentaDestino(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                required
+              >
+                <option value="">Seleccione una cuenta</option>
+                {cuentasDisponibles?.filter(c => c.id !== cuenta.id).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.numeroCuenta} - {c.descripcion}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Monto</label>
+            <input
+              type="number"
+              value={monto}
+              onChange={(e) => setMonto(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              required
+              min="0"
+              step="0.01"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Descripción</label>
+            <input
+              type="text"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {error && (
+            <div className="p-3 text-red-600 bg-red-100 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+
+          <div className="flex justify-end space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+            >
+              {loading ? 'Procesando...' : 'Confirmar'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 const MisCuentas: React.FC = () => {
   const [cuentas, setCuentas] = useState<Cuenta[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { user } = useAuth();
+  const [selectedCuenta, setSelectedCuenta] = useState<Cuenta | null>(null);
+  const [modalType, setModalType] = useState<'transferencia' | 'deposito' | 'retiro' | null>(null);
+  const [showTransacciones, setShowTransacciones] = useState(false);
+
+  const fetchCuentas = async () => {
+    if (!user?.cedula) {
+      console.error('No hay cédula de usuario disponible');
+      setError('No se puede cargar las cuentas sin identificación de usuario');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const url = `${API_BASE_URL}/api/Cuentas/cliente/${user.cedula}`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error('Error al cargar las cuentas');
+      }
+      
+      const data = await response.json();
+      setCuentas(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error completo:', err);
+      setError('Error al cargar las cuentas. Por favor, intenta más tarde.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCuentas = async () => {
-      if (!user?.cedula) {
-        console.error('No hay cédula de usuario disponible');
-        setError('No se puede cargar las cuentas sin identificación de usuario');
-        setLoading(false);
-        return;
-      }
-
-      console.log('Intentando obtener cuentas para cédula:', user.cedula);
-      try {
-        const url = `${API_BASE_URL}/api/Cuentas/cliente/${user.cedula}`;
-        console.log('Haciendo petición a:', url);
-        
-        const response = await fetch(url);
-        console.log('Respuesta recibida:', response.status);
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Error response:', errorText);
-          throw new Error(`Error al cargar las cuentas: ${response.status} ${errorText}`);
-        }
-        
-        const data = await response.json();
-        console.log('Datos recibidos:', data);
-        setCuentas(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('Error completo:', err);
-        setError('Error al cargar las cuentas. Por favor, intenta más tarde.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCuentas();
   }, [user]);
+
+  const handleOperacion = (cuenta: Cuenta, tipo: 'transferencia' | 'deposito' | 'retiro') => {
+    setSelectedCuenta(cuenta);
+    setModalType(tipo);
+  };
+
+  const handleVerTransacciones = (cuenta: Cuenta) => {
+    setSelectedCuenta(cuenta);
+    setShowTransacciones(true);
+  };
+
+  const getMonedaSymbol = (moneda: string) => {
+    switch (moneda.toUpperCase()) {
+      case 'CRC':
+        return '₡';
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      default:
+        return moneda;
+    }
+  };
 
   if (loading) {
     return (
@@ -70,19 +236,6 @@ const MisCuentas: React.FC = () => {
       </div>
     );
   }
-
-  const getMonedaSymbol = (moneda: string) => {
-    switch (moneda.toUpperCase()) {
-      case 'CRC':
-        return '₡';
-      case 'USD':
-        return '$';
-      case 'EUR':
-        return '€';
-      default:
-        return moneda;
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -117,21 +270,62 @@ const MisCuentas: React.FC = () => {
               <div className="mt-4">
                 <p className="text-sm text-gray-600">Saldo disponible</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {getMonedaSymbol(cuenta.moneda)} {(cuenta.saldo || 0).toLocaleString('es-CR', { minimumFractionDigits: 2 })}
+                  {getMonedaSymbol(cuenta.moneda)} {cuenta.saldo.toLocaleString('es-CR', { minimumFractionDigits: 2 })}
                 </p>
               </div>
 
-              <div className="mt-6 flex space-x-3">
-                <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => handleVerTransacciones(cuenta)}
+                  className="col-span-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
                   Ver Movimientos
                 </button>
-                <button className="flex-1 px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors">
+                <button
+                  onClick={() => handleOperacion(cuenta, 'transferencia')}
+                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors"
+                >
                   Transferir
+                </button>
+                <button
+                  onClick={() => handleOperacion(cuenta, 'retiro')}
+                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors"
+                >
+                  Retirar
+                </button>
+                <button
+                  onClick={() => handleOperacion(cuenta, 'deposito')}
+                  className="col-span-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors"
+                >
+                  Depositar
                 </button>
               </div>
             </div>
           ))}
         </div>
+      )}
+
+      {selectedCuenta && modalType && (
+        <TransaccionModal
+          cuenta={selectedCuenta}
+          tipo={modalType}
+          onClose={() => {
+            setSelectedCuenta(null);
+            setModalType(null);
+          }}
+          onSuccess={fetchCuentas}
+          cuentasDisponibles={modalType === 'transferencia' ? cuentas : undefined}
+        />
+      )}
+
+      {selectedCuenta && showTransacciones && (
+        <TransaccionesHistorial
+          cuentaId={selectedCuenta.id}
+          onClose={() => {
+            setSelectedCuenta(null);
+            setShowTransacciones(false);
+          }}
+        />
       )}
     </div>
   );

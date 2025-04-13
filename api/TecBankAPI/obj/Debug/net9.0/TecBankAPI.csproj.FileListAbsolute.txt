@@ -684,3 +684,4 @@ C:\Users\jrami\Desktop\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.genrun
 C:\Users\jrami\Desktop\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref\TecBankAPI.dll
 >>>>>>> 39605478ee8ce56adae95d28a6119003f756c399
 C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\asesores.json
+C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\transacciones.json

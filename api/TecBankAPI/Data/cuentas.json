@@ -1,27 +1,30 @@
 [
   {
     "Id": 1,
-    "NumeroCuenta": "U2FsdGVkX1+xJY8",
+    "NumeroCuenta": "U2FsdGVkX1\u002BxJY8",
     "Descripcion": "Cuenta principal de ahorros",
     "Moneda": "CRC",
     "TipoCuenta": "Ahorros",
-    "CedulaCliente": "119230145"
+    "CedulaCliente": "119230145",
+    "Saldo": 249900.00
   },
   {
     "Id": 2,
-    "NumeroCuenta": "U2FsdGVkX19I3+gv",
+    "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
     "Descripcion": "Cuenta para gastos personales",
     "Moneda": "USD",
     "TipoCuenta": "Corriente",
-    "CedulaCliente": "119230145"
+    "CedulaCliente": "119230145",
+    "Saldo": 600.00
   },
   {
     "Id": 3,
-    "NumeroCuenta": "U2FsdGVkX18OB+J=",
+    "NumeroCuenta": "U2FsdGVkX18OB\u002BJ=",
     "Descripcion": "Cuenta de ahorros en euros",
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
-    "CedulaCliente": "119230146"
+    "CedulaCliente": "119230146",
+    "Saldo": 1000.00
   },
   {
     "Id": 4,
@@ -29,6 +32,7 @@
     "Descripcion": "Cuenta de ahorros en euros",
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
-    "CedulaCliente": "119230146"
+    "CedulaCliente": "119230146",
+    "Saldo": 2500.00
   }
 ]
