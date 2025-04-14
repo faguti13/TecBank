@@ -79,7 +79,8 @@ function Clientes() {
       "Información faltante",
       "Error",
       "Cliente Añadido",
-      "Actualización Realizada"
+      "Actualización Realizada",
+      "Cliente Removido"
     ];
 
     const infoDialogTexts = [
@@ -89,7 +90,10 @@ function Clientes() {
       "Por favor, ingrese una credencial a buscar",
       "Lo sentimos. El usuario que se desea buscar no se encuentra en la base de datos",
       "Error al intentar la actualización de los datos. Intente nuevamente o contacte a soporte.",
-      "La información se ha actualizado correctamente."
+      "La información se ha actualizado correctamente.",
+      "La cédula ingresada corresponde a la de un usuario diferente.",
+      "El cliente ha sido eliminado de la base de datos y ha roto el corazón de la empresa :'(",
+      "No se ha podido borrar al usuario de la base de datos. Intente de nuevo o contacte a soporte."
     ];
 
     const [infoDialogTitle, setInfoDialogTitle] = React.useState(infoDialogTitles[0]);
@@ -124,6 +128,7 @@ function Clientes() {
             Direccion: (clientInfo as any).direccion,
             Telefono: (clientInfo as any).telefono,
             Email: (clientInfo as any).email,
+            IngresoMensual: (clientInfo as any).ingresoMensual,
             TipoCliente: (clientInfo as any).tipoCliente
           }
           );
@@ -142,7 +147,10 @@ function Clientes() {
       try{
         await clientService.editClientInfo(searchedClientInfo);
         handleClickOpenInfoDialog(3, 6);
-      }catch(error){
+      }catch(error: any){
+        if(error.message === "500"){
+          handleClickOpenInfoDialog(1,8);
+        }
         handleClickOpenInfoDialog(1,5);
       }
     }
@@ -161,21 +169,24 @@ function Clientes() {
         TipoCliente: "Fisico",
     });
 
-    const [searchedClientInfo, setSearchedClientInfo] = React.useState<Cliente>({
-        id: 0,
-        Cedula: '',
-        Nombre: '',
-        Apellido1: '',
-        Apellido2: '',
-        Direccion: '',
-        Telefono: '',
-        Usuario: '',
-        Password: '',
-        Email: '',
-        IngresoMensual: 0,
-        TipoCliente: "Fisico",
-    });
-
+    const cleanClientJSON = () =>{
+          let clean = {
+            id: 0,
+            Cedula: '',
+            Nombre: '',
+            Apellido1: '',
+            Apellido2: '',
+            Direccion: '',
+            Telefono: '',
+            Usuario: '',
+            Password: '',
+            Email: '',
+            IngresoMensual: 0,
+            TipoCliente: "Fisico",
+          }
+          return clean;
+        };
+    const [searchedClientInfo, setSearchedClientInfo] = React.useState<Cliente>(cleanClientJSON());
 
     const checkIfObjectIsValid = (info: Object) =>{
       var isValid =  Object.values(info).every(
@@ -199,7 +210,20 @@ function Clientes() {
       }else{
         handleClickOpenInfoDialog(0,0);
       }
-      
+    };
+
+    const handleDeleteClient = async(e: React.FormEvent) =>{
+      e.preventDefault();
+      if(searchedClientInfo.id !== 0){
+        try{
+          await clientService.deleteClient(searchedClientInfo);
+          setSearchedClientInfo(cleanClientJSON);
+          handleClickOpenInfoDialog(4,8);
+          handleCloseDeleteDialog();
+        }catch(error){
+          handleClickOpenInfoDialog(1,9);
+        }
+      }
     };
     
 
@@ -591,7 +615,7 @@ function Clientes() {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleCloseDeleteDialog}>Cancelar</Button>
-                  <Button onClick={handleCloseDeleteDialog} autoFocus>
+                  <Button onClick={handleDeleteClient} autoFocus>
                     Eliminar
                   </Button>
                 </DialogActions>

@@ -61,11 +61,29 @@ export const clientService = {
             body: JSON.stringify(cliente),}
             );
             if (!response.ok) {
-                throw new Error('Error aleditar los datos');
+                throw new Error('500');
             }
         }catch(error){
-            console.error('505', error);
+            console.error('500', error);
             throw error;
         }
     },
+    async deleteClient(cliente: Cliente): Promise<void>{
+        try{
+            const response = await fetch(`${API_URL}/Cliente/${cliente.id}`,{
+                method: 'DELETE',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cliente)
+            }
+            );
+            if (!response.ok) {
+                throw new Error('500');
+            }
+        }catch(error){
+            console.error('420', error);
+            throw error;
+        }
+    }
 };

@@ -47,15 +47,15 @@ public class ClienteController : ControllerBase
         {
             return BadRequest();
         }
-        
+
         await _clienteService.UpdateCliente(cliente);
         return NoContent();
     }
 
-    [HttpDelete("{cedula}")]
-    public async Task<IActionResult> DeleteCliente(string cedula)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCliente(int id)
     {
-        await _clienteService.DeleteCliente(cedula);
+        await _clienteService.DeleteCliente(id);
         return NoContent();
     }
 } 

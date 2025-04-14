@@ -76,9 +76,9 @@ public class ClienteService : IClienteService
         await Task.CompletedTask;
     }
 
-    public async Task DeleteCliente(string cedula)
+    public async Task DeleteCliente(int id)
     {
-        var cliente = _clientes.FirstOrDefault(c => c.Cedula == cedula);
+        var cliente = _clientes.FirstOrDefault(c => c.Id == id);
         if (cliente == null)
         {
             throw new InvalidOperationException("Cliente no encontrado");
@@ -110,4 +110,5 @@ public class ClienteService : IClienteService
             return cliente;
         }
     }
+
 } 
