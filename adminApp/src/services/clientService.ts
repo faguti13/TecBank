@@ -37,4 +37,53 @@ export const clientService = {
             throw error;
         }
     },
+
+    async getByCedula(Cedula: string): Promise<Cliente> {
+        try{
+            const response = await fetch(`${API_URL}/Cliente/${Cedula}`);
+            if (!response.ok) {
+                throw new Error('404');
+            }
+            return response.json();
+        }catch(error){
+            console.error('505', error);
+            throw error;
+        }
+    },
+
+    async editClientInfo(cliente: Cliente): Promise<void>{
+        try{
+            const response = await fetch(`${API_URL}/Cliente/${cliente.id}`, {
+                method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cliente),}
+            );
+            if (!response.ok) {
+                throw new Error('500');
+            }
+        }catch(error){
+            console.error('500', error);
+            throw error;
+        }
+    },
+    async deleteClient(cliente: Cliente): Promise<void>{
+        try{
+            const response = await fetch(`${API_URL}/Cliente/${cliente.id}`,{
+                method: 'DELETE',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cliente)
+            }
+            );
+            if (!response.ok) {
+                throw new Error('500');
+            }
+        }catch(error){
+            console.error('420', error);
+            throw error;
+        }
+    }
 };

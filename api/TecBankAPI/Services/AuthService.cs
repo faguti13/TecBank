@@ -77,6 +77,7 @@ namespace TecBankAPI.Services
                     Direccion = request.Direccion,
                     Telefono = request.Telefono,
                     Email = request.Email,
+                    IngresoMensual = request.IngresoMensual,
                     TipoCliente = request.TipoCliente
                 };
 

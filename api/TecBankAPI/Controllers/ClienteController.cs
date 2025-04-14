@@ -40,10 +40,10 @@ public class ClienteController : ControllerBase
         return CreatedAtAction(nameof(GetCliente), new { cedula = cliente.Cedula }, cliente);
     }
 
-    [HttpPut("{cedula}")]
-    public async Task<IActionResult> UpdateCliente(string cedula, Cliente cliente)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCliente(int id, Cliente cliente)
     {
-        if (cedula != cliente.Cedula)
+        if (id != cliente.Id)
         {
             return BadRequest();
         }
@@ -52,10 +52,10 @@ public class ClienteController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{cedula}")]
-    public async Task<IActionResult> DeleteCliente(string cedula)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCliente(int id)
     {
-        await _clienteService.DeleteCliente(cedula);
+        await _clienteService.DeleteCliente(id);
         return NoContent();
     }
 } 

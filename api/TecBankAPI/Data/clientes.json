@@ -10,6 +10,7 @@
     "Direccion": "Residencial Estancia Antigua",
     "Telefono": "64012272",
     "Email": "fabian@test.com",
+    "IngresoMensual": 12000,
     "TipoCliente": "F\u00EDsico"
   },
   {
@@ -23,6 +24,7 @@
     "Direccion": "Direcci\u00F3n de prueba",
     "Telefono": "88888888",
     "Email": "cliente@test.com",
+<<<<<<< HEAD
     "TipoCliente": "F\u00EDsico"
   },
   {
@@ -49,6 +51,9 @@
     "Direccion": "La Uni\u00F3n, Residencial Paso Real, Calle Viena, Casa M5",
     "Telefono": "85636474",
     "Email": "alexis03126@gmail.com",
+=======
+    "IngresoMensual": 12000,
+>>>>>>> Clientes_Get
     "TipoCliente": "F\u00EDsico"
   },
   {

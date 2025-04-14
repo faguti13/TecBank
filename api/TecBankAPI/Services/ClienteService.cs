@@ -50,7 +50,9 @@ public class ClienteService : IClienteService
         {
             throw new InvalidOperationException("Ya existe un cliente con esa cédula");
         }
-        
+        if(cliente.Id == 0){
+            cliente.Id =  _clientes.Count > 0 ? _clientes.Max(c => c.Id) + 1 : 1;
+        }
         _clientes.Add(cliente);
         SaveData();
         await Task.CompletedTask;
@@ -58,10 +60,15 @@ public class ClienteService : IClienteService
 
     public async Task UpdateCliente(Cliente cliente)
     {
-        var index = _clientes.FindIndex(c => c.Cedula == cliente.Cedula);
+        var index = _clientes.FindIndex(c => c.Id == cliente.Id);
         if (index == -1)
         {
             throw new InvalidOperationException("Cliente no encontrado");
+        }
+        for(int i = 0; i < _clientes.Count(); i++){
+            if((i != index) && (_clientes[i].Cedula == cliente.Cedula)){
+                throw new InvalidOperationException("Ya existe un cliente con esa cédula");
+            }
         }
 
         _clientes[index] = cliente;
@@ -69,9 +76,9 @@ public class ClienteService : IClienteService
         await Task.CompletedTask;
     }
 
-    public async Task DeleteCliente(string cedula)
+    public async Task DeleteCliente(int id)
     {
-        var cliente = _clientes.FirstOrDefault(c => c.Cedula == cedula);
+        var cliente = _clientes.FirstOrDefault(c => c.Id == id);
         if (cliente == null)
         {
             throw new InvalidOperationException("Cliente no encontrado");
@@ -103,4 +110,5 @@ public class ClienteService : IClienteService
             return cliente;
         }
     }
+
 } 

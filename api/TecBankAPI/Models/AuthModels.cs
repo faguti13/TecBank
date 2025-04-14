@@ -18,5 +18,6 @@ namespace TecBankAPI.Models
         public required string Direccion { get; set; }
         public required string Telefono { get; set; }
         public required string TipoCliente { get; set; }
+        public int IngresoMensual { get; internal set; }
     }
 } 

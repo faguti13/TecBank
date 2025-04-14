@@ -8,5 +8,5 @@ public interface IClienteService
     Task<Cliente?> GetClienteByCedula(string cedula);
     Task CreateCliente(Cliente cliente);
     Task UpdateCliente(Cliente cliente);
-    Task DeleteCliente(string cedula);
+    Task DeleteCliente(int id);
 } 

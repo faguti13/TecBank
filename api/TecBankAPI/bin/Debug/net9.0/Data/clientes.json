@@ -10,6 +10,7 @@
     "Direccion": "Residencial Estancia Antigua",
     "Telefono": "64012272",
     "Email": "fabian@test.com",
+    "IngresoMensual": 12000,
     "TipoCliente": "F\u00EDsico"
   },
   {
@@ -23,22 +24,30 @@
     "Direccion": "Direcci\u00F3n de prueba",
     "Telefono": "88888888",
     "Email": "cliente@test.com",
+    "IngresoMensual": 12000,
     "TipoCliente": "F\u00EDsico"
   },
   {
     "Id": 3,
+<<<<<<< HEAD
     "Usuario": "test2",
     "Password": "$2a$11$eRNVTXE9CoPwIR7PMi2Bue09jy81tX0jeiZWYp6LycjldXsxNXNZG",
+=======
+    "Usuario": "tetest5656",
+    "Password": "pass",
+>>>>>>> Clientes_Get
     "Nombre": "test2",
     "Apellido1": "test2",
     "Apellido2": "test2",
-    "Cedula": "aaaa",
+    "Cedula": "aaaab",
     "Direccion": "bbbbb",
     "Telefono": "11111",
     "Email": "@gmail",
+    "IngresoMensual": 0,
     "TipoCliente": "F\u00EDsico"
   },
   {
+<<<<<<< HEAD
     "Id": 0,
     "Usuario": "apepsos",
     "Password": "$2a$11$E1Cj3oagAn62/coefvmwCebyH6OpE0Hpbi8Y87UHJ7lLZSKLcrBUC",
@@ -50,5 +59,33 @@
     "Telefono": "85636474",
     "Email": "alexis03126@gmail.com",
     "TipoCliente": "F\u00EDsico"
+=======
+    "Id": 4,
+    "Usuario": "test4",
+    "Password": "123test4",
+    "Nombre": "test",
+    "Apellido1": "4",
+    "Apellido2": "TEst",
+    "Cedula": "12345",
+    "Direccion": "asdlasldsal",
+    "Telefono": "12122323",
+    "Email": "test4@",
+    "IngresoMensual": 1500,
+    "TipoCliente": "Jur\u00EDdico"
+  },
+  {
+    "Id": 5,
+    "Usuario": "testa",
+    "Password": "123test4",
+    "Nombre": "test",
+    "Apellido1": "4",
+    "Apellido2": "TEst",
+    "Cedula": "1234545",
+    "Direccion": "asdlasldsal",
+    "Telefono": "12122323",
+    "Email": "test4@",
+    "IngresoMensual": 0,
+    "TipoCliente": "Jur\u00EDdico"
+>>>>>>> Clientes_Get
   }
 ]
