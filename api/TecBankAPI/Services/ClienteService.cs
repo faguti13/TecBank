@@ -65,6 +65,11 @@ public class ClienteService : IClienteService
         {
             throw new InvalidOperationException("Cliente no encontrado");
         }
+        for(int i = 0; i < _clientes.Count(); i++){
+            if((i != index) && (_clientes[i].Cedula == cliente.Cedula)){
+                throw new InvalidOperationException("Ya existe un cliente con esa cédula");
+            }
+        }
 
         _clientes[index] = cliente;
         SaveData();

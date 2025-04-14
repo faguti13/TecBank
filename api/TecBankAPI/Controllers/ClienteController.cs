@@ -47,7 +47,7 @@ public class ClienteController : ControllerBase
         {
             return BadRequest();
         }
-
+        
         await _clienteService.UpdateCliente(cliente);
         return NoContent();
     }

@@ -79,6 +79,7 @@ function Clientes() {
       "Información faltante",
       "Error",
       "Cliente Añadido",
+      "Actualización Realizada"
     ];
 
     const infoDialogTexts = [
@@ -86,7 +87,9 @@ function Clientes() {
       "Error al tratar de crear el perfil. Intente nuevamente o contacte a soporte.",
       "El cliente ha sido añadido exitosamente.",
       "Por favor, ingrese una credencial a buscar",
-      "Lo sentimos. El usuario que se desea buscar no se encuentra en la base de datos"
+      "Lo sentimos. El usuario que se desea buscar no se encuentra en la base de datos",
+      "Error al intentar la actualización de los datos. Intente nuevamente o contacte a soporte.",
+      "La información se ha actualizado correctamente."
     ];
 
     const [infoDialogTitle, setInfoDialogTitle] = React.useState(infoDialogTitles[0]);
@@ -138,8 +141,9 @@ function Clientes() {
     const handleEditClientInfo = async () =>{
       try{
         await clientService.editClientInfo(searchedClientInfo);
+        handleClickOpenInfoDialog(3, 6);
       }catch(error){
-
+        handleClickOpenInfoDialog(1,5);
       }
     }
 
@@ -169,7 +173,7 @@ function Clientes() {
         Password: '',
         Email: '',
         IngresoMensual: 0,
-        TipoCliente: "Físico",
+        TipoCliente: "Fisico",
     });
 
 
