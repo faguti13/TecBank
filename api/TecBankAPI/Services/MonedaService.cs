@@ -1,9 +1,17 @@
 using TecBankAPI.Models;
+using System.Collections.Generic;
 
 namespace TecBankAPI.Services
 {
     public class MonedaService
     {
+        private static readonly Dictionary<string, HashSet<string>> MonedasEquivalentes = new()
+        {
+            { "Colones", new HashSet<string> { "CRC", "COLONES", "Colones" } },
+            { "Dolares", new HashSet<string> { "USD", "DOLARES", "Dolares" } },
+            { "Euros", new HashSet<string> { "EUR", "EUROS", "Euros" } }
+        };
+
         private static readonly Dictionary<(string, string), decimal> TasasCambio = new()
         {
             // Tasas directas
@@ -24,29 +32,52 @@ namespace TecBankAPI.Services
 
         private string NormalizarMoneda(string moneda)
         {
-            return moneda.ToUpper() switch
+            if (string.IsNullOrEmpty(moneda))
+                throw new ArgumentException("La moneda no puede ser nula o vacía");
+
+            moneda = moneda.Trim().ToUpper();
+            
+            foreach (var grupo in MonedasEquivalentes)
             {
-                "CRC" => "Colones",
-                "USD" => "Dolares",
-                "EUR" => "Euros",
-                _ => moneda
-            };
+                if (grupo.Value.Contains(moneda))
+                    return grupo.Key;
+            }
+
+            return moneda;
+        }
+
+        private bool SonMismaMoneda(string moneda1, string moneda2)
+        {
+            if (string.IsNullOrEmpty(moneda1) || string.IsNullOrEmpty(moneda2))
+                return false;
+
+            var m1 = NormalizarMoneda(moneda1);
+            var m2 = NormalizarMoneda(moneda2);
+            return m1 == m2;
         }
 
         public decimal ConvertirMonto(decimal monto, string monedaOrigen, string monedaDestino)
         {
-            if (monedaOrigen == monedaDestino)
+            // Validaciones básicas
+            if (monto < 0)
+                throw new ArgumentException("El monto no puede ser negativo");
+
+            if (string.IsNullOrEmpty(monedaOrigen) || string.IsNullOrEmpty(monedaDestino))
+                throw new ArgumentException("Las monedas no pueden ser nulas o vacías");
+
+            // Si son la misma moneda (incluyendo códigos equivalentes)
+            if (SonMismaMoneda(monedaOrigen, monedaDestino))
                 return monto;
 
-            // Intentar primero con los códigos originales
+            // Intentar con los valores originales
             if (TasasCambio.TryGetValue((monedaOrigen, monedaDestino), out decimal tasa))
                 return monto * tasa;
 
-            // Si no funciona, intentar con las monedas normalizadas
-            var origenNormalizado = NormalizarMoneda(monedaOrigen);
-            var destinoNormalizado = NormalizarMoneda(monedaDestino);
+            // Intentar con valores normalizados
+            var origenNorm = NormalizarMoneda(monedaOrigen);
+            var destinoNorm = NormalizarMoneda(monedaDestino);
 
-            if (TasasCambio.TryGetValue((origenNormalizado, destinoNormalizado), out tasa))
+            if (TasasCambio.TryGetValue((origenNorm, destinoNorm), out tasa))
                 return monto * tasa;
 
             throw new Exception($"No se encontró tasa de cambio para {monedaOrigen} a {monedaDestino}");

@@ -6,7 +6,7 @@
     "Moneda": "CRC",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230145",
-    "Saldo": 139789.00
+    "Saldo": 117787.00
   },
   {
     "Id": 2,
@@ -15,7 +15,7 @@
     "Moneda": "USD",
     "TipoCuenta": "Corriente",
     "CedulaCliente": "119230145",
-    "Saldo": 120.000
+    "Saldo": 79.996
   },
   {
     "Id": 3,

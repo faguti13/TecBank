@@ -494,7 +494,7 @@
   {
     "Id": 4,
     "MontoOriginal": 1,
-    "Saldo": 1,
+    "Saldo": 0,
     "ClienteId": 2,
     "CedulaCliente": "119230145",
     "AsesorId": 1,
@@ -520,7 +520,7 @@
   {
     "Id": 5,
     "MontoOriginal": 1,
-    "Saldo": 1,
+    "Saldo": 0,
     "ClienteId": 2,
     "CedulaCliente": "119230145",
     "AsesorId": 1,
@@ -590,6 +590,84 @@
         "MontoAmortizacion": 100000.00,
         "MontoInteres": 83.33,
         "MontoCuota": 100083.33,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 8,
+    "MontoOriginal": 10000,
+    "Saldo": 0,
+    "ClienteId": 2,
+    "CedulaCliente": "119230145",
+    "AsesorId": 1,
+    "TasaInteres": 1,
+    "PlazoMeses": 1,
+    "Moneda": "Colones",
+    "FechaCreacion": "2025-04-14T17:17:13.6932412-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 8,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-14T17:17:13.6932412-06:00",
+        "MontoAmortizacion": 10000.00,
+        "MontoInteres": 8.33,
+        "MontoCuota": 10008.33,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 9,
+    "MontoOriginal": 10,
+    "Saldo": 0,
+    "ClienteId": 2,
+    "CedulaCliente": "119230145",
+    "AsesorId": 1,
+    "TasaInteres": 1,
+    "PlazoMeses": 1,
+    "Moneda": "Dolares",
+    "FechaCreacion": "2025-04-14T17:23:32.050005-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 9,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-14T17:23:32.050005-06:00",
+        "MontoAmortizacion": 10.00,
+        "MontoInteres": 0.01,
+        "MontoCuota": 10.01,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 10,
+    "MontoOriginal": 10,
+    "Saldo": 0,
+    "ClienteId": 2,
+    "CedulaCliente": "119230145",
+    "AsesorId": 1,
+    "TasaInteres": 1,
+    "PlazoMeses": 1,
+    "Moneda": "Euros",
+    "FechaCreacion": "2025-04-14T17:24:10.1642544-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 10,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-14T17:24:10.1642544-06:00",
+        "MontoAmortizacion": 10.00,
+        "MontoInteres": 0.01,
+        "MontoCuota": 10.01,
         "SaldoProyectado": 0.00,
         "Pagado": false
       }

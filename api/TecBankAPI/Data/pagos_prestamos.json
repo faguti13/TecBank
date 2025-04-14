@@ -70,5 +70,45 @@
     "Monto": 100000,
     "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 10,
+    "PrestamoId": 8,
+    "CuentaId": 2,
+    "Monto": 10000,
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 11,
+    "PrestamoId": 5,
+    "CuentaId": 2,
+    "Monto": 1,
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 12,
+    "PrestamoId": 4,
+    "CuentaId": 1,
+    "Monto": 1,
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 13,
+    "PrestamoId": 9,
+    "CuentaId": 1,
+    "Monto": 10,
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 14,
+    "PrestamoId": 10,
+    "CuentaId": 1,
+    "Monto": 10,
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
   }
 ]
