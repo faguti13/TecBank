@@ -39,10 +39,33 @@ export const clientService = {
     },
 
     async getByCedula(Cedula: string): Promise<Cliente> {
-        const response = await fetch(`${API_URL}/Cliente/${Cedula}`);
-        if (!response.ok) {
-            throw new Error('404');
+        try{
+            const response = await fetch(`${API_URL}/Cliente/${Cedula}`);
+            if (!response.ok) {
+                throw new Error('404');
+            }
+            return response.json();
+        }catch(error){
+            console.error('505', error);
+            throw error;
         }
-        return response.json();
+    },
+
+    async editClientInfo(cliente: Cliente): Promise<void>{
+        try{
+            const response = await fetch(`${API_URL}/Cliente/${cliente.id}`, {
+                method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cliente),}
+            );
+            if (!response.ok) {
+                throw new Error('Error aleditar los datos');
+            }
+        }catch(error){
+            console.error('505', error);
+            throw error;
+        }
     },
 };

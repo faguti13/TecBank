@@ -108,9 +108,10 @@ function Clientes() {
     const handleSearchClient = async () =>{
       if(searchBar.length > 0){
         try{
-          
           const clientInfo = await clientService.getByCedula(searchBar);
+          console.log(clientInfo);
           setSearchedClientInfo({...searchedClientInfo,
+            id: (clientInfo as any).id,
             Usuario: (clientInfo as any).usuario,
             Password: (clientInfo as any).password,
             Nombre: (clientInfo as any).nombre,
@@ -134,6 +135,14 @@ function Clientes() {
       }
     }
 
+    const handleEditClientInfo = async () =>{
+      try{
+        await clientService.editClientInfo(searchedClientInfo);
+      }catch(error){
+
+      }
+    }
+
     const [newClientInfo, setNewClientInfo] = React.useState<Cliente>({
         Cedula: '',
         Nombre: '',
@@ -145,10 +154,11 @@ function Clientes() {
         Password: '',
         Email: '',
         IngresoMensual: 0,
-        TipoCliente: "Físico",
+        TipoCliente: "Fisico",
     });
 
     const [searchedClientInfo, setSearchedClientInfo] = React.useState<Cliente>({
+        id: 0,
         Cedula: '',
         Nombre: '',
         Apellido1: '',
@@ -295,8 +305,8 @@ function Clientes() {
                         onChange={(e) => setNewClientInfo({ ...newClientInfo, TipoCliente: e.target.value })}
                         defaultValue={"Físico"}
                       >
-                        <FormControlLabel value="Físico" control={<Radio />} label="Físico" />
-                        <FormControlLabel value="Jurídico" control={<Radio />} label="Jurídico" />
+                        <FormControlLabel value="Fisico" control={<Radio />} label="Físico" />
+                        <FormControlLabel value="Juridico" control={<Radio />} label="Jurídico" />
                       </RadioGroup>
                     </FormControl>
                   </div>
@@ -435,7 +445,7 @@ function Clientes() {
                     </FormControl>
                   </div>
                   <div>
-                    <div className='buttonSecondary' style={{float:'right'}}>
+                    <div className='buttonSecondary' onClick={handleEditClientInfo} style={{float:'right'}}>
                       Actualizar
                     </div>
                   </div>
@@ -502,7 +512,7 @@ function Clientes() {
                     />
                   </div>
                   <div>
-                    <div className='buttonSecondary' style={{float:'right'}}>
+                    <div className='buttonSecondary' onClick={handleEditClientInfo} style={{float:'right'}}>
                       Actualizar
                     </div>
                   </div>
@@ -549,7 +559,7 @@ function Clientes() {
                     />
                   </div>
                   <div>
-                    <div className='buttonSecondary' style={{float:'right'}}>
+                    <div className='buttonSecondary' onClick={handleEditClientInfo} style={{float:'right'}}>
                       Actualizar
                     </div>
                   </div>

@@ -29,7 +29,7 @@
   },
   {
     "Id": 3,
-    "Usuario": "test2",
+    "Usuario": "tetest5656",
     "Password": "pass",
     "Nombre": "test2",
     "Apellido1": "test2",
@@ -38,7 +38,7 @@
     "Direccion": "bbbbb",
     "Telefono": "11111",
     "Email": "@gmail",
-    "IngresoMensual": 12000,
+    "IngresoMensual": 0,
     "TipoCliente": "F\u00EDsico"
   },
   {
@@ -57,7 +57,7 @@
   },
   {
     "Id": 5,
-    "Usuario": "test4",
+    "Usuario": "testa",
     "Password": "123test4",
     "Nombre": "test",
     "Apellido1": "4",
@@ -66,7 +66,7 @@
     "Direccion": "asdlasldsal",
     "Telefono": "12122323",
     "Email": "test4@",
-    "IngresoMensual": 1500,
+    "IngresoMensual": 0,
     "TipoCliente": "Jur\u00EDdico"
   }
 ]

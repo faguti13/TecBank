@@ -60,7 +60,7 @@ public class ClienteService : IClienteService
 
     public async Task UpdateCliente(Cliente cliente)
     {
-        var index = _clientes.FindIndex(c => c.Cedula == cliente.Cedula);
+        var index = _clientes.FindIndex(c => c.Id == cliente.Id);
         if (index == -1)
         {
             throw new InvalidOperationException("Cliente no encontrado");

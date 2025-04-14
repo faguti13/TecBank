@@ -40,10 +40,10 @@ public class ClienteController : ControllerBase
         return CreatedAtAction(nameof(GetCliente), new { cedula = cliente.Cedula }, cliente);
     }
 
-    [HttpPut("{cedula}")]
-    public async Task<IActionResult> UpdateCliente(string cedula, Cliente cliente)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCliente(int id, Cliente cliente)
     {
-        if (cedula != cliente.Cedula)
+        if (id != cliente.Id)
         {
             return BadRequest();
         }
