@@ -96,7 +96,7 @@ const Tarjetas: React.FC = () => {
       
     } catch (error) {
       console.error('Error al obtener tarjetas asociadas:', error);
-      alert('Hubo un error al buscar las tarjetas asociadas.');
+      //alert('Hubo un error al buscar las tarjetas asociadas.');
     }
   };
 
