@@ -661,17 +661,6 @@
   },
   {
     "Id": 0,
-    "PrestamoId": 4,
-    "NumeroCuota": 1,
-    "FechaProgramada": "2025-05-14T16:43:15.8835531-06:00",
-    "MontoAmortizacion": 1.00,
-    "MontoInteres": 0.00,
-    "MontoCuota": 1.00,
-    "SaldoProyectado": 0.00,
-    "Pagado": false
-  },
-  {
-    "Id": 0,
     "PrestamoId": 6,
     "NumeroCuota": 1,
     "FechaProgramada": "2025-05-14T16:44:47.4355885-06:00",
@@ -708,6 +697,39 @@
     "PrestamoId": 5,
     "NumeroCuota": 1,
     "FechaProgramada": "2025-05-14T17:19:53.193258-06:00",
+    "MontoAmortizacion": 0,
+    "MontoInteres": 0,
+    "MontoCuota": 0,
+    "SaldoProyectado": 0,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 4,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-14T17:23:11.2369699-06:00",
+    "MontoAmortizacion": 0,
+    "MontoInteres": 0,
+    "MontoCuota": 0,
+    "SaldoProyectado": 0,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 9,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-14T17:23:56.8448732-06:00",
+    "MontoAmortizacion": 0,
+    "MontoInteres": 0,
+    "MontoCuota": 0,
+    "SaldoProyectado": 0,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 10,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-14T17:24:21.0758169-06:00",
     "MontoAmortizacion": 0,
     "MontoInteres": 0,
     "MontoCuota": 0,

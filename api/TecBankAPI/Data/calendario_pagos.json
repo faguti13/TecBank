@@ -735,5 +735,16 @@
     "MontoCuota": 0,
     "SaldoProyectado": 0,
     "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 11,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-14T17:47:29.9057055-06:00",
+    "MontoAmortizacion": 0,
+    "MontoInteres": 0,
+    "MontoCuota": 0,
+    "SaldoProyectado": 0,
+    "Pagado": false
   }
 ]

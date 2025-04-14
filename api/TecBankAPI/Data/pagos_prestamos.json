@@ -110,5 +110,13 @@
     "Monto": 10,
     "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 15,
+    "PrestamoId": 11,
+    "CuentaId": 1,
+    "Monto": 1,
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
   }
 ]
