@@ -1,5 +1,7 @@
 // services/tarjetaService.ts
 
+import { Cuenta } from "./cuentaService";
+
 export interface Tarjeta {
     //idCliente: number;
     numeroCuenta: string;
@@ -9,7 +11,20 @@ export interface Tarjeta {
     montoCredito?: number;
     fechaExpiracion: string;
     codigoSeguridad: string;
+    montoSinCancelar: number;
   }
+
+  export interface Compra {
+    numeroTarjeta: string;
+    monto: string;
+    fecha: string;
+}
+
+export interface Pago {
+    numeroTarjeta: string;
+    montoP: string;
+    fechaP: string;
+}
 
 const API_URL = 'http://localhost:5240/api';
 
@@ -46,6 +61,28 @@ export const tarjetaService = {
         return response.json();
     },
 
+    async deleteTarjeta(numeroTarjeta: string): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/${numeroTarjeta}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error('Error al eliminar el rol');
+        }
+    },
+
+    async obtenerCuenta(numeroCuenta: string): Promise<Cuenta> {
+        const response = await fetch(`${API_URL}/cuentas/obtener/${numeroCuenta}`);
+        if (!response.ok) {
+          if (response.status === 400) {
+            throw new Error('El número de cuenta no existe');
+          } else {
+            throw new Error('Error al verificar el número de cuenta');
+          }
+        }
+        return response.json();  // Asegúrate de que esto devuelve un objeto Cuenta con la propiedad `moneda`
+      },
+      
+
 
     async verificarCuenta(numeroCuenta: string): Promise<void> {
         const response = await fetch(`${API_URL}/cuentas/buscar/${numeroCuenta}`);
@@ -69,9 +106,82 @@ export const tarjetaService = {
             }
         }
         return response.json(); 
-    }
+    },
     
+    async registrarCompra(compra: Compra): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/compras`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(compra),
+        });
+        if (!response.ok) {
+            throw new Error('Error al registrar la compra');
+        }
+    },
+
+   
+    async compraGetByNumTarjeta(numeroTarjeta: string): Promise<Compra[]> {
+        try {
+          const response = await fetch(`${API_URL}/tarjeta/compras/${numeroTarjeta}`);
+          if (!response.ok) {
+            throw new Error('Error al obtener las compras por el num de tarjeta');
+          }
+          return response.json(); // Asegúrate de que la respuesta sea un array de compras
+        } catch (error) {
+          console.error('Error al obtener las compras desde el servicio', error);
+          throw error; // Re-lanza el error para manejarlo en el componente
+        }
+      },
       
 
+
+    async actualizarMonto(numeroTarjeta: string, nuevoMonto: number): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/actualizarMonto`, {
+            method: 'PUT',  // PUT porque actualiza un dato
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                numeroTarjeta,
+                nuevoMonto,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el monto de la tarjeta');
+        }
+    },
+
+    async registrarPago(pago: Pago): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/pagos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pago),
+        });
+        if (!response.ok) {
+            throw new Error('Error al registrar el pago');
+        }
+    },
+
+    async actualizarSaldo(numeroTarjeta: string, nuevoMonto: number): Promise<void> {
+        const response = await fetch(`${API_URL}/tarjeta/actualizarSaldo`, {
+            method: 'PUT',  // PUT porque actualiza un dato
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                numeroTarjeta,
+                nuevoMonto,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el monto de la tarjeta');
+        }
+    },
 
 }; 
