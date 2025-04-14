@@ -1,7 +1,8 @@
 using System.Text.Json;
 using TecBankAPI.Models;
-
+using System.Security.Cryptography;
 namespace TecBankAPI.Services;
+using System.Text;
 
 public class ClienteService : IClienteService
 {
@@ -10,6 +11,9 @@ public class ClienteService : IClienteService
     private readonly string _clientesFilePath;
     private static readonly object _lock = new object();
 
+    private static readonly byte[] Key = Encoding.UTF8.GetBytes("1234567890123456"); // 16 bytes = 128 bits
+    private static readonly byte[] IV = Encoding.UTF8.GetBytes("6543210987654321");  // Also 16 bytes
+
     public ClienteService()
     {
         LoadData();
@@ -17,6 +21,20 @@ public class ClienteService : IClienteService
         Directory.CreateDirectory(basePath);
         _clientesFilePath = Path.Combine(basePath, "clientes.json");
     }
+
+    public static string Encrypt(string text)
+    {
+        using var aes = Aes.Create();
+        aes.Key = Key;
+        aes.IV = IV;
+
+        var encryptor = aes.CreateEncryptor();
+        var inputBytes = Encoding.UTF8.GetBytes(text);
+        var encrypted = encryptor.TransformFinalBlock(inputBytes, 0, inputBytes.Length);
+        return Convert.ToBase64String(encrypted);
+    }
+
+    
 
     private void LoadData()
     {
@@ -53,6 +71,7 @@ public class ClienteService : IClienteService
         if(cliente.Id == 0){
             cliente.Id =  _clientes.Count > 0 ? _clientes.Max(c => c.Id) + 1 : 1;
         }
+        cliente.Password = ClienteService.Encrypt(cliente.Password);
         _clientes.Add(cliente);
         SaveData();
         await Task.CompletedTask;
@@ -70,7 +89,8 @@ public class ClienteService : IClienteService
                 throw new InvalidOperationException("Ya existe un cliente con esa cédula");
             }
         }
-
+        cliente.Password = ClienteService.Encrypt(cliente.Password);
+        
         _clientes[index] = cliente;
         SaveData();
         await Task.CompletedTask;
@@ -91,7 +111,7 @@ public class ClienteService : IClienteService
 
     public Cliente GetById(int id)
     {
-        lock (_lock)
+        
         {
             if (!File.Exists(_clientesFilePath))
             {
@@ -106,7 +126,8 @@ public class ClienteService : IClienteService
             {
                 throw new Exception($"No se encontró el cliente con ID {id}");
             }
-
+            
+            
             return cliente;
         }
     }

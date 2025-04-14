@@ -41,7 +41,7 @@ interface Cliente {
 
 
 function Clientes() {
-    const [tabActive, setTabActive] = React.useState('2');
+    const [tabActive, setTabActive] = React.useState('1');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
       setTabActive(newValue);

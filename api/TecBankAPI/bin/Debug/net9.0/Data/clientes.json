@@ -2,7 +2,7 @@
   {
     "Id": 1,
     "Usuario": "FabianGJ",
-    "Password": "$2a$11$aTJmhGxWDicqsliDq0JgQewXkFjrO2a8SJq/vvwmr3XEnpkhRk/hC",
+    "Password": "123456",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
@@ -29,63 +29,30 @@
   },
   {
     "Id": 3,
-<<<<<<< HEAD
-    "Usuario": "test2",
-    "Password": "$2a$11$eRNVTXE9CoPwIR7PMi2Bue09jy81tX0jeiZWYp6LycjldXsxNXNZG",
-=======
-    "Usuario": "tetest5656",
-    "Password": "pass",
->>>>>>> Clientes_Get
-    "Nombre": "test2",
-    "Apellido1": "test2",
-    "Apellido2": "test2",
-    "Cedula": "aaaab",
-    "Direccion": "bbbbb",
-    "Telefono": "11111",
-    "Email": "@gmail",
-    "IngresoMensual": 0,
+    "Usuario": "test123",
+    "Password": "123456",
+    "Nombre": "test",
+    "Apellido1": "test",
+    "Apellido2": "test",
+    "Cedula": "119230146",
+    "Direccion": "Residencial Estancia Antigua\nG13",
+    "Telefono": "64012272",
+    "Email": "test@test.com",
+    "IngresoMensual": 12000,
     "TipoCliente": "F\u00EDsico"
   },
   {
-<<<<<<< HEAD
-    "Id": 0,
+    "Id": 4,
     "Usuario": "apepsos",
-    "Password": "$2a$11$E1Cj3oagAn62/coefvmwCebyH6OpE0Hpbi8Y87UHJ7lLZSKLcrBUC",
+    "Password": "9jrC1mYREdT28EiSnGCO/w==",
     "Nombre": "Luis Alexis",
     "Apellido1": "Alvarado",
     "Apellido2": "Barrantes",
-    "Cedula": "118640248",
+    "Cedula": "11864",
     "Direccion": "La Uni\u00F3n, Residencial Paso Real, Calle Viena, Casa M5",
     "Telefono": "85636474",
     "Email": "alexis03126@gmail.com",
-    "TipoCliente": "F\u00EDsico"
-=======
-    "Id": 4,
-    "Usuario": "test4",
-    "Password": "123test4",
-    "Nombre": "test",
-    "Apellido1": "4",
-    "Apellido2": "TEst",
-    "Cedula": "12345",
-    "Direccion": "asdlasldsal",
-    "Telefono": "12122323",
-    "Email": "test4@",
-    "IngresoMensual": 1500,
-    "TipoCliente": "Jur\u00EDdico"
-  },
-  {
-    "Id": 5,
-    "Usuario": "testa",
-    "Password": "123test4",
-    "Nombre": "test",
-    "Apellido1": "4",
-    "Apellido2": "TEst",
-    "Cedula": "1234545",
-    "Direccion": "asdlasldsal",
-    "Telefono": "12122323",
-    "Email": "test4@",
-    "IngresoMensual": 0,
-    "TipoCliente": "Jur\u00EDdico"
->>>>>>> Clientes_Get
+    "IngresoMensual": 20000,
+    "TipoCliente": "Juridico"
   }
 ]

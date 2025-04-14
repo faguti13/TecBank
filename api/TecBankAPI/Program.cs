@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173",  // Cliente app
+                "http://localhost:3000",  // Cliente app
                 "http://localhost:5174"   // Admin app
             )
             .AllowAnyHeader()

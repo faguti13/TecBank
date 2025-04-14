@@ -1016,3 +1016,6 @@ C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\BCrypt.Net-Next.dll
 >>>>>>> Clientes
 >>>>>>> clienteApp
 C:\Users\FabianGJ\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\transacciones.json
+D:\Alexis\A_Tec\Semestre_7\Bases_Datos\TecBank\api\TecBankApi\bin\Debug\net9.0\Data\asesores.json
+D:\Alexis\A_Tec\Semestre_7\Bases_Datos\TecBank\api\TecBankApi\bin\Debug\net9.0\Data\tarjetas.json
+D:\Alexis\A_Tec\Semestre_7\Bases_Datos\TecBank\api\TecBankApi\bin\Debug\net9.0\BCrypt.Net-Next.dll

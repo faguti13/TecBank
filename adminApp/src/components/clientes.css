@@ -45,14 +45,14 @@
     font-size: medium; 
     color: white ;
     font-weight: bold;
-    background-color: rgb(231, 64, 64)  ;
+    background-color: rgb(138, 65, 212)  ;
     border-radius: 5px;
     max-width: fit-content;
     transition: 0.3s;
 }
 
 .buttonThird:hover{
-    background-color:rgb(140, 17, 17);
+    background-color:rgb(91, 39, 143);
     transition: 0.3s;
     cursor:pointer;
 }
