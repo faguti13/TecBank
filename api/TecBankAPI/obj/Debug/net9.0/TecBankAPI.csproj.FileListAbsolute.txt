@@ -1180,3 +1180,5 @@ C:\Users\Usuario\Music\TecBank\api\TecBankAPI\obj\Debug\net9.0\refint\TecBankAPI
 C:\Users\Usuario\Music\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.pdb
 C:\Users\Usuario\Music\TecBank\api\TecBankAPI\obj\Debug\net9.0\TecBankAPI.genruntimeconfig.cache
 C:\Users\Usuario\Music\TecBank\api\TecBankAPI\obj\Debug\net9.0\ref\TecBankAPI.dll
+C:\Users\Usuario\Music\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\compras_tarjetas.json
+C:\Users\Usuario\Music\TecBank\api\TecBankAPI\bin\Debug\net9.0\Data\pagos_tarjetas.json

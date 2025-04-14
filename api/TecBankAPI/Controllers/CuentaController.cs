@@ -51,6 +51,19 @@ namespace TecBankAPI.Controllers
             return cuenta;  
         }
 
+        [HttpGet("buscarCedula/{cedulaCliente}")]
+        public ActionResult<List<Cuenta>> GetByCedula(string cedulaCliente)
+        {
+            var cuentas = _cuentaService.GetByCedula(cedulaCliente); 
+            if (cuentas == null || !cuentas.Any())
+            {
+                return BadRequest(new { message = $"No se encontraron cuentas asociadas a la cédula {cedulaCliente}." });
+            }
+
+            return Ok(cuentas);  
+        }
+
+
         [HttpPost]
         public ActionResult<Cuenta> Create(Cuenta cuenta)
         {

@@ -19,3 +19,5 @@ export const buscarCuentaPorNumero = async (numeroCuenta: string): Promise<Cuent
   }
   return response.json();
 }; 
+
+

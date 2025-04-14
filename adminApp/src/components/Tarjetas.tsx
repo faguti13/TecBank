@@ -557,9 +557,15 @@ const handleActMontos = async (e: React.FormEvent) => {
                         {tarjeta.tipoTarjeta === "Credito" ? tarjeta.montoSinCancelar : "N/A"}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
-                            onClick={() => {setSelectedTarjeta(tarjeta);
-                              setShowCompraForm(true)
-                            }} 
+                              onClick={() => {
+                                if (tarjeta.tipoTarjeta === "Debito") {
+                                  alert("Las tarjetas de débito no tienen saldo pendiente para abonar.");
+                                  return;
+                                }
+                            
+                                setSelectedTarjeta(tarjeta);
+                                setShowPagoForm(true);
+                              }}
                             title="Agregar nueva compra"
                             className="text-indigo-600 hover:text-indigo-900 mr-2">
                           < DocumentPlusIcon className="h-4 w-4" />

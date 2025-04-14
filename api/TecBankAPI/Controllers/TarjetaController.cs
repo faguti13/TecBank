@@ -35,6 +35,18 @@ namespace TecBankAPI.Controllers
             return Ok(tarjeta);
         }
 
+        [HttpGet("buscarNumeroCuenta/{numeroCuenta}")]
+        public ActionResult<Tarjeta> GetNumeroCuenta(string numeroCuenta)
+        {
+            var tarjeta = _tarjetaService.GetNumeroCuenta(numeroCuenta);
+            if (tarjeta == null)
+            {
+                return NotFound($"Tarjeta con cuenta {numeroCuenta} no encontrada.");
+            }
+
+            return Ok(tarjeta);
+        }
+
         [HttpGet("buscarPorCuenta/{numeroCuenta}")]
         public ActionResult<Tarjeta> GetByNumeroCuenta(string numeroCuenta)
         {
