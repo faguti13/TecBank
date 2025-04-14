@@ -16,17 +16,17 @@
     "NumeroTarjeta": "2378549077899077",
     "TipoTarjeta": "Credito",
     "SaldoDisponible": null,
-    "MontoCredito": 24000,
+    "MontoCredito": 21500,
     "fechaExpiracion": "2032-01",
     "CodigoSeguridad": "867",
-    "MontoSinCancelar": 0
+    "MontoSinCancelar": 1500
   },
   {
     "Id": 4,
     "NumeroCuenta": "CR00000000000000000001",
     "NumeroTarjeta": "2345677654456666",
     "TipoTarjeta": "Debito",
-    "SaldoDisponible": 600000,
+    "SaldoDisponible": 566000,
     "MontoCredito": null,
     "fechaExpiracion": "2029-06",
     "CodigoSeguridad": "767",

@@ -8,12 +8,13 @@
     "apellido_2": "Sequeira",
     "fecha_nacimiento": "2004-05-18",
     "meta_colones": 1,
-    "meta_dolares": 11,
+    "meta_dolares": 1,
     "NombreCompleto": "Joaquin Ignacio Ramirez Sequeira",
     "ComisionesColones": 0,
     "ComisionesDolares": 0,
     "VentasColones": 0,
-    "VentasDolares": 0
+    "VentasDolares": 0,
+    "ComisionTotal": 0
   },
   {
     "Id": 2,
@@ -29,7 +30,8 @@
     "ComisionesColones": 0,
     "ComisionesDolares": 0,
     "VentasColones": 0,
-    "VentasDolares": 0
+    "VentasDolares": 0,
+    "ComisionTotal": 0
   },
   {
     "Id": 3,
@@ -45,6 +47,7 @@
     "ComisionesColones": 0,
     "ComisionesDolares": 0,
     "VentasColones": 0,
-    "VentasDolares": 0
+    "VentasDolares": 0,
+    "ComisionTotal": 0
   }
 ]

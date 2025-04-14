@@ -6,7 +6,7 @@
     "Moneda": "CRC",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230145",
-    "Saldo": 244800.00
+    "Saldo": 239790.00
   },
   {
     "Id": 2,
@@ -15,7 +15,7 @@
     "Moneda": "USD",
     "TipoCuenta": "Corriente",
     "CedulaCliente": "119230145",
-    "Saldo": 510.000
+    "Saldo": 520.000
   },
   {
     "Id": 3,
@@ -24,7 +24,7 @@
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230146",
-    "Saldo": 1000.00
+    "Saldo": 1010.020
   },
   {
     "Id": 4,
@@ -33,7 +33,7 @@
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230146",
-    "Saldo": 2500.00
+    "Saldo": 2490.00
   },
   {
     "Id": 5,

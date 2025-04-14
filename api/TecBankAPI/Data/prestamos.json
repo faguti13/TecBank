@@ -516,5 +516,31 @@
         "Pagado": false
       }
     ]
+  },
+  {
+    "Id": 5,
+    "MontoOriginal": 1,
+    "Saldo": 1,
+    "ClienteId": 2,
+    "CedulaCliente": "119230145",
+    "AsesorId": 1,
+    "TasaInteres": 1,
+    "PlazoMeses": 1,
+    "Moneda": "Colones",
+    "FechaCreacion": "2025-04-14T15:42:06.7755848-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 5,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-14T15:42:06.7755848-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.00,
+        "MontoCuota": 1.00,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
   }
 ]
