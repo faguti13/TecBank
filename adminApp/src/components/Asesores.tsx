@@ -278,6 +278,9 @@ const Asesores: React.FC = () => {
                     <thead className="bg-gray-50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              ID
+                            </th>  
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Cédula
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -301,11 +304,15 @@ const Asesores: React.FC = () => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Meta en doláres
                             </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Acciones
+                            </th> 
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                     {asesores.map((asesor) => (
                         <tr key={asesor.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{asesor.id}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{asesor.cedula}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{asesor.nombre_1}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{asesor.nombre_2}</td>
@@ -313,14 +320,14 @@ const Asesores: React.FC = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{asesor.apellido_2}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{asesor.fecha_nacimiento} </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{asesor.meta_colones}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{asesor.meta_dolares}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{asesor.meta_dolares}</td>
+                        <td className="px-4 py-2 border">
                         <button onClick={() => handleEdit(asesor)} className="text-indigo-600 hover:text-indigo-900 mr-4">
                           <PencilIcon className="h-5 w-5" />
                         </button>
                         <button onClick={() => asesor.id && handleDelete(asesor.id)} className="text-red-600 hover:text-red-900">
                           <TrashIcon className="h-5 w-5" />
                         </button>
-
                         </td>
                         </tr> 
                         ))}

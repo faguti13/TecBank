@@ -79,23 +79,19 @@ namespace TecBankAPI.Services
                         {
                             _logger.LogWarning("No se encontraron asesores.");
                         }
-
                         var reporteAsesores = new List<ReporteAsesor>();
-                        //Procesa cada asesor
                         foreach (var asesor in asesores)
                         {
                             try
                             {
-                                // Omitir asesores sin ventas.
                                 if (asesor.VentasColones == 0 && asesor.VentasDolares == 0)
                                 {
                                     _logger.LogWarning($"No hay ventas para el asesor {asesor.NombreCompleto}.");
                                     continue;
                                 }
-                                //Comisión Total
+
                                 var comisionTotal = asesor.ComisionesColones + asesor.ComisionesDolares;
 
-                                // Agregar datos al reporte.
                                 reporteAsesores.Add(new ReporteAsesor
                                 {
                                     NombreAsesor = asesor.NombreCompleto,
@@ -138,6 +134,5 @@ namespace TecBankAPI.Services
 
             return next;
         }
-        
     }
 }
