@@ -32,47 +32,73 @@ const Tarjetas: React.FC = () => {
     setEndDate('');
   };  
 
+/////////////////////////// Función para obtener el símbolo de la moneda según el tipo
+  const getCurrencySymbol = (moneda: string) => {
+    switch (moneda) {
+      case 'USD':
+        return '$'; // Dólar
+      case 'CRC':
+        return '₡'; // Colón costarricense
+      case 'EUR':
+        return '€'; // Euro
+      default:
+        return ''; 
+    }
+  };
 /////////////////////////// llamado automatico para obtener cuentas asociadas
-const handleBuscarCuentas = async () => {
-  try {
-    if (!user?.cedula) {
-      alert('No se encontró la cédula del usuario');
-      return;
+  type TarjetaConMoneda = Tarjeta & { simboloMoneda: string };
+
+  const handleBuscarCuentas = async () => {
+    try {
+      if (!user?.cedula) {
+        alert('No se encontró la cédula del usuario');
+        return;
+      }
+
+      const cuentas = await tarjetaService.buscarCuentaPorCedula(user.cedula);
+
+      console.log('Cuentas encontradas:', cuentas);
+
+      if (cuentas.length === 0) {
+        //alert('No se encontraron cuentas asociadas a esta cédula.');
+        return;
+      }
+
+      setCuentasCliente(cuentas);
+
+      // Obtener las tarjetas asociadas a cada cuenta
+      const tarjetasPromises = cuentas.map((cuenta) =>
+        tarjetaService.getByNumeroCuenta(cuenta.numeroCuenta)
+      );
+
+      const resultados: PromiseSettledResult<Tarjeta>[] = await Promise.allSettled(tarjetasPromises);
+
+      // Filtra solo los resultados que fueron exitosos
+      const tarjetas = resultados
+        .filter((resultado) => resultado.status === 'fulfilled')
+        .map((resultado) => resultado.value);
+      //console.log('Tarjetas filtradas (exitosas):', tarjetas);
+
+      const tarjetasConMoneda: TarjetaConMoneda[] = tarjetas.map((tarjeta) => {
+      
+        const cuenta = cuentas.find((cuenta) => cuenta.numeroCuenta === tarjeta.numeroCuenta);
+        if (!cuenta) return null; //omite las cuentas sin tarjeta
+
+        const simboloMoneda = getCurrencySymbol(cuenta.moneda);
+        //console.log(`Tarjeta Número de Cuenta: ${tarjeta.numeroCuenta}, Cuenta Moneda: ${cuenta.moneda}, Símbolo de la Moneda: ${simboloMoneda}`);
+        return {
+          ...tarjeta,
+          simboloMoneda, 
+        };
+      }).filter((tarjeta): tarjeta is TarjetaConMoneda => tarjeta !== null); 
+
+      setTarjetasCliente(tarjetasConMoneda as TarjetaConMoneda[]);
+      
+    } catch (error) {
+      console.error('Error al obtener tarjetas asociadas:', error);
+      alert('Hubo un error al buscar las tarjetas asociadas.');
     }
-
-    const cuentas = await tarjetaService.buscarCuentaPorCedula(user.cedula);
-
-    if (cuentas.length === 0) {
-      //alert('No se encontraron cuentas asociadas a esta cédula.');
-      return;
-    }
-
-    setCuentasCliente(cuentas);
-
-    // Obtener las tarjetas asociadas a cada cuenta
-    const tarjetasPromises = cuentas.map((cuenta) =>
-      tarjetaService.getByNumeroCuenta(cuenta.numeroCuenta)
-    );
-
-    const resultados: PromiseSettledResult<Tarjeta>[] = await Promise.allSettled(tarjetasPromises);
-
-    // Filtra solo los resultados que fueron exitosos
-    const tarjetas = resultados
-      .filter((resultado) => resultado.status === 'fulfilled')
-      .map((resultado) => resultado.value);
-
-    //console.log('Tarjetas asociadas:', tarjetas);
-    //alert(`Se encontraron ${tarjetas.length} tarjetas asociadas.`);
-
-    setTarjetasCliente(tarjetas);
-    
-  } catch (error) {
-    console.error('Error al obtener tarjetas asociadas:', error);
-    alert('Hubo un error al buscar las tarjetas asociadas.');
-  }
-};
-
-  
+  };
 
   useEffect(() => {
     if (user) {
@@ -234,9 +260,9 @@ return (
                   <td className="px-6 py-4">{tarjeta.numeroTarjeta}</td>
                   <td className="px-6 py-4">{tarjeta.tipoTarjeta}</td>
                   <td className="px-6 py-4">{tarjeta.fechaExpiracion}</td>
-                  <td className="px-6 py-4">{tarjeta.saldoDisponible ?? '-'}</td>
-                  <td className="px-6 py-4">{tarjeta.montoCredito ?? '-'}</td>
-                  <td className="px-6 py-4">{tarjeta.montoSinCancelar ?? '-'}</td>
+                  <td className="px-6 py-4">{(tarjeta as TarjetaConMoneda).simboloMoneda} {tarjeta.saldoDisponible ?? '-'}</td>
+                  <td className="px-6 py-4">{(tarjeta as TarjetaConMoneda).simboloMoneda} {tarjeta.montoCredito ?? '-'}</td>
+                  <td className="px-6 py-4">{(tarjeta as TarjetaConMoneda).simboloMoneda} {tarjeta.montoSinCancelar ?? '-'}</td>
                   <td className="px-6 py-4">
                     <div className="flex space-x-2 justify-center">
                       <button
@@ -288,20 +314,25 @@ return (
 
 
     {/* Modal de agregar un pago*/}
-    {showPagoForm && (
+    {showPagoForm && selectedTarjeta &&(
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-semibold mb-4">Agregar nuevo pago</h2>
             <form onSubmit={handleSubmitPago}>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+              <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+              <div className="relative mt-1">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                  {(selectedTarjeta as TarjetaConMoneda).simboloMoneda}
+                </span>
                 <input
                   type="number"
                   value={montoP}
                   onChange={(e) => setMontoP(e.target.value)}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full pl-8" 
                   required
                 />
+              </div>
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
@@ -357,7 +388,7 @@ return (
                         Compra #{index + 1}
                       </span>
                       <span className="text-green-600 font-semibold">
-                        Total: {Number(compra.monto).toLocaleString()}
+                        Total: {(selectedTarjeta as TarjetaConMoneda).simboloMoneda} {Number(compra.monto).toLocaleString()}
                       </span>
                     </div>
                     <div className="text-xs text-gray-500 text-right">

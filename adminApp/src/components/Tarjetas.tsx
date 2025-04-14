@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {DocumentPlusIcon, EyeIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 
-import { Compra, Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
+import { Compra, Tarjeta, tarjetaService } from '../services/tarjetaService'; 
+import { Cuenta } from '../services/cuentaService'; 
 
 const Tarjetas: React.FC = () => {
   // Estado para mostrar el formulario modal
@@ -54,6 +55,20 @@ const Tarjetas: React.FC = () => {
     setMontoP('');
     setFechaP('');
   };
+
+  const getCurrencySymbol = (moneda: string): string => {
+    switch (moneda) {
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      case 'CRC':
+        return '₡';
+      default:
+        return '$'; // Símbolo por defecto
+    }
+  };
+  
 
   /////////////////////// manejador del envio del formulario
   const handleSubmit = async (e: React.FormEvent) => {
@@ -162,6 +177,8 @@ const Tarjetas: React.FC = () => {
   };
 
 /////////////////////// Llamada al API para obtener todas las tarjetas
+type TarjetaConMoneda = Tarjeta & {simboloMoneda: string;};
+
   useEffect(() => {
     fetchTarjetas()
   }, []);
@@ -169,7 +186,30 @@ const Tarjetas: React.FC = () => {
   const fetchTarjetas = async () => {
     try {
       const tarjetas = await tarjetaService.getAll();
-      setTarjetas(tarjetas); // Guarda las tarjetas en el estado
+      const tarjetasConMoneda: TarjetaConMoneda[] = [];
+
+
+      for (const tarjeta of tarjetas) {
+        try {
+          const cuenta = await tarjetaService.obtenerCuenta(tarjeta.numeroCuenta);
+          const simboloMoneda = cuenta.moneda;  
+  
+          console.log(`Número de cuenta: ${cuenta.numeroCuenta}, Cuenta.moneda: ${cuenta.moneda}, Símbolo de moneda: ${getCurrencySymbol(simboloMoneda)}`);
+
+          tarjetasConMoneda.push({
+            ...tarjeta,
+            simboloMoneda: getCurrencySymbol(simboloMoneda),  
+          });
+        } catch (error) {
+          console.error('Error al obtener la cuenta asociada para la tarjeta', tarjeta.numeroCuenta, error);
+          tarjetasConMoneda.push({
+            ...tarjeta,
+            simboloMoneda: '$', // Valor por defecto
+          });
+        }
+      }
+  
+      setTarjetas(tarjetasConMoneda); //  tarjetas con moneda
     } catch (error) {
       console.error('Error al obtener las tarjetas:', error);
       alert('Hubo un problema al obtener las tarjetas');
@@ -548,23 +588,18 @@ const handleActMontos = async (e: React.FormEvent) => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {tarjeta.tipoTarjeta}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {tarjeta.saldoDisponible ?? 'N/A'}</td>
+                      {(tarjeta as TarjetaConMoneda).simboloMoneda} {tarjeta.saldoDisponible ?? 'N/A'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {tarjeta.montoCredito ?? 'N/A'}</td>
+                      {(tarjeta as TarjetaConMoneda).simboloMoneda} {tarjeta.montoCredito ?? 'N/A'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {tarjeta.fechaExpiracion}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {tarjeta.tipoTarjeta === "Credito" ? tarjeta.montoSinCancelar : "N/A"}</td>
+                      {(tarjeta as TarjetaConMoneda).simboloMoneda} {tarjeta.tipoTarjeta === "Credito" ? tarjeta.montoSinCancelar : "N/A"}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
                               onClick={() => {
-                                if (tarjeta.tipoTarjeta === "Debito") {
-                                  alert("Las tarjetas de débito no tienen saldo pendiente para abonar.");
-                                  return;
-                                }
-                            
                                 setSelectedTarjeta(tarjeta);
-                                setShowPagoForm(true);
+                                setShowCompraForm(true);
                               }}
                             title="Agregar nueva compra"
                             className="text-indigo-600 hover:text-indigo-900 mr-2">
@@ -588,7 +623,12 @@ const handleActMontos = async (e: React.FormEvent) => {
                           </button>
 
                           <button
-                            onClick={() => {setSelectedTarjeta(tarjeta);
+                            onClick={() => { if (tarjeta.tipoTarjeta === "Debito") {
+                              alert("Las tarjetas de débito no tienen saldo pendiente para abonar.");
+                              return;
+                            }
+                        
+                              setSelectedTarjeta(tarjeta);
                               setShowPagoForm(true)}}
                             title="Agregar Pago al saldo pendiente"
                             className="text-indigo-600 hover:text-indigo-900 mr-2">
@@ -608,16 +648,25 @@ const handleActMontos = async (e: React.FormEvent) => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-semibold mb-4">Agregar nueva compra</h2>
             <form onSubmit={handleSubmitCompra}>
+             
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
-                <input
-                  type="number"
-                  value={monto}
-                  onChange={(e) => setMonto(e.target.value)}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                  required
-                />
+
+                <div className="relative mt-1">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    {(selectedTarjeta as TarjetaConMoneda).simboloMoneda}
+                  </span>
+
+                  <input
+                    type="number"
+                    value={monto}
+                    onChange={(e) => setMonto(e.target.value)}
+                    className="mt-1 p-2 border border-gray-300 rounded-md w-full pl-8"  // Añadir padding a la izquierda para que el texto no se superponga al símbolo
+                    required
+                  />
+                </div>
               </div>
+
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
                 <input
@@ -655,16 +704,23 @@ const handleActMontos = async (e: React.FormEvent) => {
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-semibold mb-4">Agregar nuevo pago</h2>
             <form onSubmit={handleSubmitPago}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+              
+              <div className="relative mt-1">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                  {(selectedTarjeta as TarjetaConMoneda).simboloMoneda}
+                </span>
                 <input
                   type="number"
                   value={montoP}
                   onChange={(e) => setMontoP(e.target.value)}
-                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full pl-8" 
                   required
                 />
               </div>
+              </div>
+              
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
                 <input
@@ -708,7 +764,7 @@ const handleActMontos = async (e: React.FormEvent) => {
                     <ul>
                       {compras.map((compra, index) => (
                         <li key={index} className="mb-2">
-                          <p>Monto de compra #{index + 1}: {compra.monto}</p>
+                          <p>Monto de compra #{index + 1}: {(selectedTarjeta as TarjetaConMoneda).simboloMoneda}{compra.monto}</p>
                           <p>Fecha: {compra.fecha}</p>
                         </li>
                       ))}

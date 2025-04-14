@@ -51,6 +51,18 @@ namespace TecBankAPI.Controllers
             return cuenta;  
         }
 
+        [HttpGet("obtener/{numeroCuenta}")] //busca una cuenta por el num de cuenta y la devuelve
+        public ActionResult<Cuenta> GetByNumeroCuentaYDevolver(string numeroCuenta)
+        {
+            var cuenta = _cuentaService.GetByNumeroCuentaYDevolver(numeroCuenta); 
+            if (cuenta == null)
+            {
+                return BadRequest(new { message = $"La cuenta con el número {numeroCuenta} no existe o es inválida." });
+            }
+
+            return cuenta;  
+        }
+
         [HttpGet("buscarCedula/{cedulaCliente}")]
         public ActionResult<List<Cuenta>> GetByCedula(string cedulaCliente)
         {

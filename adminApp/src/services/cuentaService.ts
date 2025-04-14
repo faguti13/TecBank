@@ -1,4 +1,4 @@
-interface Cuenta {
+export interface Cuenta {
     id?: number;
     numeroCuenta: string;
     descripcion: string;

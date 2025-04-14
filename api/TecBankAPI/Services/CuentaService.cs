@@ -65,6 +65,12 @@ namespace TecBankAPI.Services
             return cuentas.FirstOrDefault(c => c.NumeroCuenta == numeroCuenta);
         }
 
+        public Cuenta? GetByNumeroCuentaYDevolver(string numeroCuenta)
+        {
+            var cuentas = ReadData();
+            return cuentas.FirstOrDefault(c => c.NumeroCuenta == numeroCuenta);
+        }
+
         public List<Cuenta> GetByCedula(string cedula)
         {
             var cuentas = ReadData();

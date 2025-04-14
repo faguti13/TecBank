@@ -1,5 +1,7 @@
 // services/tarjetaService.ts
 
+import { Cuenta } from "./cuentaService";
+
 export interface Tarjeta {
     //idCliente: number;
     numeroCuenta: string;
@@ -67,6 +69,19 @@ export const tarjetaService = {
             throw new Error('Error al eliminar el rol');
         }
     },
+
+    async obtenerCuenta(numeroCuenta: string): Promise<Cuenta> {
+        const response = await fetch(`${API_URL}/cuentas/obtener/${numeroCuenta}`);
+        if (!response.ok) {
+          if (response.status === 400) {
+            throw new Error('El número de cuenta no existe');
+          } else {
+            throw new Error('Error al verificar el número de cuenta');
+          }
+        }
+        return response.json();  // Asegúrate de que esto devuelve un objeto Cuenta con la propiedad `moneda`
+      },
+      
 
 
     async verificarCuenta(numeroCuenta: string): Promise<void> {
