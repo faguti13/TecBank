@@ -12,5 +12,19 @@
     "Email": "@Tralala",
     "IngresoMensual": 10000000,
     "TipoCliente": "Fisico"
+  },
+  {
+    "Id": 2,
+    "Usuario": "FabianGJ",
+    "Password": "123456",
+    "Nombre": "Fabian",
+    "Apellido1": "Gutierrez",
+    "Apellido2": "Jimenez",
+    "Cedula": "119230145",
+    "Direccion": "Residencial Estancia Antigua\nG13",
+    "Telefono": "64012272",
+    "Email": "fabian@test.com",
+    "IngresoMensual": 0,
+    "TipoCliente": "Fisico"
   }
 ]

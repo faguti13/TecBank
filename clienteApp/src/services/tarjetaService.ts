@@ -36,11 +36,9 @@ export interface Cuenta {
   saldo: number;
 }
 
-  const API_URL = 'http://localhost:5240/api';
-
-  export const tarjetaService = {
+export const tarjetaService = {
     async getAll(): Promise<Tarjeta[]> {
-        const response = await fetch(`${API_URL}/tarjeta`);
+        const response = await fetch(`${API_BASE_URL}/api/tarjeta`);
         if (!response.ok) {
             throw new Error('Error al obtener tarjetas');
         }
@@ -49,28 +47,48 @@ export interface Cuenta {
 
     async compraGetByNumTarjeta(numeroTarjeta: string): Promise<Compra[]> {
         try {
-          const response = await fetch(`${API_URL}/tarjeta/compras/${numeroTarjeta}`);
+          console.log('Fetching compras para tarjeta:', numeroTarjeta);
+          const url = `${API_BASE_URL}/api/tarjeta/compras/${numeroTarjeta}`;
+          console.log('URL de compras:', url);
+          
+          const response = await fetch(url);
+          console.log('Respuesta compras Status:', response.status);
+          
           if (!response.ok) {
             throw new Error('Error al obtener las compras por el num de tarjeta');
           }
-          return response.json(); // Asegúrate de que la respuesta sea un array de compras
+          
+          const data = await response.json();
+          console.log('Datos de compras recibidos:', data);
+          return data;
         } catch (error) {
           console.error('Error al obtener las compras desde el servicio', error);
-          throw error; // Re-lanza el error para manejarlo en el componente
+          throw error;
         }
       },
 
     async buscarCuentaPorCedula(cedulaCliente: string): Promise<Cuenta[]> {
-        const response = await fetch(`${API_BASE_URL}/api/Cuentas/buscarCedula/${cedulaCliente}`);
+        console.log('Buscando cuentas por cédula:', cedulaCliente);
+        console.log('URL base API:', API_BASE_URL);
+        
+        const url = `${API_BASE_URL}/api/Cuentas/buscarCedula/${cedulaCliente}`;
+        console.log('URL completa:', url);
+        
+        const response = await fetch(url);
+        console.log('Status respuesta:', response.status);
+        
         if (!response.ok) {
           const error = await response.json();
           throw new Error(error.message || 'Error al buscar la cuenta por la cédula');
         }
-        return response.json(); // devuelve un array de cuentas
+        
+        const data = await response.json();
+        console.log('Datos recibidos:', data);
+        return data;
     },
 
     async getByNumeroCuenta(numeroCuenta: string): Promise<Tarjeta> {
-        const response = await fetch(`${API_URL}/tarjeta/buscarNumeroCuenta/${numeroCuenta}`);
+        const response = await fetch(`${API_BASE_URL}/api/tarjeta/buscarNumeroCuenta/${numeroCuenta}`);
         if (!response.ok) {
             throw new Error('Error al obtener la tarjeta');
         }
@@ -79,7 +97,7 @@ export interface Cuenta {
       
 
     async registrarPago(pago: Pago): Promise<void> {
-        const response = await fetch(`${API_URL}/tarjeta/pagos`, {
+        const response = await fetch(`${API_BASE_URL}/api/tarjeta/pagos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -92,7 +110,7 @@ export interface Cuenta {
     },
 
     async actualizarSaldo(numeroTarjeta: string, nuevoMonto: number): Promise<void> {
-        const response = await fetch(`${API_URL}/tarjeta/actualizarSaldo`, {
+        const response = await fetch(`${API_BASE_URL}/api/tarjeta/actualizarSaldo`, {
             method: 'PUT',  // PUT porque actualiza un dato
             headers: {
                 'Content-Type': 'application/json',

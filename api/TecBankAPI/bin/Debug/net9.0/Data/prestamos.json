@@ -9,7 +9,7 @@
     "TasaInteres": 10,
     "PlazoMeses": 18,
     "Moneda": "Colones",
-    "FechaCreacion": "2024-01-06T10:57:00.7648665-06:00",
+    "FechaCreacion": "2022-01-06T10:57:00.7648665-06:00",
     "Pagos": [],
     "CalendarioPagos": [
       {
@@ -486,6 +486,32 @@
         "MontoAmortizacion": 95.78,
         "MontoInteres": 1.20,
         "MontoCuota": 96.97,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "MontoOriginal": 1,
+    "Saldo": 2,
+    "ClienteId": 2,
+    "CedulaCliente": "119230145",
+    "AsesorId": 1,
+    "TasaInteres": 1,
+    "PlazoMeses": 1,
+    "Moneda": "Colones",
+    "FechaCreacion": "2022-04-14T10:17:58.5497178-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 4,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2022-05-14T10:17:58.5497178-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.00,
+        "MontoCuota": 1.00,
         "SaldoProyectado": 0.00,
         "Pagado": false
       }

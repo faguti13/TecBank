@@ -22,18 +22,14 @@ builder.Services.AddScoped<TransaccionService>();
 builder.Services.AddScoped<MonedaService>();
 builder.Services.AddHostedService<ReporteBackgroundService>();
 
-// Configure CORS
+// Configure CORS with a completely open policy
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:5173",  // Cliente app
-                "http://localhost:5174"   // Admin app
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -49,7 +45,11 @@ if (app.Environment.IsDevelopment())
 // Use CORS - Important: This must be called before UseAuthorization and MapControllers
 app.UseCors();
 
-app.UseHttpsRedirection();
+// Configure the app to listen on all network interfaces
+app.Urls.Add("http://0.0.0.0:5240");
+
+// Comment out HTTPS redirection for local development
+// app.UseHttpsRedirection();
 
 app.UseSwaggerUI(o=>o.SwaggerEndpoint("openapi/v1.json", "Swagger Project"));
 

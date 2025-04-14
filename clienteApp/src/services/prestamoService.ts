@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '../config';
+
 export interface Prestamo {
   id: number;
   montoOriginal: number;
@@ -27,19 +29,16 @@ export interface PagoPrestamo {
   esPagoExtraordinario: boolean;
 }
 
-const API_URL = 'http://localhost:5240/api';
-
 export const prestamoService = {
   async getPrestamosByCliente(cedula: string): Promise<Prestamo[]> {
     console.log('PrestamoService: Iniciando getPrestamosByCliente para cédula:', cedula);
     
     try {
-      const url = `${API_URL}/prestamos/cliente/${cedula}`;
+      const url = `${API_BASE_URL}/api/prestamos/cliente/${cedula}`;
       console.log('PrestamoService: Haciendo fetch a:', url);
       
       const response = await fetch(url, {
         method: 'GET',
-        credentials: 'include',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -51,25 +50,46 @@ export const prestamoService = {
       
       console.log('PrestamoService: Status de la respuesta:', response.status);
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('PrestamoService: Error response:', errorText);
-        if (response.status === 404) {
-          return []; // Si no hay préstamos, devolvemos un array vacío
-        }
-        throw new Error(`Error del servidor: ${response.status} - ${errorText}`);
+      // Manejar el caso de respuesta vacía (No Content)
+      if (response.status === 204) {
+        console.log('PrestamoService: No hay préstamos para este cliente');
+        return [];
       }
       
-      const data = await response.json().catch(error => {
-        console.error('PrestamoService: Error al parsear JSON:', error);
-        throw new Error('Error al procesar la respuesta del servidor');
-      });
+      if (!response.ok) {
+        let errorMessage = 'Error del servidor';
+        try {
+          const errorText = await response.text();
+          console.error('PrestamoService: Error response:', errorText);
+          errorMessage = `${errorMessage}: ${response.status} - ${errorText}`;
+        } catch (e) {
+          console.error('PrestamoService: No se pudo leer el texto de error');
+        }
+        
+        if (response.status === 404) {
+          console.log('PrestamoService: No se encontraron préstamos (404)');
+          return []; // Si no hay préstamos, devolvemos un array vacío
+        }
+        
+        throw new Error(errorMessage);
+      }
       
-      console.log('PrestamoService: Datos recibidos:', data);
+      let data;
+      try {
+        data = await response.json();
+        console.log('PrestamoService: Datos recibidos:', data);
+      } catch (error) {
+        console.error('PrestamoService: Error al parsear JSON:', error);
+        throw new Error('Error al procesar la respuesta del servidor. La respuesta no es un JSON válido.');
+      }
       
       if (!Array.isArray(data)) {
         console.error('PrestamoService: La respuesta no es un array:', data);
-        throw new Error('La respuesta del servidor no tiene el formato esperado');
+        if (data && typeof data === 'object') {
+          // Intentar convertir un objeto a array si es posible
+          return [data as Prestamo];
+        }
+        return []; // Devolver array vacío si no es posible convertir
       }
       
       return data;
@@ -83,14 +103,13 @@ export const prestamoService = {
     console.log('PrestamoService: Iniciando registrarPago para préstamo:', prestamoId);
     
     try {
-      const response = await fetch(`${API_URL}/prestamos/${prestamoId}/pagos`, {
+      const response = await fetch(`${API_BASE_URL}/api/prestamos/${prestamoId}/pagos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(pago),
-        credentials: 'include'
+        body: JSON.stringify(pago)
       }).catch(error => {
         console.error('PrestamoService: Error de red al registrar pago:', error);
         throw new Error('Error de conexión al intentar registrar el pago');
@@ -99,9 +118,15 @@ export const prestamoService = {
       console.log('PrestamoService: Status de la respuesta de pago:', response.status);
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('PrestamoService: Error en registrarPago:', errorText);
-        throw new Error(`Error al registrar el pago: ${response.status} - ${errorText}`);
+        let errorMessage = 'Error al registrar el pago';
+        try {
+          const errorText = await response.text();
+          console.error('PrestamoService: Error en registrarPago:', errorText);
+          errorMessage = `${errorMessage}: ${response.status} - ${errorText}`;
+        } catch (e) {
+          console.error('PrestamoService: No se pudo leer el texto de error');
+        }
+        throw new Error(errorMessage);
       }
     } catch (error) {
       console.error('PrestamoService: Error en registrarPago:', error);

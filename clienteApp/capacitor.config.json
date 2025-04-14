@@ -3,6 +3,6 @@
   "appName": "TecBank Cliente",
   "webDir": "dist",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "http"
   }
 } 

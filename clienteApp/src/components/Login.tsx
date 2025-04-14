@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_BASE_URL } from '../config';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, loginError, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true);
 
     try {
+      console.log(`Intentando iniciar sesión con usuario ${username} en ${API_BASE_URL}`);
       await login(username, password);
       navigate('/dashboard');
     } catch (err) {
-      setError('Usuario o contraseña incorrectos');
-    } finally {
-      setIsLoading(false);
+      console.error('Error en componente Login:', err);
+      // Mostrar el error del contexto de Auth si está disponible
+      setError(loginError || 'Error al iniciar sesión. Comprueba tu conexión e intenta de nuevo.');
     }
   };
 
@@ -34,6 +34,9 @@ const Login: React.FC = () => {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Inicia sesión en tu cuenta
+          </p>
+          <p className="mt-1 text-center text-xs text-gray-500">
+            Conectando a: {API_BASE_URL}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -71,7 +74,9 @@ const Login: React.FC = () => {
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+            <div className="text-red-500 text-sm text-center p-2 bg-red-50 rounded border border-red-200">
+              {error}
+            </div>
           )}
 
           <div>
