@@ -12,17 +12,6 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
-  const navigationItems = [
-    { name: 'Dashboard', href: '/', icon: HomeIcon },
-    { name: 'Clientes', href: '/clientes', icon: UsersIcon },
-    { name: 'Cuentas', href: '/cuentas', icon: ChartBarIcon },
-    { name: 'Tarjetas', href: '/tarjetas', icon: CreditCardIcon },
-    { name: 'Préstamos', href: '/prestamos', icon: CurrencyDollarIcon },
-    { name: 'Asesores', href: '/asesores', icon: UserGroupIcon },
-    { name: 'Roles', href: '/roles', icon: KeyIcon },
-    { name: 'Reportes', href: '/reportes', icon: DocumentTextIcon },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
@@ -31,7 +20,7 @@ const Layout: React.FC<LayoutProps> = ({ children, navigation }) => {
             <h1 className="text-xl font-bold text-white">TecBank Admin</h1>
           </div>
           <nav className="flex-1 px-2 py-4 space-y-1">
-            {navigationItems.map((item) => (
+            {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}

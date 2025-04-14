@@ -27,10 +27,13 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.WithOrigins(
+                "http://localhost:5173",  // Cliente app
+                "http://localhost:5174"   // Admin app
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -43,12 +46,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Use CORS - Important: This must be called before UseAuthorization and MapControllers
+app.UseCors();
+
 app.UseHttpsRedirection();
 
 app.UseSwaggerUI(o=>o.SwaggerEndpoint("openapi/v1.json", "Swagger Project"));
-
-// Use CORS
-app.UseCors();
 
 app.UseAuthorization();
 
