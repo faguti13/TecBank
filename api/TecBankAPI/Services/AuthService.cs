@@ -77,6 +77,7 @@ namespace TecBankAPI.Services
                     Usuario = request.Usuario,
                     Password = request.Password,
                     Email = request.Email,
+                    IngresoMensual = request.IngresoMensual,
                     TipoCliente = request.TipoCliente
                 };
 

@@ -50,7 +50,9 @@ public class ClienteService : IClienteService
         {
             throw new InvalidOperationException("Ya existe un cliente con esa cédula");
         }
-        
+        if(cliente.Id == 0){
+            cliente.Id =  _clientes.Count > 0 ? _clientes.Max(c => c.Id) + 1 : 1;
+        }
         _clientes.Add(cliente);
         SaveData();
         await Task.CompletedTask;

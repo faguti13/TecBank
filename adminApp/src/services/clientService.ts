@@ -37,4 +37,12 @@ export const clientService = {
             throw error;
         }
     },
+
+    async getByCedula(Cedula: string): Promise<Cliente> {
+        const response = await fetch(`${API_URL}/Cliente/${Cedula}`);
+        if (!response.ok) {
+            throw new Error('404');
+        }
+        return response.json();
+    },
 };

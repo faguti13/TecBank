@@ -41,7 +41,7 @@ interface Cliente {
 
 
 function Clientes() {
-    const [tabActive, setTabActive] = React.useState('1');
+    const [tabActive, setTabActive] = React.useState('2');
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
       setTabActive(newValue);
@@ -73,34 +73,66 @@ function Clientes() {
 
     /*Dialogo para cuando se va a crear un cliente*/
 
-    const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
+    const [openInfoDialog, setOpenInfoDialog] = React.useState(false);
 
-    const createDialogTitles = [
+    const infoDialogTitles = [
       "Información faltante",
       "Error",
-      "Cliente Añadido"
+      "Cliente Añadido",
     ];
 
-    const createDialogTexts = [
+    const infoDialogTexts = [
       "Falta información de completar para inscribir al cliente al sistema.",
       "Error al tratar de crear el perfil. Intente nuevamente o contacte a soporte.",
-      "El cliente ha sido añadido exitosamente."
+      "El cliente ha sido añadido exitosamente.",
+      "Por favor, ingrese una credencial a buscar",
+      "Lo sentimos. El usuario que se desea buscar no se encuentra en la base de datos"
     ];
 
-    const [createDialogTitle, setCreateDialogTitle] = React.useState(createDialogTitles[0]);
+    const [infoDialogTitle, setInfoDialogTitle] = React.useState(infoDialogTitles[0]);
 
-    const [createDialogText, setCreateDialogText] = React.useState(createDialogTexts[0]);
+    const [infoDialogText, setInfoDialogText] = React.useState(infoDialogTexts[0]);
 
-    const handleClickOpenCreateDialog = (dialogType: number) => {
-      setCreateDialogTitle(createDialogTitles[dialogType]);
-      setCreateDialogText(createDialogTexts[dialogType]);
-      setOpenCreateDialog(true);
+    const handleClickOpenInfoDialog = (dialogTitleType: number,dialogTextType: number) => {
+      setInfoDialogTitle(infoDialogTitles[dialogTitleType]);
+      setInfoDialogText(infoDialogTexts[dialogTextType]);
+      setOpenInfoDialog(true);
     };
 
     const handleCloseCreateDialog = () => {
-      setOpenCreateDialog(false);
+      setOpenInfoDialog(false);
     };
 
+    const [searchBar, setSearchBar] = React.useState("");
+
+    const handleSearchClient = async () =>{
+      if(searchBar.length > 0){
+        try{
+          
+          const clientInfo = await clientService.getByCedula(searchBar);
+          setSearchedClientInfo({...searchedClientInfo,
+            Usuario: (clientInfo as any).usuario,
+            Password: (clientInfo as any).password,
+            Nombre: (clientInfo as any).nombre,
+            Apellido1: (clientInfo as any).apellido1,
+            Apellido2: (clientInfo as any).apellido2,
+            Cedula: (clientInfo as any).cedula,
+            Direccion: (clientInfo as any).direccion,
+            Telefono: (clientInfo as any).telefono,
+            Email: (clientInfo as any).email,
+            TipoCliente: (clientInfo as any).tipoCliente
+          }
+          );
+          
+        }catch(err: any){
+          if(err.message === '404'){
+            handleClickOpenInfoDialog(1,4);
+          }
+        }
+      }else{
+        handleClickOpenInfoDialog(0,3);
+      }
+    }
 
     const [newClientInfo, setNewClientInfo] = React.useState<Cliente>({
         Cedula: '',
@@ -116,8 +148,23 @@ function Clientes() {
         TipoCliente: "Físico",
     });
 
-    const checkIfNewClientIsValid = () =>{
-      var isValid =  Object.values(newClientInfo).every(
+    const [searchedClientInfo, setSearchedClientInfo] = React.useState<Cliente>({
+        Cedula: '',
+        Nombre: '',
+        Apellido1: '',
+        Apellido2: '',
+        Direccion: '',
+        Telefono: '',
+        Usuario: '',
+        Password: '',
+        Email: '',
+        IngresoMensual: 0,
+        TipoCliente: "Físico",
+    });
+
+
+    const checkIfObjectIsValid = (info: Object) =>{
+      var isValid =  Object.values(info).every(
         value => {
           if ((value === null || value === undefined || value === '')) return false;
           return true;
@@ -128,15 +175,15 @@ function Clientes() {
 
     const handleCreateClient = async(e: React.FormEvent) =>{
       e.preventDefault();
-      if(checkIfNewClientIsValid()){
+      if(checkIfObjectIsValid(newClientInfo)){
         try{
           await clientService.create(newClientInfo);
-          handleClickOpenCreateDialog(2);
+          handleClickOpenInfoDialog(2,2);
         }catch(err){
-          handleClickOpenCreateDialog(1);
+          handleClickOpenInfoDialog(1,1);
         }
       }else{
-        handleClickOpenCreateDialog(0);
+        handleClickOpenInfoDialog(0,0);
       }
       
     };
@@ -315,24 +362,7 @@ function Clientes() {
                 Ingresar Cliente
               </div>
             </div>
-            <Dialog
-                open={openCreateDialog}
-                onClose={handleCloseCreateDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogTitle id="alert-dialog-title">
-                  {createDialogTitle}
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    {createDialogText}
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseCreateDialog}>Ok</Button>
-                </DialogActions>
-              </Dialog>
+            
           </div>
           {/**************************** Modificar cliente ***********************************/}
           <div style={{display:showTab(tabActive, "2"), flexFlow: 'column'}}>
@@ -343,11 +373,12 @@ function Clientes() {
               >
                 <InputBase
                   sx={{ ml: 1, flex: 1 }}
-                  placeholder="Buscar Cliente..."
+                  placeholder="Buscar Cliente por cédula..."
                   inputProps={{ 'aria-label': 'search client' }}
+                  onChange={(e) => setSearchBar(e.target.value)}
                 />
                 <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearchClient}>
                   <SearchIcon></SearchIcon>
                 </IconButton>
               </Paper>
@@ -370,15 +401,19 @@ function Clientes() {
                 <AccordionDetails className='editClientAccordionInterior' >
                   <div className='editClientTextFieldSpecial'>
                     Usuario:
-                    <TextField id="standard-basic"  variant="standard" />
+                    <TextField id="standard-basic"  variant="standard" 
+                    value={searchedClientInfo.Usuario} 
+                    onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, Usuario: e.target.value })}
+                    />
                   </div>
                   <div className='editClientTextFieldSpecial'>
                     Contraseña:
                     <FormControl sx={{width:'200px'}} variant="standard">
-                      
                       <Input
                         id="standard-adornment-password"
                         type={showPassword ? 'text' : 'password'}
+                        value={searchedClientInfo.Password} 
+                        onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, Password: e.target.value })}
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
@@ -423,11 +458,24 @@ function Clientes() {
                 <AccordionDetails className='editClientAccordionInterior' >
                   <div className='editClientTextFieldSpecial'>
                     Nombre:
-                    <TextField id="standard-basic"  variant="standard" />
+                    <TextField id="standard-basic"  variant="standard" 
+                    value={searchedClientInfo.Nombre} 
+                    onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, Nombre: e.target.value })}
+                    />
                   </div>
                   <div className='editClientTextFieldSpecial'>
-                    Apellido:
-                    <TextField id="standard-basic"  variant="standard" />
+                    Primer Apellido:
+                    <TextField id="standard-basic"  variant="standard" 
+                    value={searchedClientInfo.Apellido1} 
+                    onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo,Apellido1: e.target.value })}
+                    />
+                  </div>
+                  <div className='editClientTextFieldSpecial'>
+                    Segundo Apellido:
+                    <TextField id="standard-basic"  variant="standard" 
+                    value={searchedClientInfo.Apellido2} 
+                    onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, Apellido2: e.target.value })}
+                    />
                   </div>
                   <div className='editClientTextFieldSpecial'>
                     Tipo de usuario: 
@@ -437,6 +485,8 @@ function Clientes() {
                           row
                           aria-labelledby="demo-row-radio-buttons-group-label"
                           name="row-radio-buttons-group"
+                          value={searchedClientInfo.TipoCliente}
+                          onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, TipoCliente: e.target.value })}
                         >
                           <FormControlLabel value="Físico" control={<Radio />} label="Físico" />
                           <FormControlLabel value="Jurídico" control={<Radio />} label="Jurídico" />
@@ -446,7 +496,10 @@ function Clientes() {
                   </div>
                   <div className='editClientTextFieldSpecial'>
                     Cédula:
-                    <TextField id="standard-basic"  variant="standard" />
+                    <TextField id="standard-basic"  variant="standard" 
+                    value={searchedClientInfo.Cedula}
+                    onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, Cedula: e.target.value })}
+                    />
                   </div>
                   <div>
                     <div className='buttonSecondary' style={{float:'right'}}>
@@ -472,11 +525,17 @@ function Clientes() {
                 <AccordionDetails className='editClientAccordionInterior' >
                   <div className='editClientTextFieldSpecial'>
                     Teléfono:
-                    <TextField id="standard-basic"  variant="standard" />
+                    <TextField id="standard-basic"  variant="standard" 
+                    value={searchedClientInfo.Telefono}
+                    onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, Telefono: e.target.value })}
+                    />
                   </div>
                   <div className='editClientTextFieldSpecial'>
                     Ingreso mensual:
-                    <TextField id="standard-basic"  variant="standard" />
+                    <TextField id="standard-basic"  variant="standard" 
+                    value={searchedClientInfo.IngresoMensual}
+                    onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, IngresoMensual: parseInt(e.target.value) })}
+                    />
                   </div>
                   <div className='editClientTextFieldSpecial'>
                     Dirección:
@@ -485,6 +544,8 @@ function Clientes() {
                       multiline
                       rows={3}
                       variant="filled"
+                      value={searchedClientInfo.Direccion}
+                      onChange={(e) => setSearchedClientInfo({ ...searchedClientInfo, Direccion: e.target.value })}
                     />
                   </div>
                   <div>
@@ -499,6 +560,7 @@ function Clientes() {
                     Eliminar Cliente
                 </div>
               </div>
+              
               <Dialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}
@@ -522,6 +584,24 @@ function Clientes() {
               </Dialog>
             </div>
           </div>
+          <Dialog
+            open={openInfoDialog}
+            onClose={handleCloseCreateDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {infoDialogTitle}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {infoDialogText}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseCreateDialog}>Ok</Button>
+            </DialogActions>
+          </Dialog>
           </ThemeProvider>
         </div>
       </div>

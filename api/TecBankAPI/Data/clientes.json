@@ -10,6 +10,7 @@
     "Direccion": "Residencial Estancia Antigua",
     "Telefono": "64012272",
     "Email": "fabian@test.com",
+    "IngresoMensual": 12000,
     "TipoCliente": "F\u00EDsico"
   },
   {
@@ -23,6 +24,7 @@
     "Direccion": "Direcci\u00F3n de prueba",
     "Telefono": "88888888",
     "Email": "cliente@test.com",
+    "IngresoMensual": 12000,
     "TipoCliente": "F\u00EDsico"
   },
   {
@@ -36,19 +38,35 @@
     "Direccion": "bbbbb",
     "Telefono": "11111",
     "Email": "@gmail",
+    "IngresoMensual": 12000,
     "TipoCliente": "F\u00EDsico"
   },
   {
-    "Id": 0,
-    "Usuario": "apepsos",
-    "Password": "123456",
-    "Nombre": "Luis Alexis",
-    "Apellido1": "Alvarado",
-    "Apellido2": "Barrantes",
-    "Cedula": "118640248",
-    "Direccion": "La Uni\u00F3n, Residencial Paso Real, Calle Viena, Casa M5",
-    "Telefono": "85636474",
-    "Email": "alexis03126@gmail.com",
-    "TipoCliente": "F\u00EDsico"
+    "Id": 4,
+    "Usuario": "test4",
+    "Password": "123test4",
+    "Nombre": "test",
+    "Apellido1": "4",
+    "Apellido2": "TEst",
+    "Cedula": "12345",
+    "Direccion": "asdlasldsal",
+    "Telefono": "12122323",
+    "Email": "test4@",
+    "IngresoMensual": 1500,
+    "TipoCliente": "Jur\u00EDdico"
+  },
+  {
+    "Id": 5,
+    "Usuario": "test4",
+    "Password": "123test4",
+    "Nombre": "test",
+    "Apellido1": "4",
+    "Apellido2": "TEst",
+    "Cedula": "1234545",
+    "Direccion": "asdlasldsal",
+    "Telefono": "12122323",
+    "Email": "test4@",
+    "IngresoMensual": 1500,
+    "TipoCliente": "Jur\u00EDdico"
   }
 ]
