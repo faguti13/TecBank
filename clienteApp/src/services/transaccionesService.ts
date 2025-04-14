@@ -1,14 +1,18 @@
 import { API_BASE_URL } from '../config';
+import { TipoMoneda } from './monedaService';
 
 export interface Transaccion {
   id: number;
-  cuentaOrigenId: number;
-  cuentaDestinoId?: number;
-  monto: number;
   tipo: string;
+  monto: number;
+  montoDestino: number;
+  monedaOrigen: TipoMoneda;
+  monedaDestino: TipoMoneda;
   fecha: string;
   descripcion: string;
   estado: string;
+  cuentaOrigenId: number;
+  cuentaDestinoId?: number;
 }
 
 export interface TransferenciaRequest {
@@ -16,12 +20,14 @@ export interface TransferenciaRequest {
   cuentaDestinoId: number;
   monto: number;
   descripcion: string;
+  monedaOrigen: TipoMoneda;
 }
 
 export interface MovimientoRequest {
   cuentaId: number;
   monto: number;
   descripcion: string;
+  monedaOrigen: TipoMoneda;
 }
 
 export const getTransaccionesByCuenta = async (cuentaId: number): Promise<Transaccion[]> => {

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Transaccion, getTransaccionesByCuenta } from '../services/transaccionesService';
+import { formatearMonto, getMonedaSymbol, TipoMoneda } from '../services/monedaService';
 
 interface TransaccionesHistorialProps {
   cuentaId: number;
+  monedaCuenta: TipoMoneda;
   onClose: () => void;
 }
 
-const TransaccionesHistorial: React.FC<TransaccionesHistorialProps> = ({ cuentaId, onClose }) => {
+const TransaccionesHistorial: React.FC<TransaccionesHistorialProps> = ({ cuentaId, monedaCuenta, onClose }) => {
   const [transacciones, setTransacciones] = useState<Transaccion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -14,11 +16,16 @@ const TransaccionesHistorial: React.FC<TransaccionesHistorialProps> = ({ cuentaI
   useEffect(() => {
     const fetchTransacciones = async () => {
       try {
+        console.log('Fetching transactions for account:', cuentaId);
         const data = await getTransaccionesByCuenta(cuentaId);
+        console.log('Received transactions:', data);
+        if (!Array.isArray(data)) {
+          throw new Error('La respuesta no es un array de transacciones');
+        }
         setTransacciones(data);
       } catch (err) {
-        setError('Error al cargar las transacciones');
-        console.error(err);
+        console.error('Error detallado:', err);
+        setError(err instanceof Error ? err.message : 'Error al cargar las transacciones');
       } finally {
         setLoading(false);
       }
@@ -60,6 +67,26 @@ const TransaccionesHistorial: React.FC<TransaccionesHistorialProps> = ({ cuentaI
     );
   }
 
+  const getMonto = (transaccion: Transaccion) => {
+    // Si la cuenta actual es la cuenta origen, usar monto original
+    if (transaccion.cuentaOrigenId === cuentaId) {
+      return {
+        monto: transaccion.monto,
+        moneda: transaccion.monedaOrigen
+      };
+    }
+    // Si la cuenta actual es la cuenta destino, usar monto destino
+    return {
+      monto: transaccion.montoDestino,
+      moneda: transaccion.monedaDestino
+    };
+  };
+
+  const esTransaccionSaliente = (transaccion: Transaccion) => {
+    return transaccion.tipo === 'Retiro' || 
+           (transaccion.tipo === 'Transferencia' && transaccion.cuentaOrigenId === cuentaId);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-2xl">
@@ -85,29 +112,35 @@ const TransaccionesHistorial: React.FC<TransaccionesHistorialProps> = ({ cuentaI
           </div>
         ) : (
           <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-            {transacciones.map((transaccion) => (
-              <div
-                key={transaccion.id}
-                className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className={`font-semibold ${getTipoTransaccionStyle(transaccion.tipo)}`}>
-                      {transaccion.tipo}
-                    </p>
-                    <p className="text-sm text-gray-600">{transaccion.descripcion}</p>
-                    <p className="text-xs text-gray-500">{formatFecha(transaccion.fecha)}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-lg">
-                      {transaccion.tipo === 'Retiro' ? '-' : ''}
-                      ₡{transaccion.monto.toLocaleString('es-CR', { minimumFractionDigits: 2 })}
-                    </p>
-                    <p className="text-xs text-gray-500">{transaccion.estado}</p>
+            {transacciones.map((transaccion) => {
+              const { monto, moneda } = getMonto(transaccion);
+              const esSaliente = esTransaccionSaliente(transaccion);
+              
+              return (
+                <div
+                  key={transaccion.id}
+                  className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className={`font-semibold ${getTipoTransaccionStyle(transaccion.tipo)}`}>
+                        {transaccion.tipo}
+                      </p>
+                      <p className="text-sm text-gray-600">{transaccion.descripcion}</p>
+                      <p className="text-xs text-gray-500">{formatFecha(transaccion.fecha)}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-lg">
+                        {esSaliente ? '-' : '+'}
+                        {getMonedaSymbol(moneda)}
+                        {formatearMonto(monto, moneda)}
+                      </p>
+                      <p className="text-xs text-gray-500">{transaccion.estado}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

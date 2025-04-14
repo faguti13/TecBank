@@ -1,25 +1,25 @@
 [
   {
     "Id": 1,
-    "NumeroCuenta": "U2FsdGVkX1\u002BxJY8",
+    "NumeroCuenta": "CR00000000000000000001",
     "Descripcion": "Cuenta principal de ahorros",
     "Moneda": "CRC",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230145",
-    "Saldo": 250000.00
+    "Saldo": 244800.00
   },
   {
     "Id": 2,
-    "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
+    "NumeroCuenta": "CR00000000000000000002",
     "Descripcion": "Cuenta para gastos personales",
     "Moneda": "USD",
     "TipoCuenta": "Corriente",
     "CedulaCliente": "119230145",
-    "Saldo": 600.00
+    "Saldo": 710.000
   },
   {
     "Id": 3,
-    "NumeroCuenta": "U2FsdGVkX18OB\u002BJ=",
+    "NumeroCuenta": "CR00000000000000000003",
     "Descripcion": "Cuenta de ahorros en euros",
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
@@ -28,7 +28,7 @@
   },
   {
     "Id": 4,
-    "NumeroCuenta": "Oal/7dsF7sHAbgPigruSfw==",
+    "NumeroCuenta": "CR00000000000000000004",
     "Descripcion": "prueba2",
     "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
@@ -37,16 +37,16 @@
   },
   {
     "Id": 5,
-    "NumeroCuenta": "CR12312321421321421421",
+    "NumeroCuenta": "CR00000000000000000005",
     "Descripcion": "CAS",
     "Moneda": "CRC",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230145",
-    "Saldo": 100
+    "Saldo": 200
   },
   {
     "Id": 6,
-    "NumeroCuenta": "CR12409214921094821098",
+    "NumeroCuenta": "CR00000000000000000006",
     "Descripcion": "NOSE",
     "Moneda": "USD",
     "TipoCuenta": "Ahorros",

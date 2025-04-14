@@ -7,11 +7,16 @@ namespace TecBankAPI.Services
     {
         private readonly string _transaccionPath;
         private readonly CuentaService _cuentaService;
+        private readonly MonedaService _monedaService;
         private static readonly object _lock = new object();
 
-        public TransaccionService(IWebHostEnvironment webHostEnvironment, CuentaService cuentaService)
+        public TransaccionService(
+            IWebHostEnvironment webHostEnvironment, 
+            CuentaService cuentaService,
+            MonedaService monedaService)
         {
             _cuentaService = cuentaService;
+            _monedaService = monedaService;
             var dataPath = Path.Combine(webHostEnvironment.ContentRootPath, "Data");
             _transaccionPath = Path.Combine(dataPath, "transacciones.json");
 
@@ -54,6 +59,9 @@ namespace TecBankAPI.Services
             if (cuentaOrigen == null || cuentaDestino == null)
                 throw new Exception("Una o ambas cuentas no existen");
 
+            // Convertir el monto a la moneda de la cuenta destino
+            decimal montoConvertido = _monedaService.ConvertirMonto(monto, cuentaOrigen.Moneda, cuentaDestino.Moneda);
+
             if (cuentaOrigen.Saldo < monto)
                 throw new Exception("Saldo insuficiente");
 
@@ -65,6 +73,9 @@ namespace TecBankAPI.Services
                 CuentaOrigenId = cuentaOrigenId,
                 CuentaDestinoId = cuentaDestinoId,
                 Monto = monto,
+                MonedaOrigen = cuentaOrigen.Moneda,
+                MonedaDestino = cuentaDestino.Moneda,
+                MontoDestino = montoConvertido,
                 Tipo = "Transferencia",
                 Fecha = DateTime.Now,
                 Descripcion = descripcion,
@@ -73,7 +84,7 @@ namespace TecBankAPI.Services
 
             // Actualizar saldos
             cuentaOrigen.Saldo -= monto;
-            cuentaDestino.Saldo += monto;
+            cuentaDestino.Saldo += montoConvertido;
 
             // Guardar cambios
             _cuentaService.Update(cuentaOrigenId, cuentaOrigen);
@@ -85,11 +96,14 @@ namespace TecBankAPI.Services
             return nuevaTransaccion;
         }
 
-        public Transaccion RegistrarDeposito(int cuentaId, decimal monto, string descripcion)
+        public Transaccion RegistrarDeposito(int cuentaId, decimal monto, string descripcion, string monedaOrigen)
         {
             var cuenta = _cuentaService.GetById(cuentaId);
             if (cuenta == null)
                 throw new Exception("La cuenta no existe");
+
+            // Convertir el monto a la moneda de la cuenta
+            decimal montoConvertido = _monedaService.ConvertirMonto(monto, monedaOrigen, cuenta.Moneda);
 
             var transacciones = ReadData();
             var nuevaTransaccion = new Transaccion
@@ -97,13 +111,16 @@ namespace TecBankAPI.Services
                 Id = transacciones.Count > 0 ? transacciones.Max(t => t.Id) + 1 : 1,
                 CuentaOrigenId = cuentaId,
                 Monto = monto,
+                MonedaOrigen = monedaOrigen,
+                MonedaDestino = cuenta.Moneda,
+                MontoDestino = montoConvertido,
                 Tipo = "Depósito",
                 Fecha = DateTime.Now,
                 Descripcion = descripcion,
                 Estado = "Completada"
             };
 
-            cuenta.Saldo += monto;
+            cuenta.Saldo += montoConvertido;
             _cuentaService.Update(cuentaId, cuenta);
 
             transacciones.Add(nuevaTransaccion);
@@ -112,13 +129,16 @@ namespace TecBankAPI.Services
             return nuevaTransaccion;
         }
 
-        public Transaccion RegistrarRetiro(int cuentaId, decimal monto, string descripcion)
+        public Transaccion RegistrarRetiro(int cuentaId, decimal monto, string descripcion, string monedaOrigen)
         {
             var cuenta = _cuentaService.GetById(cuentaId);
             if (cuenta == null)
                 throw new Exception("La cuenta no existe");
 
-            if (cuenta.Saldo < monto)
+            // Convertir el monto a la moneda de la cuenta para verificar el saldo
+            decimal montoConvertido = _monedaService.ConvertirMonto(monto, monedaOrigen, cuenta.Moneda);
+
+            if (cuenta.Saldo < montoConvertido)
                 throw new Exception("Saldo insuficiente");
 
             var transacciones = ReadData();
@@ -127,13 +147,16 @@ namespace TecBankAPI.Services
                 Id = transacciones.Count > 0 ? transacciones.Max(t => t.Id) + 1 : 1,
                 CuentaOrigenId = cuentaId,
                 Monto = monto,
+                MonedaOrigen = monedaOrigen,
+                MonedaDestino = cuenta.Moneda,
+                MontoDestino = montoConvertido,
                 Tipo = "Retiro",
                 Fecha = DateTime.Now,
                 Descripcion = descripcion,
                 Estado = "Completada"
             };
 
-            cuenta.Saldo -= monto;
+            cuenta.Saldo -= montoConvertido;
             _cuentaService.Update(cuentaId, cuenta);
 
             transacciones.Add(nuevaTransaccion);

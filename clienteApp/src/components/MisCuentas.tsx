@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
 import TransaccionesHistorial from './TransaccionesHistorial';
 import { realizarTransferencia, registrarDeposito, registrarRetiro } from '../services/transaccionesService';
+import { TipoMoneda } from '../services/monedaService';
 
 interface Cuenta {
   id: number;
@@ -47,21 +48,24 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
             cuentaOrigenId: cuenta.id,
             cuentaDestinoId: parseInt(cuentaDestino),
             monto: montoNumerico,
-            descripcion
+            descripcion,
+            monedaOrigen: cuenta.moneda as TipoMoneda
           });
           break;
         case 'deposito':
           await registrarDeposito({
             cuentaId: cuenta.id,
             monto: montoNumerico,
-            descripcion
+            descripcion,
+            monedaOrigen: cuenta.moneda as TipoMoneda
           });
           break;
         case 'retiro':
           await registrarRetiro({
             cuentaId: cuenta.id,
             monto: montoNumerico,
-            descripcion
+            descripcion,
+            monedaOrigen: cuenta.moneda as TipoMoneda
           });
           break;
       }
@@ -321,6 +325,7 @@ const MisCuentas: React.FC = () => {
       {selectedCuenta && showTransacciones && (
         <TransaccionesHistorial
           cuentaId={selectedCuenta.id}
+          monedaCuenta={selectedCuenta.moneda as TipoMoneda}
           onClose={() => {
             setSelectedCuenta(null);
             setShowTransacciones(false);

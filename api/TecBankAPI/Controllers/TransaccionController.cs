@@ -48,7 +48,8 @@ namespace TecBankAPI.Controllers
                 var transaccion = _transaccionService.RegistrarDeposito(
                     request.CuentaId,
                     request.Monto,
-                    request.Descripcion
+                    request.Descripcion,
+                    request.MonedaOrigen
                 );
                 return Ok(transaccion);
             }
@@ -66,7 +67,8 @@ namespace TecBankAPI.Controllers
                 var transaccion = _transaccionService.RegistrarRetiro(
                     request.CuentaId,
                     request.Monto,
-                    request.Descripcion
+                    request.Descripcion,
+                    request.MonedaOrigen
                 );
                 return Ok(transaccion);
             }
@@ -83,6 +85,7 @@ namespace TecBankAPI.Controllers
         public int CuentaDestinoId { get; set; }
         public decimal Monto { get; set; }
         public string Descripcion { get; set; } = string.Empty;
+        public string MonedaOrigen { get; set; } = string.Empty;
     }
 
     public class MovimientoRequest
@@ -90,5 +93,6 @@ namespace TecBankAPI.Controllers
         public int CuentaId { get; set; }
         public decimal Monto { get; set; }
         public string Descripcion { get; set; } = string.Empty;
+        public string MonedaOrigen { get; set; } = string.Empty;
     }
 } 

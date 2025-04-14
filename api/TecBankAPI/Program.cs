@@ -19,6 +19,7 @@ builder.Services.AddScoped<AsesorService>();
 builder.Services.AddScoped<TarjetaService>();
 builder.Services.AddScoped<CuentaService>();
 builder.Services.AddScoped<TransaccionService>();
+builder.Services.AddScoped<MonedaService>();
 builder.Services.AddHostedService<ReporteBackgroundService>();
 
 // Configure CORS

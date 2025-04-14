@@ -9,6 +9,9 @@ public class Transaccion
     public int CuentaOrigenId { get; set; }
     public int? CuentaDestinoId { get; set; }
     public decimal Monto { get; set; }
+    public string MonedaOrigen { get; set; } = string.Empty;
+    public string MonedaDestino { get; set; } = string.Empty;
+    public decimal MontoDestino { get; set; }
     public string Tipo { get; set; } = string.Empty;
     public DateTime Fecha { get; set; }
     public string Descripcion { get; set; } = string.Empty;
