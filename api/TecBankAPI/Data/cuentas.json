@@ -6,7 +6,7 @@
     "Moneda": "CRC",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230145",
-    "Saldo": 249900.00
+    "Saldo": 250000.00
   },
   {
     "Id": 2,
@@ -30,9 +30,27 @@
     "Id": 4,
     "NumeroCuenta": "Oal/7dsF7sHAbgPigruSfw==",
     "Descripcion": "prueba2",
-    "Moneda": "Euros",
+    "Moneda": "EUR",
     "TipoCuenta": "Ahorros",
     "CedulaCliente": "119230146",
     "Saldo": 2500.00
+  },
+  {
+    "Id": 5,
+    "NumeroCuenta": "CR12312321421321421421",
+    "Descripcion": "CAS",
+    "Moneda": "CRC",
+    "TipoCuenta": "Ahorros",
+    "CedulaCliente": "119230145",
+    "Saldo": 100
+  },
+  {
+    "Id": 6,
+    "NumeroCuenta": "CR12409214921094821098",
+    "Descripcion": "NOSE",
+    "Moneda": "USD",
+    "TipoCuenta": "Ahorros",
+    "CedulaCliente": "119230145",
+    "Saldo": 10
   }
 ]

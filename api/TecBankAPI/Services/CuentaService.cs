@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using TecBankAPI.Models;
 
 namespace TecBankAPI.Services
@@ -8,6 +9,7 @@ namespace TecBankAPI.Services
         private readonly string _cuentaPath;
         private static readonly object _lock = new object();
         private readonly JsonSerializerOptions _jsonOptions;
+        private static readonly Regex IbanRegex = new Regex(@"^CR\d{20}$");
 
         public CuentaService(IWebHostEnvironment webHostEnvironment)
         {
@@ -68,13 +70,25 @@ namespace TecBankAPI.Services
             var cuentas = ReadData();
             cuenta.Id = cuentas.Count > 0 ? cuentas.Max(c => c.Id) + 1 : 1;
             
-            // Asegurar que todas las propiedades requeridas estén establecidas
+            // Validar el formato del número de cuenta
             if (string.IsNullOrEmpty(cuenta.NumeroCuenta))
                 throw new ArgumentException("El número de cuenta es requerido");
+            if (!IbanRegex.IsMatch(cuenta.NumeroCuenta))
+                throw new ArgumentException("El número de cuenta debe tener el formato IBAN de Costa Rica (CR + 20 dígitos)");
+            
+            // Validar que el número de cuenta no exista
+            if (cuentas.Any(c => c.NumeroCuenta == cuenta.NumeroCuenta))
+                throw new ArgumentException("El número de cuenta ya existe");
+
             if (string.IsNullOrEmpty(cuenta.Descripcion))
                 throw new ArgumentException("La descripción es requerida");
+            
+            // Validar moneda
             if (string.IsNullOrEmpty(cuenta.Moneda))
-                cuenta.Moneda = "Colones";
+                cuenta.Moneda = "CRC";
+            else if (!new[] { "CRC", "USD", "EUR" }.Contains(cuenta.Moneda))
+                throw new ArgumentException("La moneda debe ser CRC, USD o EUR");
+
             if (string.IsNullOrEmpty(cuenta.TipoCuenta))
                 cuenta.TipoCuenta = "Ahorros";
             if (string.IsNullOrEmpty(cuenta.CedulaCliente))
@@ -91,13 +105,25 @@ namespace TecBankAPI.Services
             var index = cuentas.FindIndex(c => c.Id == id);
             if (index == -1) return false;
 
-            // Asegurar que todas las propiedades requeridas estén establecidas
+            // Validar el formato del número de cuenta
             if (string.IsNullOrEmpty(cuenta.NumeroCuenta))
                 throw new ArgumentException("El número de cuenta es requerido");
+            if (!IbanRegex.IsMatch(cuenta.NumeroCuenta))
+                throw new ArgumentException("El número de cuenta debe tener el formato IBAN de Costa Rica (CR + 20 dígitos)");
+            
+            // Validar que el número de cuenta no exista (excepto si es el mismo registro)
+            if (cuentas.Any(c => c.NumeroCuenta == cuenta.NumeroCuenta && c.Id != id))
+                throw new ArgumentException("El número de cuenta ya existe");
+
             if (string.IsNullOrEmpty(cuenta.Descripcion))
                 throw new ArgumentException("La descripción es requerida");
+            
+            // Validar moneda
             if (string.IsNullOrEmpty(cuenta.Moneda))
-                cuenta.Moneda = "Colones";
+                cuenta.Moneda = "CRC";
+            else if (!new[] { "CRC", "USD", "EUR" }.Contains(cuenta.Moneda))
+                throw new ArgumentException("La moneda debe ser CRC, USD o EUR");
+
             if (string.IsNullOrEmpty(cuenta.TipoCuenta))
                 cuenta.TipoCuenta = "Ahorros";
             if (string.IsNullOrEmpty(cuenta.CedulaCliente))

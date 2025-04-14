@@ -2,9 +2,10 @@ interface Cuenta {
     id?: number;
     numeroCuenta: string;
     descripcion: string;
-    moneda: 'Colones' | 'Dólares' | 'Euros';
+    moneda: 'CRC' | 'USD' | 'EUR';
     tipoCuenta: 'Ahorros' | 'Corriente';
-    nombreCliente: string;  // Cambiado de cedulaCliente a nombreCliente
+    cedulaCliente: string;
+    saldo: number;
 }
 
 // URL base de la API
