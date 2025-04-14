@@ -4,16 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import TransaccionesHistorial from './TransaccionesHistorial';
 import { realizarTransferencia, registrarDeposito, registrarRetiro } from '../services/transaccionesService';
 import { TipoMoneda } from '../services/monedaService';
-
-interface Cuenta {
-  id: number;
-  numeroCuenta: string;
-  descripcion: string;
-  moneda: string;
-  tipoCuenta: string;
-  cedulaCliente: string;
-  saldo: number;
-}
+import { Cuenta, buscarCuentaPorNumero } from '../services/cuentaService';
 
 interface TransaccionModalProps {
   cuenta: Cuenta;
@@ -27,8 +18,33 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
   const [monto, setMonto] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [cuentaDestino, setCuentaDestino] = useState('');
+  const [numeroCuentaExterna, setNumeroCuentaExterna] = useState('');
+  const [cuentaExterna, setCuentaExterna] = useState<Cuenta | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [tipoTransferencia, setTipoTransferencia] = useState<'interna' | 'externa'>('interna');
+  const [buscandoCuenta, setBuscandoCuenta] = useState(false);
+
+  const buscarCuentaExterna = async () => {
+    if (!numeroCuentaExterna) return;
+    
+    setBuscandoCuenta(true);
+    setError('');
+    setCuentaExterna(null);
+    
+    try {
+      const cuentaEncontrada = await buscarCuentaPorNumero(numeroCuentaExterna);
+      if (cuentaEncontrada.id === cuenta.id) {
+        throw new Error('No puedes transferir a la misma cuenta');
+      }
+      setCuentaExterna(cuentaEncontrada);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al buscar la cuenta');
+      setCuentaExterna(null);
+    } finally {
+      setBuscandoCuenta(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,16 +58,26 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
       }
 
       switch (tipo) {
-        case 'transferencia':
-          if (!cuentaDestino) throw new Error('Seleccione una cuenta destino');
+        case 'transferencia': {
+          let cuentaDestinoId: number;
+          
+          if (tipoTransferencia === 'interna') {
+            if (!cuentaDestino) throw new Error('Seleccione una cuenta destino');
+            cuentaDestinoId = parseInt(cuentaDestino);
+          } else {
+            if (!cuentaExterna) throw new Error('Busque y seleccione una cuenta destino válida');
+            cuentaDestinoId = cuentaExterna.id;
+          }
+
           await realizarTransferencia({
             cuentaOrigenId: cuenta.id,
-            cuentaDestinoId: parseInt(cuentaDestino),
+            cuentaDestinoId,
             monto: montoNumerico,
             descripcion,
             monedaOrigen: cuenta.moneda as TipoMoneda
           });
           break;
+        }
         case 'deposito':
           await registrarDeposito({
             cuentaId: cuenta.id,
@@ -93,22 +119,83 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {tipo === 'transferencia' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Cuenta Destino</label>
-              <select
-                value={cuentaDestino}
-                onChange={(e) => setCuentaDestino(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                required
-              >
-                <option value="">Seleccione una cuenta</option>
-                {cuentasDisponibles?.filter(c => c.id !== cuenta.id).map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.numeroCuenta} - {c.descripcion}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <>
+              <div className="flex space-x-4 mb-4">
+                <button
+                  type="button"
+                  className={`flex-1 py-2 px-4 rounded-md ${
+                    tipoTransferencia === 'interna'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 text-gray-700'
+                  }`}
+                  onClick={() => setTipoTransferencia('interna')}
+                >
+                  Mis Cuentas
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 py-2 px-4 rounded-md ${
+                    tipoTransferencia === 'externa'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 text-gray-700'
+                  }`}
+                  onClick={() => setTipoTransferencia('externa')}
+                >
+                  Otra Cuenta
+                </button>
+              </div>
+
+              {tipoTransferencia === 'interna' ? (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Cuenta Destino</label>
+                  <select
+                    value={cuentaDestino}
+                    onChange={(e) => setCuentaDestino(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Seleccione una cuenta</option>
+                    {cuentasDisponibles?.filter(c => c.id !== cuenta.id).map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.numeroCuenta} - {c.descripcion} ({c.moneda})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Número de Cuenta</label>
+                    <div className="flex space-x-2">
+                      <input
+                        type="text"
+                        value={numeroCuentaExterna}
+                        onChange={(e) => setNumeroCuentaExterna(e.target.value)}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        placeholder="CR + 20 dígitos"
+                      />
+                      <button
+                        type="button"
+                        onClick={buscarCuentaExterna}
+                        disabled={buscandoCuenta || !numeroCuentaExterna}
+                        className="mt-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                      >
+                        {buscandoCuenta ? '...' : 'Buscar'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {cuentaExterna && (
+                    <div className="p-4 bg-gray-50 rounded-md">
+                      <h3 className="font-medium text-gray-900">Detalles de la cuenta:</h3>
+                      <p className="text-sm text-gray-600">Titular: {cuentaExterna.cedulaCliente}</p>
+                      <p className="text-sm text-gray-600">Tipo: {cuentaExterna.tipoCuenta}</p>
+                      <p className="text-sm text-gray-600">Moneda: {cuentaExterna.moneda}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </>
           )}
 
           <div>
@@ -151,7 +238,7 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || (tipo === 'transferencia' && tipoTransferencia === 'externa' && !cuentaExterna)}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
               {loading ? 'Procesando...' : 'Confirmar'}
