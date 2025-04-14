@@ -51,18 +51,65 @@ function App() {
 function Dashboard() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <div className="p-6 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-medium text-gray-900">Total Clientes</h3>
-        <p className="mt-2 text-3xl font-bold text-blue-600">0</p>
-      </div>
-      <div className="p-6 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-medium text-gray-900">Préstamos Activos</h3>
-        <p className="mt-2 text-3xl font-bold text-green-600">0</p>
-      </div>
-      <div className="p-6 bg-white rounded-lg shadow">
-        <h3 className="text-lg font-medium text-gray-900">Cuentas Morosas</h3>
-        <p className="mt-2 text-3xl font-bold text-red-600">0</p>
-      </div>
+      <Link to="/clientes" className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div className="flex items-center">
+          <UserGroupIcon className="h-8 w-8 text-blue-500 mr-3" />
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">Clientes</h3>
+            <p className="mt-1 text-sm text-gray-500">Gestionar clientes del banco</p>
+          </div>
+        </div>
+      </Link>
+
+      <Link to="/cuentas" className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div className="flex items-center">
+          <CardIcon className="h-8 w-8 text-green-500 mr-3" />
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">Cuentas</h3>
+            <p className="mt-1 text-sm text-gray-500">Administrar cuentas bancarias</p>
+          </div>
+        </div>
+      </Link>
+
+      <Link to="/prestamos" className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div className="flex items-center">
+          <CurrencyDollarIcon className="h-8 w-8 text-indigo-500 mr-3" />
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">Préstamos</h3>
+            <p className="mt-1 text-sm text-gray-500">Gestionar préstamos y pagos</p>
+          </div>
+        </div>
+      </Link>
+
+      <Link to="/tarjetas" className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div className="flex items-center">
+          <CardIcon className="h-8 w-8 text-purple-500 mr-3" />
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">Tarjetas</h3>
+            <p className="mt-1 text-sm text-gray-500">Administrar tarjetas de crédito</p>
+          </div>
+        </div>
+      </Link>
+
+      <Link to="/asesores" className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div className="flex items-center">
+          <ClipboardDocumentListIcon className="h-8 w-8 text-yellow-500 mr-3" />
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">Asesores</h3>
+            <p className="mt-1 text-sm text-gray-500">Gestionar asesores y metas</p>
+          </div>
+        </div>
+      </Link>
+
+      <Link to="/reportes" className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
+        <div className="flex items-center">
+          <ChartBarIcon className="h-8 w-8 text-red-500 mr-3" />
+          <div>
+            <h3 className="text-lg font-medium text-gray-900">Reportes</h3>
+            <p className="mt-1 text-sm text-gray-500">Ver reportes y estadísticas</p>
+          </div>
+        </div>
+      </Link>
     </div>
   );
 }
