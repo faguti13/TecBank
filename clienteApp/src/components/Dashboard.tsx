@@ -11,15 +11,10 @@ const Dashboard: React.FC = () => {
         Bienvenido, {user ? `${user.nombre} ${user.apellido1}` : ''}
       </h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Link to="/dashboard/cuentas" className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <h2 className="text-xl font-semibold mb-2">Mis Cuentas</h2>
           <p className="text-gray-600">Consulta tus cuentas y movimientos</p>
-        </Link>
-
-        <Link to="/dashboard/transferencias" className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h2 className="text-xl font-semibold mb-2">Transferencias</h2>
-          <p className="text-gray-600">Realiza transferencias entre cuentas</p>
         </Link>
 
         <Link to="/dashboard/tarjetas" className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
