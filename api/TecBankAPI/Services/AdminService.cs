@@ -58,12 +58,8 @@ namespace TecBankAPI.Services
         public async Task<Admin?> Login(string usuario, string password)
         {
             var admin = _admins.FirstOrDefault(a => 
-                a.Usuario.Equals(usuario, StringComparison.OrdinalIgnoreCase));
-
-            if (admin == null || !admin.VerifyPassword(password))
-            {
-                return null;
-            }
+                a.Usuario.Equals(usuario, StringComparison.OrdinalIgnoreCase) &&
+                a.Password == password);
 
             return admin;
         }

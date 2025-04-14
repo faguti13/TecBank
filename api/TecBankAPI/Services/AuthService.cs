@@ -13,28 +13,34 @@ namespace TecBankAPI.Services
     {
         private readonly string _clientesFilePath;
         private static readonly object _lock = new object();
+        private readonly JsonSerializerOptions _jsonOptions;
 
         public AuthService()
         {
             var basePath = Path.Combine(Directory.GetCurrentDirectory(), "Data");
             Directory.CreateDirectory(basePath);
             _clientesFilePath = Path.Combine(basePath, "clientes.json");
+            _jsonOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            if (!File.Exists(_clientesFilePath))
+            {
+                File.WriteAllText(_clientesFilePath, "[]");
+            }
         }
 
         public async Task<Cliente> Login(LoginRequest request)
         {
             lock (_lock)
             {
-                if (!File.Exists(_clientesFilePath))
-                {
-                    throw new Exception("No se encontró el archivo de clientes");
-                }
+                var clientes = ObtenerClientes();
+                var cliente = clientes.FirstOrDefault(c => 
+                    c.Usuario.Equals(request.Usuario, StringComparison.OrdinalIgnoreCase) &&
+                    c.Password == request.Password);
 
-                var json = File.ReadAllText(_clientesFilePath);
-                var clientes = JsonSerializer.Deserialize<List<Cliente>>(json) ?? new List<Cliente>();
-                var cliente = clientes.FirstOrDefault(c => c.Usuario == request.Usuario);
-
-                if (cliente == null || !cliente.VerifyPassword(request.Password))
+                if (cliente == null)
                 {
                     throw new Exception("Usuario o contraseña incorrectos");
                 }
@@ -47,17 +53,11 @@ namespace TecBankAPI.Services
         {
             lock (_lock)
             {
-                if (!File.Exists(_clientesFilePath))
-                {
-                    File.WriteAllText(_clientesFilePath, "[]");
-                }
+                var clientes = ObtenerClientes();
 
-                var json = File.ReadAllText(_clientesFilePath);
-                var clientes = JsonSerializer.Deserialize<List<Cliente>>(json) ?? new List<Cliente>();
-
-                if (clientes.Any(c => c.Usuario == request.Usuario))
+                if (clientes.Any(c => c.Usuario.Equals(request.Usuario, StringComparison.OrdinalIgnoreCase)))
                 {
-                    throw new Exception("Ya existe un usuario con ese nombre de usuario");
+                    throw new Exception("El usuario ya existe");
                 }
 
                 if (clientes.Any(c => c.Cedula == request.Cedula))
@@ -65,26 +65,38 @@ namespace TecBankAPI.Services
                     throw new Exception("Ya existe un usuario con esa cédula");
                 }
 
-                var nuevoCliente = new Cliente
+                var cliente = new Cliente
                 {
                     Id = clientes.Count > 0 ? clientes.Max(c => c.Id) + 1 : 1,
-                    Cedula = request.Cedula,
+                    Usuario = request.Usuario,
+                    Password = request.Password,
                     Nombre = request.Nombre,
                     Apellido1 = request.Apellido1,
                     Apellido2 = request.Apellido2,
+                    Cedula = request.Cedula,
                     Direccion = request.Direccion,
                     Telefono = request.Telefono,
-                    Usuario = request.Usuario,
-                    Password = request.Password,
                     Email = request.Email,
                     TipoCliente = request.TipoCliente
                 };
 
-                clientes.Add(nuevoCliente);
-                File.WriteAllText(_clientesFilePath, JsonSerializer.Serialize(clientes));
+                clientes.Add(cliente);
+                GuardarClientes(clientes);
 
-                return nuevoCliente;
+                return cliente;
             }
+        }
+
+        private List<Cliente> ObtenerClientes()
+        {
+            var json = File.ReadAllText(_clientesFilePath);
+            return JsonSerializer.Deserialize<List<Cliente>>(json, _jsonOptions) ?? new List<Cliente>();
+        }
+
+        private void GuardarClientes(List<Cliente> clientes)
+        {
+            var json = JsonSerializer.Serialize(clientes, _jsonOptions);
+            File.WriteAllText(_clientesFilePath, json);
         }
     }
 } 

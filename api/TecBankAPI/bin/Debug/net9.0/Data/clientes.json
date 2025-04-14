@@ -2,7 +2,7 @@
   {
     "Id": 1,
     "Usuario": "FabianGJ",
-    "Password": "$2a$11$u/dGboTRBXHFihLHMEMMF.cN1IcXkPqXEYoP6EFvAPja5QWmyzDXy",
+    "Password": "$2a$11$aTJmhGxWDicqsliDq0JgQewXkFjrO2a8SJq/vvwmr3XEnpkhRk/hC",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
@@ -15,7 +15,7 @@
   {
     "Id": 2,
     "Usuario": "cliente_test",
-    "Password": "$2a$11$o8.L1egn/SZqo4S/FuCqruClExi.OLP0eNf53fQj36ftWyC5PmG1W",
+    "Password": "$2a$11$/TskuyH1JAIbFMSJhunOJuj2pyEPUCcy6vdFAn8svb6mzqpWktbee",
     "Nombre": "Cliente",
     "Apellido1": "Prueba",
     "Apellido2": "Test",
@@ -28,7 +28,7 @@
   {
     "Id": 3,
     "Usuario": "test2",
-    "Password": "$2a$11$rHH1a8CHenEp46lbuFBxCOMq5xyG6qssXbanVbpGrnw0Kr9gaMaeK",
+    "Password": "$2a$11$eRNVTXE9CoPwIR7PMi2Bue09jy81tX0jeiZWYp6LycjldXsxNXNZG",
     "Nombre": "test2",
     "Apellido1": "test2",
     "Apellido2": "test2",
@@ -41,7 +41,7 @@
   {
     "Id": 0,
     "Usuario": "apepsos",
-    "Password": "$2a$11$.HwhdPXGaPTvTEkOexAsA.yYV5J2p3H5wybAcCCG42U4LZ4.jZvty",
+    "Password": "$2a$11$E1Cj3oagAn62/coefvmwCebyH6OpE0Hpbi8Y87UHJ7lLZSKLcrBUC",
     "Nombre": "Luis Alexis",
     "Apellido1": "Alvarado",
     "Apellido2": "Barrantes",
@@ -49,45 +49,6 @@
     "Direccion": "La Uni\u00F3n, Residencial Paso Real, Calle Viena, Casa M5",
     "Telefono": "85636474",
     "Email": "alexis03126@gmail.com",
-    "TipoCliente": "F\u00EDsico"
-  },
-  {
-    "Id": 0,
-    "Usuario": "FabianG",
-    "Password": "$2a$11$Ui/.3nO33QcrYE.RLFpcJu41u/9/nfc5SR0Afm4YDfDRVswHvfqj6",
-    "Nombre": "Fabian",
-    "Apellido1": "Gutierrez",
-    "Apellido2": "Jimenez",
-    "Cedula": "119230146",
-    "Direccion": "Residencial Estancia Antigua\nG13",
-    "Telefono": "64012272",
-    "Email": "fagutierrez1318@gmail.com",
-    "TipoCliente": "F\u00EDsico"
-  },
-  {
-    "Id": 0,
-    "Usuario": "FabianGJ",
-    "Password": "$2a$11$KEGbliDhGWAZOa8spF1R.Oq8gUbZAboWK0ReTW3o9dJ1cGnK5Rfcy",
-    "Nombre": "Fabian",
-    "Apellido1": "Gutierrez",
-    "Apellido2": "Jimenez",
-    "Cedula": "119230147",
-    "Direccion": "Residencial Estancia Antigua\nG13",
-    "Telefono": "64012272",
-    "Email": "fagutierrez1318@gmail.com",
-    "TipoCliente": "F\u00EDsico"
-  },
-  {
-    "Id": 0,
-    "Usuario": "juan",
-    "Password": "$2a$11$ubrwj2RfleHPVLJmWZGvFeJQPcVj12NvppaHVGC7SaV/q7HucJFUW",
-    "Nombre": "juan",
-    "Apellido1": "nose",
-    "Apellido2": "nose",
-    "Cedula": "119230150",
-    "Direccion": "Residencial Estancia Antigua\nG13",
-    "Telefono": "64012272",
-    "Email": "juan@correo.com",
     "TipoCliente": "F\u00EDsico"
   }
 ]
