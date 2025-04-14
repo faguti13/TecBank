@@ -43,18 +43,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TecBank API v1");
+});
 
 // Use CORS - Important: This must be called before UseAuthorization and MapControllers
 app.UseCors();
-
-// Configure the app to listen on all network interfaces
-app.Urls.Add("http://0.0.0.0:5240");
-
-// Comment out HTTPS redirection for local development
-// app.UseHttpsRedirection();
-
-app.UseSwaggerUI(o=>o.SwaggerEndpoint("openapi/v1.json", "Swagger Project"));
 
 app.UseAuthorization();
 
