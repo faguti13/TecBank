@@ -1,32 +1,24 @@
 [
   {
     "Id": 1,
-    "NumeroCuenta": "Prueba",
-    "NumeroTarjeta": "prueba",
-    "TipoTarjeta": "Debito",
-    "SaldoDisponible": 10000,
-    "MontoCredito": null,
-    "fechaExpiracion": "2036-08",
-    "CodigoSeguridad": "888"
-  },
-  {
-    "Id": 2,
-    "NumeroCuenta": "U2FsdGVkX1\u002BxJY8",
-    "NumeroTarjeta": "1234567821234556",
-    "TipoTarjeta": "Credito",
-    "SaldoDisponible": null,
-    "MontoCredito": 54000,
-    "fechaExpiracion": "2025-05",
-    "CodigoSeguridad": "123"
-  },
-  {
-    "Id": 3,
-    "NumeroCuenta": "U2FsdGVkX19I3\u002Bgv",
-    "NumeroTarjeta": "prueba3",
+    "NumeroCuenta": "CR00000000000000000003",
+    "NumeroTarjeta": "123476893456",
     "TipoTarjeta": "Debito",
     "SaldoDisponible": 12000,
     "MontoCredito": null,
-    "fechaExpiracion": "2033-10",
-    "CodigoSeguridad": "234"
+    "fechaExpiracion": "2030-07",
+    "CodigoSeguridad": "234",
+    "MontoSinCancelar": 0
+  },
+  {
+    "Id": 2,
+    "NumeroCuenta": "CR00000000000000000004",
+    "NumeroTarjeta": "2342346782234333",
+    "TipoTarjeta": "Credito",
+    "SaldoDisponible": null,
+    "MontoCredito": 121000,
+    "fechaExpiracion": "2029-08",
+    "CodigoSeguridad": "567",
+    "MontoSinCancelar": 21000
   }
 ]
