@@ -19,7 +19,7 @@ const Prestamos: React.FC = () => {
 
     const [formData, setFormData] = useState({
         montoOriginal: '',
-        clienteId: '',
+        cedulaCliente: '',
         asesorId: '',
         tasaInteres: '',
         plazoMeses: '',
@@ -54,7 +54,7 @@ const Prestamos: React.FC = () => {
         try {
             const prestamo = {
                 montoOriginal: parseFloat(formData.montoOriginal),
-                clienteId: parseInt(formData.clienteId),
+                cedulaCliente: formData.cedulaCliente,
                 asesorId: parseInt(formData.asesorId),
                 tasaInteres: parseFloat(formData.tasaInteres),
                 plazoMeses: parseInt(formData.plazoMeses),
@@ -67,21 +67,22 @@ const Prestamos: React.FC = () => {
             setShowForm(false);
             setFormData({ 
                 montoOriginal: '', 
-                clienteId: '', 
+                cedulaCliente: '', 
                 asesorId: '', 
                 tasaInteres: '', 
                 plazoMeses: '',
                 moneda: TipoMoneda.Colones 
             });
             loadPrestamos();
-        } catch (err: any) {
-            console.error('Error completo:', err);
+        } catch (error: unknown) {
+            console.error('Error completo:', error);
             let errorMessage: ErrorMessage;
+            const err = error as Error;
             
             if (err.message.includes("No se encontró el cliente")) {
                 errorMessage = {
                     title: "Cliente no encontrado",
-                    message: "El ID de cliente ingresado no existe en el sistema. Por favor, verifique el ID e intente nuevamente.",
+                    message: "La cédula ingresada no existe en el sistema. Por favor, verifique la cédula e intente nuevamente.",
                     type: "error"
                 };
             } else if (err.message.includes("El asesor con ID")) {
@@ -208,12 +209,12 @@ const Prestamos: React.FC = () => {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">
-                                        ID del Cliente
+                                        Cédula del Cliente
                                     </label>
                                     <input
-                                        type="number"
-                                        value={formData.clienteId}
-                                        onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })}
+                                        type="text"
+                                        value={formData.cedulaCliente}
+                                        onChange={(e) => setFormData({ ...formData, cedulaCliente: e.target.value })}
                                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                         required
                                     />
@@ -418,7 +419,7 @@ const Prestamos: React.FC = () => {
                     <thead className="bg-gray-50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Cliente ID
+                                Cédula Cliente
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Monto Original
@@ -447,7 +448,7 @@ const Prestamos: React.FC = () => {
                         {prestamos.map((prestamo) => (
                             <tr key={prestamo.id}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {prestamo.clienteId}
+                                    {prestamo.cedulaCliente || prestamo.clienteId}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {formatMoney(prestamo.montoOriginal, prestamo.moneda)}

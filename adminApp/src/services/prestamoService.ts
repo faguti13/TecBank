@@ -8,7 +8,8 @@ export interface Prestamo {
     id?: number;
     montoOriginal: number;
     saldo: number;
-    clienteId: number;
+    clienteId?: number;
+    cedulaCliente: string;
     asesorId: number;
     tasaInteres: number;
     plazoMeses: number;

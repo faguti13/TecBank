@@ -548,5 +548,27 @@
     "MontoCuota": 1.01,
     "SaldoProyectado": 0.00,
     "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 7,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-13T20:58:24.9640937-06:00",
+    "MontoAmortizacion": 1.00,
+    "MontoInteres": 0.00,
+    "MontoCuota": 1.00,
+    "SaldoProyectado": 0.00,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 8,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-13T21:20:20.335093-06:00",
+    "MontoAmortizacion": 1.00,
+    "MontoInteres": 0.00,
+    "MontoCuota": 1.00,
+    "SaldoProyectado": 0.00,
+    "Pagado": false
   }
 ]

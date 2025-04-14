@@ -504,5 +504,60 @@
     "MontoCuota": 1.00,
     "SaldoProyectado": 0.00,
     "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 6,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-12T18:19:39.9994476-06:00",
+    "MontoAmortizacion": 1.00,
+    "MontoInteres": 0.01,
+    "MontoCuota": 1.01,
+    "SaldoProyectado": 3.00,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 6,
+    "NumeroCuota": 2,
+    "FechaProgramada": "2025-06-12T18:19:39.9994476-06:00",
+    "MontoAmortizacion": 1.00,
+    "MontoInteres": 0.01,
+    "MontoCuota": 1.01,
+    "SaldoProyectado": 2.01,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 6,
+    "NumeroCuota": 3,
+    "FechaProgramada": "2025-07-12T18:19:39.9994476-06:00",
+    "MontoAmortizacion": 1.00,
+    "MontoInteres": 0.01,
+    "MontoCuota": 1.01,
+    "SaldoProyectado": 1.00,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 6,
+    "NumeroCuota": 4,
+    "FechaProgramada": "2025-08-12T18:19:39.9994476-06:00",
+    "MontoAmortizacion": 1.00,
+    "MontoInteres": 0.00,
+    "MontoCuota": 1.01,
+    "SaldoProyectado": 0.00,
+    "Pagado": false
+  },
+  {
+    "Id": 0,
+    "PrestamoId": 7,
+    "NumeroCuota": 1,
+    "FechaProgramada": "2025-05-13T20:58:24.9640937-06:00",
+    "MontoAmortizacion": 1.00,
+    "MontoInteres": 0.00,
+    "MontoCuota": 1.00,
+    "SaldoProyectado": 0.00,
+    "Pagado": false
   }
 ]

@@ -4,11 +4,11 @@
     "MontoOriginal": 1,
     "Saldo": 0,
     "ClienteId": 1,
+    "AsesorId": 1,
     "TasaInteres": 1,
     "PlazoMeses": 1,
     "Moneda": "Colones",
     "FechaCreacion": "2025-04-06T10:56:36.1620906-06:00",
-    "AsesorId": 1,
     "Pagos": [],
     "CalendarioPagos": [
       {
@@ -29,11 +29,11 @@
     "MontoOriginal": 1000000,
     "Saldo": 1000000,
     "ClienteId": 2,
+    "AsesorId": 2,
     "TasaInteres": 10,
     "PlazoMeses": 18,
     "Moneda": "Colones",
     "FechaCreacion": "2024-01-06T10:57:00.7648665-06:00",
-    "AsesorId": 2,
     "Pagos": [],
     "CalendarioPagos": [
       {
@@ -241,11 +241,11 @@
     "MontoOriginal": 2000,
     "Saldo": 2000,
     "ClienteId": 3,
+    "AsesorId": 3,
     "TasaInteres": 15,
     "PlazoMeses": 24,
     "Moneda": "Dolares",
     "FechaCreacion": "2025-04-06T10:57:27.0472726-06:00",
-    "AsesorId": 3,
     "Pagos": [],
     "CalendarioPagos": [
       {
@@ -519,11 +519,11 @@
     "MontoOriginal": 1,
     "Saldo": 1,
     "ClienteId": 1,
+    "AsesorId": 1,
     "TasaInteres": 1,
     "PlazoMeses": 1,
     "Moneda": "Colones",
     "FechaCreacion": "2025-04-12T16:48:05.7941872-06:00",
-    "AsesorId": 1,
     "Pagos": [],
     "CalendarioPagos": [
       {
@@ -544,11 +544,11 @@
     "MontoOriginal": 2,
     "Saldo": 2,
     "ClienteId": 2,
+    "AsesorId": 2,
     "TasaInteres": 2,
     "PlazoMeses": 2,
     "Moneda": "Colones",
     "FechaCreacion": "2025-04-12T16:48:21.4688926-06:00",
-    "AsesorId": 2,
     "Pagos": [],
     "CalendarioPagos": [
       {
@@ -567,6 +567,89 @@
         "PrestamoId": 5,
         "NumeroCuota": 2,
         "FechaProgramada": "2025-06-12T16:48:21.4688926-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.00,
+        "MontoCuota": 1.00,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 6,
+    "MontoOriginal": 4,
+    "Saldo": 4,
+    "ClienteId": 1,
+    "AsesorId": 1,
+    "TasaInteres": 4,
+    "PlazoMeses": 4,
+    "Moneda": "Colones",
+    "FechaCreacion": "2025-04-12T18:19:39.9994476-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 6,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-12T18:19:39.9994476-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.01,
+        "MontoCuota": 1.01,
+        "SaldoProyectado": 3.00,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 6,
+        "NumeroCuota": 2,
+        "FechaProgramada": "2025-06-12T18:19:39.9994476-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.01,
+        "MontoCuota": 1.01,
+        "SaldoProyectado": 2.01,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 6,
+        "NumeroCuota": 3,
+        "FechaProgramada": "2025-07-12T18:19:39.9994476-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.01,
+        "MontoCuota": 1.01,
+        "SaldoProyectado": 1.00,
+        "Pagado": false
+      },
+      {
+        "Id": 0,
+        "PrestamoId": 6,
+        "NumeroCuota": 4,
+        "FechaProgramada": "2025-08-12T18:19:39.9994476-06:00",
+        "MontoAmortizacion": 1.00,
+        "MontoInteres": 0.00,
+        "MontoCuota": 1.01,
+        "SaldoProyectado": 0.00,
+        "Pagado": false
+      }
+    ]
+  },
+  {
+    "Id": 7,
+    "MontoOriginal": 1,
+    "Saldo": 1,
+    "ClienteId": 1,
+    "AsesorId": 1,
+    "TasaInteres": 1,
+    "PlazoMeses": 1,
+    "Moneda": "Colones",
+    "FechaCreacion": "2025-04-13T20:58:24.9640937-06:00",
+    "Pagos": [],
+    "CalendarioPagos": [
+      {
+        "Id": 0,
+        "PrestamoId": 7,
+        "NumeroCuota": 1,
+        "FechaProgramada": "2025-05-13T20:58:24.9640937-06:00",
         "MontoAmortizacion": 1.00,
         "MontoInteres": 0.00,
         "MontoCuota": 1.00,

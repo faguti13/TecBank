@@ -16,6 +16,9 @@ public class Prestamo
     public int ClienteId { get; set; }
 
     [Required]
+    public string CedulaCliente { get; set; } = string.Empty;
+
+    [Required]
     public int AsesorId { get; set; }
 
     [Required]

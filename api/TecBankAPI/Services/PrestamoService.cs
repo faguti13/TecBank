@@ -56,11 +56,17 @@ namespace TecBankAPI.Services
             var prestamos = ReadData<Prestamo>(_prestamosPath);
             var pagos = ReadData<PagoPrestamo>(_pagosPath);
             var calendarios = ReadData<CalendarioPago>(_calendarioPath);
+            var clientes = _clienteService.GetAllClientes().Result;
 
             foreach (var prestamo in prestamos)
             {
                 prestamo.Pagos = pagos.Where(p => p.PrestamoId == prestamo.Id).ToList();
                 prestamo.CalendarioPagos = calendarios.Where(c => c.PrestamoId == prestamo.Id).ToList();
+                var cliente = clientes.FirstOrDefault(c => c.Id == prestamo.ClienteId);
+                if (cliente != null)
+                {
+                    prestamo.CedulaCliente = cliente.Cedula;
+                }
             }
 
             return prestamos;
@@ -82,11 +88,14 @@ namespace TecBankAPI.Services
             try
             {
                 // Validar que el cliente existe
-                var cliente = _clienteService.GetById(prestamo.ClienteId);
+                var clientes = _clienteService.GetAllClientes().Result;
+                var cliente = clientes.FirstOrDefault(c => c.Cedula == prestamo.CedulaCliente);
                 if (cliente == null)
                 {
-                    throw new Exception($"El cliente con ID {prestamo.ClienteId} no existe");
+                    throw new Exception($"No se encontró el cliente con cédula {prestamo.CedulaCliente}");
                 }
+
+                prestamo.ClienteId = cliente.Id;
 
                 // Validar que el asesor existe
                 var asesores = _asesorService.GetAsesores();
