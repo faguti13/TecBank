@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TecBankAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+77beded116fd17fc917530bcd597df06c3ddbb67")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+56e51aedd5ffa0cb25e4c910a55c17c6b45412fc")]
 [assembly: System.Reflection.AssemblyProductAttribute("TecBankAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TecBankAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

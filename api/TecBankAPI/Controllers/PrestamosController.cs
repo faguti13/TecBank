@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TecBankAPI.Models;
 using TecBankAPI.Services;
 using System.Text.Json;
+using System.Linq;
 
 namespace TecBankAPI.Controllers
 {
@@ -21,6 +22,17 @@ namespace TecBankAPI.Controllers
         public ActionResult<IEnumerable<Prestamo>> GetPrestamos()
         {
             return _prestamoService.GetAll();
+        }
+
+        // GET: api/Prestamos/cliente/{cedula}
+        [HttpGet("cliente/{cedula}")]
+        public ActionResult<IEnumerable<Prestamo>> GetPrestamosByCliente(string cedula)
+        {
+            var prestamos = _prestamoService.GetAll()
+                .Where(p => p.CedulaCliente == cedula)
+                .ToList();
+
+            return Ok(prestamos);
         }
 
         // GET: api/Prestamos/5

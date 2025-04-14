@@ -25,16 +25,14 @@ builder.Services.AddHostedService<ReporteBackgroundService>();
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
 });
-
-
 
 var app = builder.Build();
 
@@ -50,7 +48,7 @@ app.UseHttpsRedirection();
 app.UseSwaggerUI(o=>o.SwaggerEndpoint("openapi/v1.json", "Swagger Project"));
 
 // Use CORS
-app.UseCors("AllowAll");
+app.UseCors();
 
 app.UseAuthorization();
 
