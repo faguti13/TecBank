@@ -41,13 +41,15 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
                 await registrarDeposito({
                     cuentaId: cuenta.id!,
                     monto: montoNumerico,
-                    descripcion
+                    descripcion,
+                    monedaOrigen: cuenta.moneda
                 });
             } else {
                 await registrarRetiro({
                     cuentaId: cuenta.id!,
                     monto: montoNumerico,
-                    descripcion
+                    descripcion,
+                    monedaOrigen: cuenta.moneda
                 });
             }
 
@@ -69,7 +71,9 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
                     </h3>
                     <form onSubmit={handleSubmit} className="mt-4">
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">Monto</label>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Monto ({cuenta.moneda})
+                            </label>
                             <input
                                 type="number"
                                 value={monto}
@@ -91,22 +95,20 @@ const TransaccionModal: React.FC<TransaccionModalProps> = ({ cuenta, tipo, onClo
                             />
                         </div>
                         {error && (
-                            <div className="mb-4 text-sm text-red-600">
-                                {error}
-                            </div>
+                            <div className="mb-4 text-red-600 text-sm">{error}</div>
                         )}
                         <div className="flex justify-end space-x-3">
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                             >
                                 Cancelar
                             </button>
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50"
                             >
                                 {loading ? 'Procesando...' : 'Confirmar'}
                             </button>

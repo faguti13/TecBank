@@ -5,6 +5,9 @@ export interface Transaccion {
     cuentaOrigenId: number;
     cuentaDestinoId?: number;
     monto: number;
+    monedaOrigen: string;
+    monedaDestino: string;
+    montoDestino: number;
     tipo: string;
     fecha: string;
     descripcion: string;
@@ -15,15 +18,21 @@ export interface MovimientoRequest {
     cuentaId: number;
     monto: number;
     descripcion: string;
+    monedaOrigen?: string;
 }
 
 export const registrarDeposito = async (request: MovimientoRequest): Promise<Transaccion> => {
+    const requestWithCurrency = {
+        ...request,
+        monedaOrigen: request.monedaOrigen || 'CRC'
+    };
+
     const response = await fetch(`${API_BASE_URL}/api/Transacciones/deposito`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(request),
+        body: JSON.stringify(requestWithCurrency),
     });
 
     if (!response.ok) {
