@@ -33,40 +33,45 @@ const Tarjetas: React.FC = () => {
   };  
 
 /////////////////////////// llamado automatico para obtener cuentas asociadas
-  const handleBuscarCuentas= async () => {
-    try {
-      if (!user?.cedula) {
-        alert('No se encontró la cédula del usuario');
-        return;
-      }
-  
-      const cuentas = await tarjetaService.buscarCuentaPorCedula(user.cedula);
-  
-      if (cuentas.length === 0) {
-        alert('No se encontraron cuentas asociadas a esta cédula.');
-        return;
-      }
-  
-      // Guarda las cuentas
-      setCuentasCliente(cuentas);
-  
-      //  las tarjetas asociadas a cada cuenta
-      const tarjetasPromises = cuentas.map((cuenta) =>
-        tarjetaService.getByNumeroCuenta(cuenta.numeroCuenta)
-      );
-  
-      const tarjetas = await Promise.all(tarjetasPromises);
-  
-      console.log('Tarjetas asociadas:', tarjetas);
-      //alert(`Se encontraron ${tarjetas.length} tarjetas asociadas.`);
-  
-      setTarjetasCliente(tarjetas);  
-  
-    } catch (error) {
-      //console.error('Error al obtener tarjetas asociadas:', error);
-      //alert('Hubo un error al buscar las tarjetas asociadas.');
+const handleBuscarCuentas = async () => {
+  try {
+    if (!user?.cedula) {
+      alert('No se encontró la cédula del usuario');
+      return;
     }
-  };
+
+    const cuentas = await tarjetaService.buscarCuentaPorCedula(user.cedula);
+
+    if (cuentas.length === 0) {
+      //alert('No se encontraron cuentas asociadas a esta cédula.');
+      return;
+    }
+
+    setCuentasCliente(cuentas);
+
+    // Obtener las tarjetas asociadas a cada cuenta
+    const tarjetasPromises = cuentas.map((cuenta) =>
+      tarjetaService.getByNumeroCuenta(cuenta.numeroCuenta)
+    );
+
+    const resultados: PromiseSettledResult<Tarjeta>[] = await Promise.allSettled(tarjetasPromises);
+
+    // Filtra solo los resultados que fueron exitosos
+    const tarjetas = resultados
+      .filter((resultado) => resultado.status === 'fulfilled')
+      .map((resultado) => resultado.value);
+
+    //console.log('Tarjetas asociadas:', tarjetas);
+    //alert(`Se encontraron ${tarjetas.length} tarjetas asociadas.`);
+
+    setTarjetasCliente(tarjetas);
+    
+  } catch (error) {
+    console.error('Error al obtener tarjetas asociadas:', error);
+    alert('Hubo un error al buscar las tarjetas asociadas.');
+  }
+};
+
   
 
   useEffect(() => {
