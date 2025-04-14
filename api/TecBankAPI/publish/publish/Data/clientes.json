@@ -1,16 +1,30 @@
 [
   {
-    "Cedula": "119230145",
+    "Id": 1,
+    "Usuario": "Tralalero",
+    "Password": "8q\u002BLnKktFeFHVoYqj879eQ==",
+    "Nombre": "Tralalero",
+    "Apellido1": "Tralala",
+    "Apellido2": "Italia",
+    "Cedula": "111222333",
+    "Direccion": "Playa",
+    "Telefono": "89897474",
+    "Email": "@Tralala",
+    "IngresoMensual": 10000000,
+    "TipoCliente": "Fisico"
+  },
+  {
+    "Id": 2,
+    "Usuario": "FabianGJ",
+    "Password": "123456",
     "Nombre": "Fabian",
     "Apellido1": "Gutierrez",
     "Apellido2": "Jimenez",
-    "Direccion": "Residencial Estancia Antigua",
+    "Cedula": "119230145",
+    "Direccion": "Residencial Estancia Antigua\nG13",
     "Telefono": "64012272",
-    "Usuario": "FabianGJ",
-    "Password": "73l8gRjwLftklgfdXT\u002BMdiMEjJwGPVMsyVxe16iYpk8=",
+    "Email": "fabian@test.com",
     "IngresoMensual": 0,
-    "TipoCliente": "F\u00EDsico",
-    "Cuentas": [],
-    "Prestamos": []
+    "TipoCliente": "Fisico"
   }
 ]

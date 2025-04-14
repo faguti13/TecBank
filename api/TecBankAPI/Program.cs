@@ -42,6 +42,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 // Use CORS - Important: This must be called before UseAuthorization and MapControllers
 app.UseCors();
 
