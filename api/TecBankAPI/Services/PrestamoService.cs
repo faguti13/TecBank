@@ -10,18 +10,29 @@ namespace TecBankAPI.Services
         private readonly string _calendarioPath;
         private readonly ClienteService _clienteService;
         private readonly AsesorService _asesorService;
+        private readonly CuentaService _cuentaService;
+        private readonly TransaccionService _transaccionService;
+        private readonly MonedaService _monedaService;
         private static readonly object _lock = new object();
 
-        public PrestamoService(IWebHostEnvironment webHostEnvironment, ClienteService clienteService, AsesorService asesorService)
+        public PrestamoService(
+            IWebHostEnvironment webHostEnvironment,
+            ClienteService clienteService,
+            AsesorService asesorService,
+            CuentaService cuentaService,
+            TransaccionService transaccionService,
+            MonedaService monedaService)
         {
+            _clienteService = clienteService;
+            _asesorService = asesorService;
+            _cuentaService = cuentaService;
+            _transaccionService = transaccionService;
+            _monedaService = monedaService;
             var dataPath = Path.Combine(webHostEnvironment.ContentRootPath, "Data");
             _prestamosPath = Path.Combine(dataPath, "prestamos.json");
             _pagosPath = Path.Combine(dataPath, "pagos_prestamos.json");
             _calendarioPath = Path.Combine(dataPath, "calendario_pagos.json");
-            _clienteService = clienteService;
-            _asesorService = asesorService;
 
-            // Crear archivos si no existen
             if (!Directory.Exists(dataPath))
                 Directory.CreateDirectory(dataPath);
 
@@ -54,8 +65,8 @@ namespace TecBankAPI.Services
         public List<Prestamo> GetAll()
         {
             var prestamos = ReadData<Prestamo>(_prestamosPath);
-            var pagos = ReadData<PagoPrestamo>(_pagosPath);
-            var calendarios = ReadData<CalendarioPago>(_calendarioPath);
+            var pagos = ReadData<TecBankAPI.Models.PagoPrestamo>(_pagosPath);
+            var calendarios = ReadData<TecBankAPI.Models.CalendarioPago>(_calendarioPath);
             var clientes = _clienteService.GetAllClientes().Result;
 
             foreach (var prestamo in prestamos)
@@ -77,8 +88,12 @@ namespace TecBankAPI.Services
             var prestamo = ReadData<Prestamo>(_prestamosPath).FirstOrDefault(p => p.Id == id);
             if (prestamo == null) return null;
 
-            prestamo.Pagos = ReadData<PagoPrestamo>(_pagosPath).Where(p => p.PrestamoId == id).ToList();
-            prestamo.CalendarioPagos = ReadData<CalendarioPago>(_calendarioPath).Where(c => c.PrestamoId == id).ToList();
+            prestamo.Pagos = ReadData<TecBankAPI.Models.PagoPrestamo>(_pagosPath)
+                .Where(p => p.PrestamoId == id)
+                .ToList();
+            prestamo.CalendarioPagos = ReadData<TecBankAPI.Models.CalendarioPago>(_calendarioPath)
+                .Where(c => c.PrestamoId == id)
+                .ToList();
 
             return prestamo;
         }
@@ -143,6 +158,32 @@ namespace TecBankAPI.Services
             var prestamos = ReadData<Prestamo>(_prestamosPath);
             var prestamoToUpdate = prestamos.First(p => p.Id == prestamoId);
             prestamoToUpdate.Saldo -= pago.Monto;
+
+            // Actualizar saldo de la cuenta y registrar transacción
+            if (pago.CuentaId > 0)
+            {
+                var cuenta = _cuentaService.GetById(pago.CuentaId);
+                if (cuenta != null)
+                {
+                    // Convertir el monto del pago a la moneda de la cuenta
+                    decimal montoEnMonedaCuenta = _monedaService.ConvertirMonto(
+                        pago.Monto,
+                        prestamo.Moneda.ToString(), // Convertir TipoMoneda a string
+                        cuenta.Moneda.ToString()    // Convertir TipoMoneda a string
+                    );
+
+                    cuenta.Saldo -= montoEnMonedaCuenta;
+                    _cuentaService.Update(pago.CuentaId, cuenta);
+
+                    // Registrar la transacción en la moneda de la cuenta
+                    _transaccionService.RegistrarRetiro(
+                        pago.CuentaId,
+                        montoEnMonedaCuenta,
+                        $"Pago de préstamo #{prestamoId} {(pago.EsPagoExtraordinario ? "- Pago extraordinario" : "")}",
+                        cuenta.Moneda.ToString() // Convertir TipoMoneda a string
+                    );
+                }
+            }
 
             // Si es pago extraordinario, recalcular calendario
             if (pago.EsPagoExtraordinario)
@@ -219,7 +260,8 @@ namespace TecBankAPI.Services
             
             return nuevoCalendario;
         }
-//Obtiene los prestamos por asesor basados en su cédula
+
+        //Obtiene los prestamos por asesor basados en su cédula
         internal IEnumerable<object> GetPrestamosPorAsesor(string cedula)
         {
             throw new NotImplementedException();

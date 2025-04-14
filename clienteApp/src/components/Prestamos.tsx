@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useAuth } from '../contexts/AuthContext';
 import { prestamoService, Prestamo, CalendarioPago, PagoPrestamo } from '../services/prestamoService';
+import { cuentaService } from '../services/cuentaService';
+import { TipoMoneda, formatearMonto, getMonedaSymbol, convertirMonto } from '../services/monedaService';
 
 const Prestamos: React.FC = () => {
   const [prestamos, setPrestamos] = useState<Prestamo[]>([]);
@@ -11,9 +13,11 @@ const Prestamos: React.FC = () => {
   const [showCalendario, setShowCalendario] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [cuentasCliente, setCuentasCliente] = useState<any[]>([]);
   const [pagoData, setPagoData] = useState({
     monto: '',
-    esPagoExtraordinario: false
+    esPagoExtraordinario: false,
+    cuentaId: ''
   });
 
   const { user } = useAuth();
@@ -25,6 +29,7 @@ const Prestamos: React.FC = () => {
     if (user?.cedula) {
       console.log('User cédula found, loading préstamos...');
       loadPrestamos();
+      loadCuentasCliente();
     } else {
       console.log('No user cédula found');
       setError('No se encontró la cédula del usuario. Por favor, inicie sesión nuevamente.');
@@ -61,33 +66,88 @@ const Prestamos: React.FC = () => {
     }
   };
 
+  const loadCuentasCliente = async () => {
+    try {
+      if (!user?.cedula) return;
+      const cuentas = await cuentaService.getCuentasByCliente(user.cedula);
+      setCuentasCliente(cuentas);
+    } catch (err) {
+      console.error('Error al cargar cuentas:', err);
+      setError('No se pudieron cargar las cuentas del cliente');
+    }
+  };
+
+  const convertirTipoMoneda = (moneda: string): TipoMoneda => {
+    // Normalizar el string de moneda
+    const monedaNormalizada = moneda.toLowerCase();
+    
+    if (monedaNormalizada.includes('colon') || monedaNormalizada === 'crc') {
+      return 'CRC';
+    }
+    if (monedaNormalizada.includes('dolar') || monedaNormalizada === 'usd') {
+      return 'USD';
+    }
+    if (monedaNormalizada.includes('euro') || monedaNormalizada === 'eur') {
+      return 'EUR';
+    }
+    console.warn('Tipo de moneda no reconocido:', moneda);
+    return 'CRC';
+  };
+
+  const formatMoney = (amount: number, moneda: string) => {
+    const tipoMoneda = convertirTipoMoneda(moneda);
+    return `${getMonedaSymbol(tipoMoneda)} ${formatearMonto(amount, tipoMoneda)}`;
+  };
+
+  const handleMontoConversion = (monto: number, monedaOrigen: string, monedaDestino: string): number => {
+    console.log('Convirtiendo monto:', { monto, monedaOrigen, monedaDestino });
+    const tipoMonedaOrigen = convertirTipoMoneda(monedaOrigen);
+    const tipoMonedaDestino = convertirTipoMoneda(monedaDestino);
+    console.log('Tipos de moneda convertidos:', { tipoMonedaOrigen, tipoMonedaDestino });
+    const montoConvertido = convertirMonto(monto, tipoMonedaOrigen, tipoMonedaDestino);
+    console.log('Monto convertido:', montoConvertido);
+    return montoConvertido;
+  };
+
   const handlePagoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedPrestamo) return;
+    if (!selectedPrestamo || !pagoData.cuentaId) return;
 
     try {
+      const monto = parseFloat(pagoData.monto);
+      const cuenta = cuentasCliente.find(c => c.id === parseInt(pagoData.cuentaId));
+      
+      if (!cuenta) {
+        throw new Error('Cuenta no encontrada');
+      }
+
+      // Convertir el monto del préstamo a la moneda de la cuenta para verificar el saldo
+      const montoEnMonedaCuenta = handleMontoConversion(
+        monto,
+        selectedPrestamo.moneda,
+        cuenta.moneda
+      );
+
+      if (cuenta.saldo < montoEnMonedaCuenta) {
+        throw new Error('Saldo insuficiente en la cuenta seleccionada');
+      }
+
       const pago: PagoPrestamo = {
-        monto: parseFloat(pagoData.monto),
+        monto: monto, // Monto en la moneda del préstamo
         fechaPago: new Date(),
-        esPagoExtraordinario: pagoData.esPagoExtraordinario
+        esPagoExtraordinario: pagoData.esPagoExtraordinario,
+        cuentaId: parseInt(pagoData.cuentaId)
       };
 
       await prestamoService.registrarPago(selectedPrestamo.id, pago);
       setShowPagoForm(false);
-      setPagoData({ monto: '', esPagoExtraordinario: false });
+      setPagoData({ monto: '', esPagoExtraordinario: false, cuentaId: '' });
       loadPrestamos();
+      loadCuentasCliente();
     } catch (err) {
-      setError('No se pudo registrar el pago. Por favor, verifique los datos e intente nuevamente.');
+      const errorMessage = err instanceof Error ? err.message : 'Error al procesar el pago';
+      setError(errorMessage);
     }
-  };
-
-  const formatMoney = (amount: number, moneda: string) => {
-    const currency = moneda === 'Colones' ? 'CRC' : 
-                    moneda === 'Dolares' ? 'USD' : 'EUR';
-    return new Intl.NumberFormat('es-CR', {
-      style: 'currency',
-      currency: currency
-    }).format(amount);
   };
 
   return (
@@ -286,12 +346,39 @@ const Prestamos: React.FC = () => {
             <form onSubmit={handlePagoSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Monto del Pago
+                  Cuenta a Debitar
+                </label>
+                <select
+                  value={pagoData.cuentaId}
+                  onChange={(e) => setPagoData({ ...pagoData, cuentaId: e.target.value })}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Seleccione una cuenta</option>
+                  {cuentasCliente.map((cuenta) => {
+                    const saldoEnMonedaPrestamo = handleMontoConversion(
+                      cuenta.saldo,
+                      cuenta.moneda,
+                      selectedPrestamo.moneda
+                    );
+                    return (
+                      <option key={cuenta.id} value={cuenta.id}>
+                        {cuenta.descripcion} - Saldo: {formatMoney(cuenta.saldo, cuenta.moneda)} 
+                        ({formatMoney(saldoEnMonedaPrestamo, selectedPrestamo.moneda)} en moneda del préstamo)
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Monto del Pago ({selectedPrestamo.moneda})
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <span className="text-gray-500 sm:text-sm">
-                      {selectedPrestamo.moneda === 'Colones' ? '₡' : '$'}
+                      {getMonedaSymbol(selectedPrestamo.moneda as TipoMoneda)}
                     </span>
                   </div>
                   <input
@@ -302,12 +389,23 @@ const Prestamos: React.FC = () => {
                     placeholder="0.00"
                     required
                   />
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 sm:text-sm">
-                      {selectedPrestamo.moneda}
-                    </span>
-                  </div>
                 </div>
+                {pagoData.cuentaId && pagoData.monto && (
+                  <p className="mt-1 text-sm text-gray-500">
+                    {(() => {
+                      const cuenta = cuentasCliente.find(c => c.id === parseInt(pagoData.cuentaId));
+                      if (cuenta) {
+                        const montoEnMonedaCuenta = handleMontoConversion(
+                          parseFloat(pagoData.monto),
+                          selectedPrestamo.moneda,
+                          cuenta.moneda
+                        );
+                        return `Se debitarán ${formatMoney(montoEnMonedaCuenta, cuenta.moneda)} de su cuenta`;
+                      }
+                      return '';
+                    })()}
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center">
@@ -323,7 +421,13 @@ const Prestamos: React.FC = () => {
                 </label>
               </div>
 
-              <div className="flex justify-end space-x-3 mt-6">
+              {error && (
+                <div className="text-red-600 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3">
                 <button
                   type="button"
                   onClick={() => setShowPagoForm(false)}
@@ -340,7 +444,7 @@ const Prestamos: React.FC = () => {
               </div>
             </form>
           </div>
-      </div>
+        </div>
       )}
     </div>
   );

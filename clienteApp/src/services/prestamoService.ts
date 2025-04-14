@@ -27,6 +27,7 @@ export interface PagoPrestamo {
   monto: number;
   fechaPago: Date;
   esPagoExtraordinario: boolean;
+  cuentaId: number;
 }
 
 export const prestamoService = {

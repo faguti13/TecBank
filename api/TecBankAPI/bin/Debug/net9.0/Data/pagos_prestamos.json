@@ -2,43 +2,65 @@
   {
     "Id": 1,
     "PrestamoId": 1,
+    "CuentaId": 0,
     "Monto": 1,
-    "FechaPago": "2025-04-06T17:14:12.894Z",
+    "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": false
   },
   {
     "Id": 2,
     "PrestamoId": 2,
+    "CuentaId": 0,
     "Monto": 50000,
-    "FechaPago": "2025-04-06T17:17:56.633Z",
+    "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": true
   },
   {
     "Id": 3,
     "PrestamoId": 2,
+    "CuentaId": 0,
     "Monto": -50000,
-    "FechaPago": "2025-04-06T17:19:34.603Z",
+    "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": true
   },
   {
     "Id": 4,
     "PrestamoId": 1,
+    "CuentaId": 0,
     "Monto": 1,
-    "FechaPago": "2025-04-14T04:00:00.735Z",
+    "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": true
   },
   {
     "Id": 5,
     "PrestamoId": 1,
+    "CuentaId": 0,
     "Monto": -1,
-    "FechaPago": "2025-04-14T04:00:12.618Z",
+    "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": true
   },
   {
     "Id": 6,
     "PrestamoId": 4,
+    "CuentaId": 0,
     "Monto": -1,
-    "FechaPago": "2025-04-14T17:00:37.69Z",
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 7,
+    "PrestamoId": 4,
+    "CuentaId": 1,
+    "Monto": 1,
+    "Fecha": "0001-01-01T00:00:00",
+    "EsPagoExtraordinario": true
+  },
+  {
+    "Id": 8,
+    "PrestamoId": 6,
+    "CuentaId": 1,
+    "Monto": 100000,
+    "Fecha": "0001-01-01T00:00:00",
     "EsPagoExtraordinario": true
   }
 ]
