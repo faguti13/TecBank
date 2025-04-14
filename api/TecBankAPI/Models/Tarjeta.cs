@@ -24,4 +24,51 @@ public class Tarjeta
 
         [Required]
         public string CodigoSeguridad { get; set; }  // Código de seguridad (CVV)
+
+        [Required]
+        public decimal MontoSinCancelar { get; set; }
+    }
+
+public class Compra
+    {
+        [Required]
+        public int Id { get; set; }  
+        
+        [Required]
+        public string NumeroTarjeta { get; set; } 
+
+        [Required]
+        public string Monto { get; set; }  
+
+        [Required]
+        public string Fecha { get; set; }  
+    }
+
+
+public class ActualizarMontoRequest
+{
+    public string NumeroTarjeta { get; set; }
+    public decimal NuevoMonto { get; set; }  // El monto a restar
+}
+
+public class ActualizarSaldoRequest
+{
+    public string NumeroTarjeta { get; set; }
+    public decimal NuevoMonto { get; set; }  // El monto a restar
+}
+
+
+public class Pago
+    {
+        [Required]
+        public int Id { get; set; }  
+        
+        [Required]
+        public string NumeroTarjeta { get; set; } 
+
+        [Required]
+        public string MontoP { get; set; }  
+
+        [Required]
+        public string FechaP { get; set; }  
     }

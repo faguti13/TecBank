@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import {DocumentPlusIcon, EyeIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 
-import { Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
+import { Compra, Tarjeta, tarjetaService } from '../services/tarjetaService'; // ajusta la ruta según tu estructura
 
 const Tarjetas: React.FC = () => {
   // Estado para mostrar el formulario modal
@@ -19,6 +20,19 @@ const Tarjetas: React.FC = () => {
   const [isCuentaConfirmada, setIsCuentaConfirmada] = useState(false);
   const [isCuentaExistente, setIsCuentaExistente] = useState(false);
   const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
+  const [selectedTarjeta, setSelectedTarjeta] = useState<Tarjeta | null>(null);
+
+  const [compras, setCompras] = useState<Compra[]>([]); // Aquí se almacenan las compras
+  const [showCompraForm, setShowCompraForm] = useState(false); // visualización del modal de form compras
+  const [showPagoForm, setShowPagoForm] = useState(false); // visualización del modal de form pagos
+  const [showCompraPorNumForm, setShowCompraPorNumForm] = useState(false); // visualización del modal de las compras por tarjetas
+  const [loading, setLoading] = useState(false); //
+
+  const [monto, setMonto] = useState('');
+  const [fecha, setFecha] = useState('');
+
+  const [montoP, setMontoP] = useState('');
+  const [fechaP, setFechaP] = useState('');
 
   const resetForm = () => { // Resetear la confirmación de cuenta, todo en blanco
     setNumeroCuenta('');
@@ -29,6 +43,16 @@ const Tarjetas: React.FC = () => {
     setFechaExpiracion('');
     setCodigoSeguridad('');
     setIsCuentaConfirmada(false); 
+  };
+
+  const resetFormCompras = () => { // Resetear el forms de registrar una nueva compra
+    setMonto('');
+    setFecha('');
+  };
+
+  const resetFormPagos = () => { // Resetear el forms de registrar una nueva compra
+    setMontoP('');
+    setFechaP('');
   };
 
   /////////////////////// manejador del envio del formulario
@@ -44,6 +68,7 @@ const Tarjetas: React.FC = () => {
       montoCredito: tipoTarjeta === 'Credito' ? parseFloat(montoCredito) : undefined,
       fechaExpiracion:fechaExpiracion,
       codigoSeguridad,
+      montoSinCancelar:0,
     };
 
     try {
@@ -60,6 +85,26 @@ const Tarjetas: React.FC = () => {
     }
   };
 
+
+  /////////////////////// Llamada al API para obtener todas las compras de una tarejta especifica
+  const deleteTarjera = async (tarjeta: Tarjeta) => {
+    setLoading(true);
+
+    if(tarjeta.montoSinCancelar != 0){
+      alert('Esta tarjeta no se puede eliminar: aún tiene un saldo pendiente por cancelar.');
+      return 
+    }
+
+    try {
+      await tarjetaService.deleteTarjeta(tarjeta.numeroTarjeta);
+      alert('Tarjeta elimanda con éxito');
+      fetchTarjetas();
+
+    } catch (error) {
+      console.error('Error al obtener las compras:', error);
+      //alert('Hubo un problema al obtener las compras. Intente nuevamente.');
+    } 
+  };
 
 /////////////////////// manejador de verificacion de que el num cuenta no esta asociado a otra cuenta
   const handleConfirmarUnicidadCuenta = async (e: React.FormEvent) => {
@@ -116,7 +161,7 @@ const Tarjetas: React.FC = () => {
     }
   };
 
-  // Llamada al API para obtener todas las tarjetas
+/////////////////////// Llamada al API para obtener todas las tarjetas
   useEffect(() => {
     fetchTarjetas()
   }, []);
@@ -131,7 +176,158 @@ const Tarjetas: React.FC = () => {
     }
   };
 
+  /////////////////////// Llamada al API para obtener todas las compras de una tarejta especifica
+  const fetchCompras = async (numeroTarjeta: string) => {
+    setLoading(true);
+    try {
+      const compras = await tarjetaService.compraGetByNumTarjeta(numeroTarjeta);
 
+      setCompras(compras);
+    } catch (error) {
+      console.error('Error al obtener las compras:', error);
+      //alert('Hubo un problema al obtener las compras. Intente nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Función para cerrar el modal
+  const handleCloseModal = () => {
+    setShowCompraPorNumForm(false)
+    setSelectedTarjeta(null);
+    setCompras([]); // Limpia compras al cerrar el modal
+  };
+
+  // Función para ver las compras de la tarjeta seleccionada
+  const handleVerCompras = (tarjeta: Tarjeta) => {
+    setSelectedTarjeta(tarjeta);
+    fetchCompras(tarjeta.numeroTarjeta); 
+    setShowCompraPorNumForm(true); 
+  };
+
+/////////////////////// manejador del envio del formulario de nuevo pagp
+const handleSubmitPago = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!selectedTarjeta) return;
+  const nuevoPago = {
+    numeroTarjeta: selectedTarjeta.numeroTarjeta!,
+    montoP,
+    fechaP,
+  };
+
+  // Validación del monto a abonar
+  const montoNumerico = parseFloat(montoP); 
+  if (selectedTarjeta.tipoTarjeta === 'Debito') {
+    alert('Una tarjeta de débito no tiene montos pendientes.');
+    return;
+  } else if (selectedTarjeta.tipoTarjeta === 'Credito') {
+    if (selectedTarjeta.montoSinCancelar !== undefined && montoNumerico > selectedTarjeta.montoSinCancelar) {
+      alert('El monto del pago excede el saldo pendiente.');
+      return;
+    }
+  }
+
+  try {
+
+    await tarjetaService.registrarPago(nuevoPago);
+  
+    alert('Pago creado con éxito');
+    handleActSaldo(e);
+    //fetchTarjetas();
+    
+  } catch (error) {
+    //console.error('Error al crear la tarjeta', error);
+    alert('Error al crear el pago :(');
+  }
+};
+
+/////////////////////// manejador del envio del formulario para actualizar montos
+const handleActSaldo = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!selectedTarjeta) return;
+  //const montoNumerico = parseFloat(monto); 
+
+  try {
+    const nuevoMonto = parseFloat(montoP);   // El monto a restar
+    await tarjetaService.actualizarSaldo(selectedTarjeta.numeroTarjeta!, nuevoMonto);
+    alert('Saldo actualizado con éxito');
+    fetchTarjetas();
+    resetFormPagos();
+    setShowPagoForm(false);
+    
+  } catch (error) {
+    //console.error('Error al crear la tarjeta', error);
+    alert('Error al actualizar la tarjeta');
+  }
+};
+
+/////////////////////// manejador del envio del formulario de nueva compra
+  const handleSubmitCompra = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!selectedTarjeta) return;
+    const nuevaCompra = {
+      monto,
+      fecha,
+      numeroTarjeta: selectedTarjeta.numeroTarjeta!,
+    };
+
+    // Validación del monto según el tipo de tarjeta
+    const montoNumerico = parseFloat(monto); 
+    if (selectedTarjeta.tipoTarjeta === 'Debito') {
+      if (selectedTarjeta.saldoDisponible !== undefined && montoNumerico > selectedTarjeta.saldoDisponible) {
+        alert('El monto de la compra excede el saldo disponible de la tarjeta de débito. No se puede realizar la compra.');
+        return;
+      }
+    } else if (selectedTarjeta.tipoTarjeta === 'Credito') {
+      if (selectedTarjeta.montoCredito !== undefined && montoNumerico > selectedTarjeta.montoCredito) {
+        alert('El monto de la compra excede el crédito disponible en la tarjeta. No se puede realizar la compra');
+        return;
+      }
+    }
+
+    try {
+
+      await tarjetaService.registrarCompra(nuevaCompra);
+      //const nuevoMonto = montoNumerico;  // El monto a restar
+      //await tarjetaService.actualizarMonto(selectedTarjeta.numeroTarjeta!, nuevoMonto);
+
+      //setShowCompraForm(false);
+      //resetFormCompras();
+      alert('Compra creada con éxito');
+      handleActMontos(e);
+      //fetchTarjetas();
+      
+    } catch (error) {
+      //console.error('Error al crear la tarjeta', error);
+      alert('Error al crear la compra :(');
+    }
+  };
+
+/////////////////////// manejador del envio del formulario para actualizar montos
+const handleActMontos = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!selectedTarjeta) return;
+  //const montoNumerico = parseFloat(monto); 
+
+  try {
+    const nuevoMonto = parseFloat(monto);   // El monto a restar
+    await tarjetaService.actualizarMonto(selectedTarjeta.numeroTarjeta!, nuevoMonto);
+    alert('Montos actualizados con éxito');
+    fetchTarjetas();
+    resetFormCompras();
+    setShowCompraForm(false);
+    
+  } catch (error) {
+    //console.error('Error al crear la tarjeta', error);
+    alert('Error al actualizar la tarjeta');
+  }
+};
+
+ ///////////////////////  lo que se muestra
   return (
     <div className="p-6 bg-white rounded-lg shadow">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Gestión de Tarjetas</h2>
@@ -336,6 +532,10 @@ const Tarjetas: React.FC = () => {
                       Monto Crédito</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Fecha Expiración</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Saldo Pendiente</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -353,14 +553,180 @@ const Tarjetas: React.FC = () => {
                         {tarjeta.montoCredito ?? 'N/A'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {tarjeta.fechaExpiracion}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {tarjeta.tipoTarjeta === "Credito" ? tarjeta.montoSinCancelar : "N/A"}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button
+                              onClick={() => {
+                                if (tarjeta.tipoTarjeta === "Debito") {
+                                  alert("Las tarjetas de débito no tienen saldo pendiente para abonar.");
+                                  return;
+                                }
+                            
+                                setSelectedTarjeta(tarjeta);
+                                setShowPagoForm(true);
+                              }}
+                            title="Agregar nueva compra"
+                            className="text-indigo-600 hover:text-indigo-900 mr-2">
+                          < DocumentPlusIcon className="h-4 w-4" />
+                          </button>
+
+                          <button
+                              onClick={() => { 
+                                setSelectedTarjeta(tarjeta); handleVerCompras(tarjeta);
+                                }} 
+                            title="Ver compras realizadas"
+                            className="text-indigo-600 hover:text-indigo-900 mr-2">
+                          < EyeIcon className="h-4 w-4" />
+                          </button>
+
+                          <button
+                            onClick={() => {deleteTarjera(tarjeta)}}
+                            title="Eliminar tarjeta"
+                            className="text-red-600 hover:text-red-900 mr-1">
+                          <TrashIcon className="h-4 w-4" />
+                          </button>
+
+                          <button
+                            onClick={() => {setSelectedTarjeta(tarjeta);
+                              setShowPagoForm(true)}}
+                            title="Agregar Pago al saldo pendiente"
+                            className="text-indigo-600 hover:text-indigo-900 mr-2">
+                          <PlusIcon className="h-4 w-4" />
+                          </button>
+                      </td>
+                 
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
+      {/* Modal de agregar una compra*/}
+      {showCompraForm && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold mb-4">Agregar nueva compra</h2>
+            <form onSubmit={handleSubmitCompra}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+                <input
+                  type="number"
+                  value={monto}
+                  onChange={(e) => setMonto(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
+                <input
+                  type="date"
+                  value={fecha}
+                  onChange={(e) => setFecha(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={() => {setShowCompraForm(false);
+                    resetFormCompras()}}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                >
+                  Agregar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de agregar un pago*/}
+      {showPagoForm && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold mb-4">Agregar nuevo pago</h2>
+            <form onSubmit={handleSubmitPago}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Monto de pago</label>
+                <input
+                  type="number"
+                  value={montoP}
+                  onChange={(e) => setMontoP(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
+                <input
+                  type="date"
+                  value={fechaP}
+                  onChange={(e) => setFechaP(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={() => {setShowPagoForm(false);
+                    resetFormPagos()}}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                >
+                  Agregar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para mostrar las compras de cada tarjeta*/}
+      {showCompraPorNumForm && (
+              <div className="fixed inset-0 z-50 flex justify-center items-center bg-gray-500 bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                  <h2 className="text-xl font-medium mb-4">Compras realizadas para {selectedTarjeta?.numeroTarjeta}</h2>
+
+                  {loading ? (
+                    <p>Cargando...</p>
+                  ) : compras.length > 0 ? (
+                    <ul>
+                      {compras.map((compra, index) => (
+                        <li key={index} className="mb-2">
+                          <p>Monto de compra #{index + 1}: {compra.monto}</p>
+                          <p>Fecha: {compra.fecha}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No se encontraron compras.</p>
+                  )}
+
+                  <button
+                    onClick={handleCloseModal}
+                    className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg">
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            )}
     </div>
   );
-};
+}
 
 export default Tarjetas;
