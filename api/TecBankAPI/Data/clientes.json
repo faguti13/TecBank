@@ -1,72 +1,16 @@
 [
   {
     "Id": 1,
-    "Usuario": "FabianGJ",
-    "Password": "123456",
-    "Nombre": "Fabian",
-    "Apellido1": "Gutierrez",
-    "Apellido2": "Jimenez",
-    "Cedula": "119230145",
-    "Direccion": "Residencial Estancia Antigua",
-    "Telefono": "64012272",
-    "Email": "fabian@test.com",
-    "IngresoMensual": 12000,
-    "TipoCliente": "F\u00EDsico"
-  },
-  {
-    "Id": 2,
-    "Usuario": "cliente_test",
-    "Password": "$2a$11$/TskuyH1JAIbFMSJhunOJuj2pyEPUCcy6vdFAn8svb6mzqpWktbee",
-    "Nombre": "Cliente",
-    "Apellido1": "Prueba",
-    "Apellido2": "Test",
-    "Cedula": "123456789",
-    "Direccion": "Direcci\u00F3n de prueba",
-    "Telefono": "88888888",
-    "Email": "cliente@test.com",
-<<<<<<< HEAD
-    "TipoCliente": "F\u00EDsico"
-  },
-  {
-    "Id": 3,
-    "Usuario": "test2",
-    "Password": "$2a$11$eRNVTXE9CoPwIR7PMi2Bue09jy81tX0jeiZWYp6LycjldXsxNXNZG",
-    "Nombre": "test2",
-    "Apellido1": "test2",
-    "Apellido2": "test2",
-    "Cedula": "aaaa",
-    "Direccion": "bbbbb",
-    "Telefono": "11111",
-    "Email": "@gmail",
-    "TipoCliente": "F\u00EDsico"
-  },
-  {
-    "Id": 0,
-    "Usuario": "apepsos",
-    "Password": "$2a$11$E1Cj3oagAn62/coefvmwCebyH6OpE0Hpbi8Y87UHJ7lLZSKLcrBUC",
-    "Nombre": "Luis Alexis",
-    "Apellido1": "Alvarado",
-    "Apellido2": "Barrantes",
-    "Cedula": "118640248",
-    "Direccion": "La Uni\u00F3n, Residencial Paso Real, Calle Viena, Casa M5",
-    "Telefono": "85636474",
-    "Email": "alexis03126@gmail.com",
-=======
-    "IngresoMensual": 12000,
->>>>>>> Clientes_Get
-    "TipoCliente": "F\u00EDsico"
-  },
-  {
-    "Id": 0,
-    "Usuario": "test123",
-    "Password": "123456",
-    "Nombre": "test",
-    "Apellido1": "test",
-    "Apellido2": "test",
-    "Cedula": "119230146",
-    "Direccion": "Residencial Estancia Antigua\nG13",
-    "Telefono": "64012272",
-    "Email": "test@test.com",
-    "TipoCliente": "F\u00EDsico"
+    "Usuario": "Tralalero",
+    "Password": "8q\u002BLnKktFeFHVoYqj879eQ==",
+    "Nombre": "Tralalero",
+    "Apellido1": "Tralala",
+    "Apellido2": "Italia",
+    "Cedula": "111222333",
+    "Direccion": "Playa",
+    "Telefono": "89897474",
+    "Email": "@Tralala",
+    "IngresoMensual": 10000000,
+    "TipoCliente": "Fisico"
   }
 ]
